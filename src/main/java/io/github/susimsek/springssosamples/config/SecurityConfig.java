@@ -96,7 +96,6 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
-            .logout(AbstractHttpConfigurer::disable)
             .cors(withDefaults())
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp.policyDirectives(securityProperties.getContentSecurityPolicy()))
@@ -112,7 +111,11 @@ public class SecurityConfig {
                     .requestMatchers(requestMatcherConfig.actuatorPaths()).permitAll()
                     .anyRequest().authenticated())
             .formLogin(formLogin -> formLogin.loginPage("/login")
-                .permitAll());
+                .failureUrl("/login?error=true")
+                .permitAll())
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout=true")
+            );;
         return http.build();
     }
 

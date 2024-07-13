@@ -11,7 +11,10 @@ public class RequestMatcherConfig {
 
     public RequestMatcher[] staticResources() {
         return new MvcRequestMatcher[] {
+            mvc.pattern("/login/**"),
             mvc.pattern("/webjars/**"),
+            mvc.pattern("/css/**"),
+            mvc.pattern("/js/**"),
             mvc.pattern("/*.js"),
             mvc.pattern("/*.css"),
             mvc.pattern("/*.ico"),
