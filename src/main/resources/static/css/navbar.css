@@ -1,0 +1,84 @@
+.navbar {
+  background-color: var(--light-gray-color);
+  color: var(--dark-gray-color);
+}
+
+body.dark-mode .navbar {
+  background-color: var(--navbar-bg-color-dark);
+  color: var(--white-color);
+}
+
+.navbar .navbar-brand, .navbar .nav-link {
+  color: var(--dark-gray-color);
+}
+
+body.dark-mode .navbar .navbar-brand, body.dark-mode .navbar .nav-link {
+  color: var(--white-color);
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.theme-toggle input {
+  display: none;
+}
+
+.theme-toggle .slider {
+  width: 50px;
+  height: 25px;
+  background-color: #ccc;
+  border-radius: 25px;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.theme-toggle .slider:before {
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: var(--white-color);
+  box-shadow: 0 0 2px #000;
+  transition: transform 0.3s;
+}
+
+.theme-toggle input:checked + .slider {
+  background-color: #333;
+}
+
+.theme-toggle input:checked + .slider:before {
+  transform: translateX(25px);
+}
+
+.theme-toggle .icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.theme-toggle .fa-sun {
+  left: 5px;
+  color: #f39c12;
+  opacity: 1;
+}
+
+.theme-toggle .fa-moon {
+  right: 5px;
+  color: #f1c40f;
+  opacity: 0;
+}
+
+.theme-toggle input:checked ~ .fa-sun {
+  opacity: 0;
+}
+
+.theme-toggle input:checked ~ .fa-moon {
+  opacity: 1;
+}
