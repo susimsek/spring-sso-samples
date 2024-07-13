@@ -35,6 +35,7 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
         <bootstrap.version>5.3.3</bootstrap.version>
+        <font-awesome.version>6.5.2</font-awesome.version>
     </properties>
     <dependencies>
         <dependency>
@@ -73,6 +74,11 @@
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
             <version>${bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>${font-awesome.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

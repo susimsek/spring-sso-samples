@@ -5,6 +5,7 @@
   <title>Login</title>
   <link rel="stylesheet" th:href="@{/css/login.css}" />
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.5.2/css/all.min.css}" />
 </head>
 <body>
 <div class="container">
@@ -25,7 +26,9 @@
               <div class="input-group">
                 <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required />
                 <div class="input-group-append">
-                  <span class="input-group-text" onclick="togglePasswordVisibility()">Show</span>
+                  <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
+                    <i class="fa fa-eye" id="toggleIcon"></i>
+                  </button>
                 </div>
               </div>
             </div>
