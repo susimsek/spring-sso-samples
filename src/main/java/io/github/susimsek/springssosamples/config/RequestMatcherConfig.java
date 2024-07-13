@@ -11,7 +11,6 @@ public class RequestMatcherConfig {
 
     public RequestMatcher[] staticResources() {
         return new MvcRequestMatcher[] {
-            mvc.pattern("/index.html"),
             mvc.pattern("/webjars/**"),
             mvc.pattern("/*.js"),
             mvc.pattern("/*.css"),

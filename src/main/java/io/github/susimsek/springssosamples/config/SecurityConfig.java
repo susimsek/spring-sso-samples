@@ -111,7 +111,8 @@ public class SecurityConfig {
                     .requestMatchers(requestMatcherConfig.swaggerPaths()).permitAll()
                     .requestMatchers(requestMatcherConfig.actuatorPaths()).permitAll()
                     .anyRequest().authenticated())
-            .formLogin(Customizer.withDefaults());
+            .formLogin(formLogin -> formLogin.loginPage("/login")
+                .permitAll());
         return http.build();
     }
 
