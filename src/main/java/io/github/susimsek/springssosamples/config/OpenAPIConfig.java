@@ -43,7 +43,6 @@ public class OpenAPIConfig {
     private static final String PARAM_REDIRECT_URI = "redirect_uri";
     private static final String PARAM_SCOPE = "scope";
     private static final String PARAM_STATE = "state";
-    private static final String SCHEMA_TYPE_OBJECT = "object";
     public static final String RS256 = "RS256";
 
     @Bean
@@ -252,12 +251,10 @@ public class OpenAPIConfig {
                 .content(new Content()
                     .addMediaType(org.springframework.http.MediaType.APPLICATION_JSON_VALUE, new MediaType()
                         .schema(new MapSchema()
-                            .type(SCHEMA_TYPE_OBJECT)
                             .properties(Map.of(
                                 "keys", new ArraySchema()
                                     .description("List of keys used to sign tokens.")
                                     .items(new MapSchema()
-                                        .type(SCHEMA_TYPE_OBJECT)
                                         .properties(Map.of(
                                             "kty", new StringSchema()
                                                 .description("Key type")
