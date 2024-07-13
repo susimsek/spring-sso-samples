@@ -1,0 +1,26 @@
+server:
+  port: 7080
+  shutdown: graceful
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
+
+spring:
+  liquibase:
+    change-log: classpath:config/liquibase/master.xml
+  application:
+    name: spring-sso-samples
+  main:
+    allow-bean-definition-overriding: true
+  output:
+    ansi:
+      enabled: always
+  profiles:
+    active: local
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null

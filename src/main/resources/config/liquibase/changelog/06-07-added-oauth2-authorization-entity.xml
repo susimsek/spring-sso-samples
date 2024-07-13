@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="3" author="susimsek">
+        <createTable tableName="oauth2_authorization">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" primaryKeyName="pk_oauth2_authorization" nullable="false"/>
+            </column>
+            <column name="registered_client_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="principal_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authorization_grant_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authorized_scopes" type="varchar(2048)"/>
+            <column name="attributes" type="varchar(4000)"/>
+            <column name="state" type="varchar(255)"/>
+            <column name="authorization_code_value" type="varchar(4000)"/>
+            <column name="authorization_code_issued_at" type="datetime"/>
+            <column name="authorization_code_expires_at" type="datetime"/>
+            <column name="authorization_code_metadata" type="varchar(4000)"/>
+            <column name="access_token_value" type="varchar(4000)"/>
+            <column name="access_token_issued_at" type="datetime"/>
+            <column name="access_token_expires_at" type="datetime"/>
+            <column name="access_token_metadata" type="varchar(4000)"/>
+            <column name="access_token_type" type="varchar(255)"/>
+            <column name="access_token_scopes" type="varchar(2048)"/>
+            <column name="oidc_id_token_value" type="varchar(4000)"/>
+            <column name="oidc_id_token_issued_at" type="datetime"/>
+            <column name="oidc_id_token_expires_at" type="datetime"/>
+            <column name="oidc_id_token_metadata" type="varchar(4000)"/>
+            <column name="refresh_token_value" type="varchar(4000)"/>
+            <column name="refresh_token_issued_at" type="datetime"/>
+            <column name="refresh_token_expires_at" type="datetime"/>
+            <column name="refresh_token_metadata" type="varchar(4000)"/>
+            <column name="user_code_value" type="varchar(4000)"/>
+            <column name="user_code_issued_at" type="datetime"/>
+            <column name="user_code_expires_at" type="datetime"/>
+            <column name="user_code_metadata" type="varchar(4000)"/>
+            <column name="device_code_value" type="varchar(4000)"/>
+            <column name="device_code_issued_at" type="datetime"/>
+            <column name="device_code_expires_at" type="datetime"/>
+            <column name="device_code_metadata" type="varchar(4000)"/>
+        </createTable>
+
+        <!-- Indices for OAuth2 Authorization -->
+        <createIndex indexName="idx_oauth2_authorization_registered_client_id" tableName="oauth2_authorization">
+            <column name="registered_client_id"/>
+        </createIndex>
+        <createIndex indexName="idx_oauth2_authorization_principal_name" tableName="oauth2_authorization">
+            <column name="principal_name"/>
+        </createIndex>
+        <createIndex indexName="idx_oauth2_authorization_state" tableName="oauth2_authorization">
+            <column name="state"/>
+        </createIndex>
+        <createIndex indexName="idx_oauth2_authorization_authorization_code_value" tableName="oauth2_authorization">
+            <column name="authorization_code_value"/>
+        </createIndex>
+        <createIndex indexName="idx_oauth2_authorization_access_token_value" tableName="oauth2_authorization">
+            <column name="access_token_value"/>
+        </createIndex>
+        <createIndex indexName="idx_oauth2_authorization_oidc_id_token_value" tableName="oauth2_authorization">
+            <column name="oidc_id_token_value"/>
+        </createIndex>
+        <createIndex indexName="idx_oauth2_authorization_refresh_token_value" tableName="oauth2_authorization">
+            <column name="refresh_token_value"/>
+        </createIndex>
+        <createIndex indexName="idx_oauth2_authorization_user_code_value" tableName="oauth2_authorization">
+            <column name="user_code_value"/>
+        </createIndex>
+        <createIndex indexName="idx_oauth2_authorization_device_code_value" tableName="oauth2_authorization">
+            <column name="device_code_value"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

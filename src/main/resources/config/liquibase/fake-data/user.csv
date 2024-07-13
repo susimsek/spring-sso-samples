@@ -1,0 +1,3 @@
+id;username;password;email;first_name;last_name;enabled;created_at;created_by;updated_at;updated_by
+1e7d07a7-896e-41a7-bb47-8ccedb9c9fc3;admin;$2a$10$45h4TdLTwTCtLIRThucXLuPOMtALeRErlNU5Ch2GkwZIWojh7mTOe;admin@example.com;Admin;User;true;2023-07-13 10:00:00.533433;system;;
+5f74d85e-87d1-4c1c-b0c1-ec54d1d23f57;user;$2a$10$45h4TdLTwTCtLIRThucXLuPOMtALeRErlNU5Ch2GkwZIWojh7mTOe;user@example.com;User;User;true;2023-07-13 10:00:00.533433;system;;
