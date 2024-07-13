@@ -9,7 +9,7 @@
     <changeSet id="1" author="susimsek">
         <createTable tableName="user_identity">
             <column name="id" type="varchar(36)">
-                <constraints primaryKey="true" primaryKeyName="pk_oauth2_user" nullable="false"/>
+                <constraints primaryKey="true" primaryKeyName="pk_user_identity" nullable="false"/>
             </column>
             <column name="username" type="varchar(50)">
                 <constraints nullable="false" unique="true"/>
@@ -44,6 +44,67 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="2" author="susimsek">
+        <createTable tableName="role">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" primaryKeyName="pk_role" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="varchar(50)"/>
+        </createTable>
+
+        <createIndex indexName="idx_role_name" tableName="role">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="3" author="susimsek">
+        <createTable tableName="user_role_mapping">
+            <column name="user_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="varchar(50)"/>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, role_id" constraintName="pk_user_role_mapping" tableName="user_role_mapping"/>
+    </changeSet>
+
+    <changeSet id="4" author="susimsek">
+        <addForeignKeyConstraint baseTableName="user_role_mapping"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_user_role_user"
+                                 referencedTableName="user_identity"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="5" author="susimsek">
+        <addForeignKeyConstraint baseTableName="user_role_mapping"
+                                 baseColumnNames="role_id"
+                                 constraintName="fk_user_role_role"
+                                 referencedTableName="role"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
     <changeSet id="1-data" author="susimsek (generated)" context="faker">
         <loadData
                 file="config/liquibase/fake-data/user.csv"
@@ -56,6 +117,35 @@
             <column name="first_name" type="varchar"/>
             <column name="last_name" type="varchar"/>
             <column name="enabled" type="boolean"/>
+            <column name="created_at" type="datetime"/>
+            <column name="created_by" type="varchar"/>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="varchar"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="2-data" author="susimsek (generated)" context="faker">
+        <loadData
+                file="config/liquibase/fake-data/role.csv"
+                separator=";"
+                tableName="role">
+            <column name="id" type="varchar"/>
+            <column name="name" type="varchar"/>
+            <column name="description" type="varchar"/>
+            <column name="created_at" type="datetime"/>
+            <column name="created_by" type="varchar"/>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="varchar"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="3-data" author="susimsek (generated)" context="faker">
+        <loadData
+                file="config/liquibase/fake-data/user_role_mapping.csv"
+                separator=";"
+                tableName="user_role_mapping">
+            <column name="user_id" type="varchar"/>
+            <column name="role_id" type="varchar"/>
             <column name="created_at" type="datetime"/>
             <column name="created_by" type="varchar"/>
             <column name="updated_at" type="datetime"/>

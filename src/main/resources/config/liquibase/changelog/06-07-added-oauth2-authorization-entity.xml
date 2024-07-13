@@ -6,7 +6,7 @@
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
-    <changeSet id="3" author="susimsek">
+    <changeSet id="7" author="susimsek">
         <createTable tableName="oauth2_authorization">
             <column name="id" type="varchar(36)">
                 <constraints primaryKey="true" primaryKeyName="pk_oauth2_authorization" nullable="false"/>

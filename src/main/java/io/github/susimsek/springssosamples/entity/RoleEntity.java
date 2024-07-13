@@ -1,52 +1,40 @@
 package io.github.susimsek.springssosamples.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import java.util.Objects;
-import java.util.Set;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.util.Objects;
+import java.util.Set;
+
 @Entity
-@Table(name = "user_identity")
+@Table(name = "role")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class UserEntity extends BaseEntity {
+public class RoleEntity extends BaseEntity {
 
     @Id
     @Column(length = 36, nullable = false)
+    @NotNull
+    @Size(max = 36)
     private String id;
 
     @Column(length = 50, nullable = false, unique = true)
-    private String username;
+    @NotBlank
+    @Size(max = 50)
+    private String name;
 
-    @Column(length = 100, nullable = false)
-    private String password;
+    @Column(length = 255)
+    private String description;
 
-    @Column(length = 100, nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "first_name", length = 50)
-    private String firstName;
-
-    @Column(name = "last_name", length = 50)
-    private String lastName;
-
-    @Column(nullable = false)
-    private Boolean enabled;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRoleMappingEntity> userRoles;
 
     @Override
@@ -54,7 +42,7 @@ public class UserEntity extends BaseEntity {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof UserEntity otherUser)) {
+        if (!(obj instanceof RoleEntity otherRole)) {
             return false;
         }
         Class<?> objEffectiveClass = obj instanceof HibernateProxy hibernateProxy
@@ -66,7 +54,7 @@ public class UserEntity extends BaseEntity {
         if (!thisEffectiveClass.equals(objEffectiveClass)) {
             return false;
         }
-        return id != null && Objects.equals(id, otherUser.id);
+        return id != null && Objects.equals(id, otherRole.id);
     }
 
     @Override
