@@ -44,6 +44,7 @@ public class OpenAPIConfig {
     private static final String PARAM_SCOPE = "scope";
     private static final String PARAM_STATE = "state";
     public static final String RS256 = "RS256";
+    public static final String PARAM_REFRESH_TOKEN = "refresh_token";
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -120,39 +121,40 @@ public class OpenAPIConfig {
             .post(new io.swagger.v3.oas.models.Operation()
                 .addTagsItem(TAG_NAME)
                 .summary("Token")
-                .description("Endpoint to request access token")
+                .description("Endpoint to request access token or refresh token")
                 .responses(createTokenResponses())
                 .requestBody(new io.swagger.v3.oas.models.parameters.RequestBody()
                     .content(new Content()
-                        .addMediaType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-                            new MediaType()
+                        .addMediaType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE, new MediaType()
                             .schema(new MapSchema()
                                 .properties(Map.of(
                                     "grant_type", new StringSchema()
-                                        .description("The type of grant being requested")
+                                        .description("The type of grant being requested.")
+                                        ._enum(List.of("authorization_code", PARAM_REFRESH_TOKEN))
                                         .example("authorization_code"),
                                     "code", new StringSchema()
-                                        .description("The authorization code received from the authorization server")
+                                        .description("The authorization code received from the authorization server. Required if grant_type is 'authorization_code'.")
                                         .example("authorization_code_here"),
                                     PARAM_REDIRECT_URI, new StringSchema()
-                                        .description("The redirect URI registered with the authorization server")
+                                        .description("The redirect URI registered with the authorization server. Required if grant_type is 'authorization_code'.")
                                         .example("http://localhost:8080/callback"),
                                     PARAM_CLIENT_ID, new StringSchema()
-                                        .description("The client ID issued to the client during registration")
+                                        .description("The client ID issued to the client during registration.")
                                         .example("client_id_here"),
                                     "client_secret", new StringSchema()
-                                        .description("The client secret issued to the client during registration")
-                                        .example("client_secret_here")
+                                        .description("The client secret issued to the client during registration.")
+                                        .example("client_secret_here"),
+                                    PARAM_REFRESH_TOKEN, new StringSchema()
+                                        .description("The refresh token used to obtain new access tokens. Required if grant_type is 'refresh_token'.")
+                                        .example("refresh_token_here")
                                 ))
-                                .required(
-                                    List.of("grant_type", "code", PARAM_REDIRECT_URI, PARAM_CLIENT_ID, "client_secret"))
+                                .required(List.of("grant_type", PARAM_CLIENT_ID, "client_secret"))
                             )
                         )
                     )
                 )
             )
         );
-
 
         // /oauth2/jwks
         openAPI.path("/oauth2/jwks", new PathItem()
@@ -226,7 +228,7 @@ public class OpenAPIConfig {
                                 "expires_in", new Schema<Integer>().type("integer")
                                     .description("The lifetime in seconds of the access token")
                                     .example(3600),
-                                "refresh_token", new StringSchema()
+                                PARAM_REFRESH_TOKEN, new StringSchema()
                                     .description("The refresh token, which can be used to obtain new access tokens")
                                     .example("refresh_token_here"),
                                 PARAM_SCOPE, new StringSchema()
