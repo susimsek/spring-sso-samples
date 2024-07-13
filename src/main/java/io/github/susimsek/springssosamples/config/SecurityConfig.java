@@ -92,7 +92,7 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain defaultSecurityFilterChain(
         HttpSecurity http,
-        MvcRequestMatcher.Builder mvc) throws Exception {
+        RequestMatcherConfig requestMatcherConfig) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
@@ -107,6 +107,9 @@ public class SecurityConfig {
                 ))
             .authorizeHttpRequests(authz ->
                 authz
+                    .requestMatchers(requestMatcherConfig.staticResources()).permitAll()
+                    .requestMatchers(requestMatcherConfig.swaggerPaths()).permitAll()
+                    .requestMatchers(requestMatcherConfig.actuatorPaths()).permitAll()
                     .anyRequest().authenticated())
             .formLogin(Customizer.withDefaults());
         return http.build();
@@ -115,6 +118,11 @@ public class SecurityConfig {
     @Bean
     MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
         return new MvcRequestMatcher.Builder(introspector);
+    }
+
+    @Bean
+    RequestMatcherConfig requestMatchersConfig(MvcRequestMatcher.Builder mvc) {
+        return new RequestMatcherConfig(mvc);
     }
 
     @Bean
