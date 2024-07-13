@@ -14,7 +14,6 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.QueryParameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.tags.Tag;
 import java.util.HashMap;
@@ -57,7 +56,6 @@ public class OpenAPIConfig {
                         .bearerFormat(BEARER_FORMAT)
                 )
             )
-            .addSecurityItem(new SecurityRequirement().addList(SCHEME_NAME))
             .info(new Info()
                 .title("OAuth2 Authorization Server API")
                 .version("1.0.0")
