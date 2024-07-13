@@ -12,12 +12,10 @@
 <div th:replace="fragments/navbar :: navbar"></div>
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-8 col-lg-6">
       <div class="card mt-5">
-        <div class="card-header text-center">
-          <h3>Login</h3>
-        </div>
-        <div class="card-body">
+        <div class="card-body p-4">
+          <h3 class="card-title text-center mb-4">Login</h3>
           <form th:action="@{/login}" method="post">
             <div class="form-group mb-3">
               <label for="username">Username</label>

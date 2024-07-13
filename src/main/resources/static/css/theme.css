@@ -24,6 +24,17 @@ body {
 .card {
   background-color: var(--light-gray-color);
   color: var(--dark-gray-color);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: auto;
+}
+
+.card-title {
+  border-bottom: 1px solid var(--light-border-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .btn-primary {
@@ -73,4 +84,8 @@ body.dark-mode input {
 
 body.dark-mode input::placeholder {
   color: var(--dark-placeholder-color);
+}
+
+body.dark-mode .card-title {
+  border-bottom: 1px solid var(--dark-border-color);
 }
