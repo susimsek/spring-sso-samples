@@ -14,6 +14,7 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.QueryParameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.tags.Tag;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class OpenAPIConfig {
     private static final String PARAM_STATE = "state";
     public static final String RS256 = "RS256";
     public static final String PARAM_REFRESH_TOKEN = "refresh_token";
+    public static final String PARAM_CLIENT_SECRET = "client_secret";
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -54,6 +56,11 @@ public class OpenAPIConfig {
                         .type(SecurityScheme.Type.valueOf(SECURITY_SCHEME_TYPE))
                         .scheme(SCHEME_TYPE)
                         .bearerFormat(BEARER_FORMAT)
+                )
+                .addSecuritySchemes("basicAuth",
+                    new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("basic")
                 )
             )
             .info(new Info()
@@ -139,18 +146,19 @@ public class OpenAPIConfig {
                                     PARAM_CLIENT_ID, new StringSchema()
                                         .description("The client ID issued to the client during registration.")
                                         .example("client_id_here"),
-                                    "client_secret", new StringSchema()
+                                    PARAM_CLIENT_SECRET, new StringSchema()
                                         .description("The client secret issued to the client during registration.")
                                         .example("client_secret_here"),
                                     PARAM_REFRESH_TOKEN, new StringSchema()
                                         .description("The refresh token used to obtain new access tokens. Required if grant_type is 'refresh_token'.")
                                         .example("refresh_token_here")
                                 ))
-                                .required(List.of("grant_type", PARAM_CLIENT_ID, "client_secret"))
+                                .required(List.of("grant_type", PARAM_CLIENT_ID, PARAM_CLIENT_SECRET))
                             )
                         )
                     )
                 )
+                .addSecurityItem(new SecurityRequirement().addList("basicAuth"))
             )
         );
 
@@ -187,6 +195,36 @@ public class OpenAPIConfig {
                     .addApiResponse(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
                         new ApiResponse().description(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()))
                 )
+            )
+        );
+
+        // /oauth2/revoke
+        openAPI.path("/oauth2/revoke", new PathItem()
+            .post(new io.swagger.v3.oas.models.Operation()
+                .addTagsItem(TAG_NAME)
+                .summary("Revoke Token")
+                .description("Endpoint to revoke an access or refresh token")
+                .requestBody(new io.swagger.v3.oas.models.parameters.RequestBody()
+                    .content(new Content()
+                        .addMediaType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE, new MediaType()
+                            .schema(new MapSchema()
+                                .properties(createRevokeTokenProperties())
+                            )
+                        )
+                    )
+                )
+                .responses(new ApiResponses()
+                    .addApiResponse(String.valueOf(HttpStatus.OK.value()), new ApiResponse()
+                        .description(HttpStatus.OK.getReasonPhrase())
+                    )
+                    .addApiResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()),
+                        new ApiResponse().description(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+                    .addApiResponse(String.valueOf(HttpStatus.UNAUTHORIZED.value()),
+                        new ApiResponse().description(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+                    .addApiResponse(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
+                        new ApiResponse().description(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()))
+                )
+                .addSecurityItem(new SecurityRequirement().addList("basicAuth"))
             )
         );
     }
@@ -327,5 +365,24 @@ public class OpenAPIConfig {
             .items(new StringSchema().example("sub"))
             .example(List.of("sub", "iss", "name", "email")));
         return properties;
+    }
+
+    private Map<String, Schema> createRevokeTokenProperties() {
+        return Map.of(
+            "token", new StringSchema()
+                .description("The token to be revoked.")
+                .example("ACCESS_TOKEN_HERE"),
+            "token_type_hint", new StringSchema()
+                .type("string")
+                .description("A hint about the type of the token submitted for revocation.")
+                .example(PARAM_REFRESH_TOKEN)
+                ._enum(List.of("access_token", PARAM_REFRESH_TOKEN)),
+            PARAM_CLIENT_ID, new StringSchema()
+                .description("The client ID issued to the client during registration.")
+                .example("client_id_here"),
+            PARAM_CLIENT_SECRET, new StringSchema()
+                .description("The client secret issued to the client during registration.")
+                .example("client_secret_here")
+        );
     }
 }
