@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @RequiredArgsConstructor
 public enum FilterOrder {
-    LOGGING(LOWEST_PRECEDENCE);
+    LOGGING(1);
 
     private final int order;
 }
