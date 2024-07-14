@@ -15,3 +15,6 @@ function disableSubmitButton() {
   submitButton.querySelector('.spinner-border').style.display = 'inline-block';
   submitButton.querySelector('.sr-only').style.display = 'inline-block';
 }
+
+document.getElementById('loginForm').addEventListener(
+  'submit', disableSubmitButton);
