@@ -97,15 +97,10 @@ body.dark-mode .navbar .navbar-brand, body.dark-mode .navbar .nav-link {
   align-items: center;
 }
 
-.custom-select {
+.language-toggle {
+  position: relative;
   display: flex;
   align-items: center;
-}
-
-.custom-select i {
-  margin-right: 0.5rem;
-  font-size: 1.5rem;
-  color: var(--dark-gray-color);
 }
 
 .language-toggle select {
@@ -116,9 +111,8 @@ body.dark-mode .navbar .navbar-brand, body.dark-mode .navbar .nav-link {
   color: var(--dark-gray-color);
   background: var(--light-gray-color) none;
   border-radius: 0.25rem;
-  position: relative;
-  z-index: 2;
   outline: none;
+  padding-left: 2.5rem; /* Icon için yer aç */
 }
 
 .language-toggle select:focus {
@@ -127,6 +121,14 @@ body.dark-mode .navbar .navbar-brand, body.dark-mode .navbar .nav-link {
 
 .language-toggle select option {
   color: black;
+}
+
+.language-toggle .icon {
+  position: absolute;
+  left: 0.5rem; /* Icon'un pozisyonunu ayarla */
+  font-size: 1.5rem;
+  color: var(--dark-gray-color);
+  pointer-events: none;
 }
 
 body.dark-mode .language-toggle select {
@@ -138,6 +140,6 @@ body.dark-mode .language-toggle select option {
   color: black;
 }
 
-body.dark-mode .language-toggle i {
+body.dark-mode .language-toggle .icon {
   color: var(--white-color);
 }
