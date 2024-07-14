@@ -1,13 +1,10 @@
 package io.github.susimsek.springssosamples.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Objects;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,33 +13,30 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "role")
+@Table(name = "oauth2_scope")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class RoleEntity extends BaseEntity {
+public class OAuth2ScopeEntity extends BaseEntity {
 
     @Id
     @Column(length = 36, nullable = false)
     private String id;
 
-    @Column(length = 50, nullable = false, unique = true)
-    private String name;
+    @Column(name = "scope", length = 255, nullable = false)
+    private String scope;
 
     @Column(length = 255)
     private String description;
-
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRoleMappingEntity> userRoles;
 
     @Override
     public final boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof RoleEntity otherRole)) {
+        if (!(obj instanceof OAuth2ScopeEntity otherScope)) {
             return false;
         }
         Class<?> objEffectiveClass = obj instanceof HibernateProxy hibernateProxy
@@ -54,7 +48,7 @@ public class RoleEntity extends BaseEntity {
         if (!thisEffectiveClass.equals(objEffectiveClass)) {
             return false;
         }
-        return id != null && Objects.equals(id, otherRole.id);
+        return id != null && Objects.equals(id, otherScope.id);
     }
 
     @Override

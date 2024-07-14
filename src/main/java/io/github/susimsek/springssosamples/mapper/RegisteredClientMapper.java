@@ -1,6 +1,8 @@
 package io.github.susimsek.springssosamples.mapper;
 
+import io.github.susimsek.springssosamples.entity.OAuth2ClientScopeMappingEntity;
 import io.github.susimsek.springssosamples.entity.OAuth2RegisteredClientEntity;
+import io.github.susimsek.springssosamples.entity.OAuth2ScopeEntity;
 import io.github.susimsek.springssosamples.security.oauth2.OAuth2JsonUtils;
 import java.time.Instant;
 import java.util.Map;
@@ -44,10 +46,22 @@ public class RegisteredClientMapper {
                 .collect(Collectors.toSet())
         ));
         client.setRedirectUris(StringUtils.collectionToCommaDelimitedString(registeredClient.getRedirectUris()));
-        client.setScopes(StringUtils.collectionToCommaDelimitedString(registeredClient.getScopes()));
         client.setPostLogoutRedirectUris(StringUtils.collectionToCommaDelimitedString(registeredClient.getPostLogoutRedirectUris()));
         client.setClientSettings(oAuth2JsonUtils.writeMap(registeredClient.getClientSettings().getSettings()));
         client.setTokenSettings(oAuth2JsonUtils.writeMap(registeredClient.getTokenSettings().getSettings()));
+
+        // Scope mapping
+        Set<OAuth2ClientScopeMappingEntity> clientScopeMappings = registeredClient.getScopes().stream()
+            .map(scope -> {
+                OAuth2ScopeEntity scopeEntity = new OAuth2ScopeEntity();
+                scopeEntity.setScope(scope);
+                OAuth2ClientScopeMappingEntity clientScopeMapping = new OAuth2ClientScopeMappingEntity();
+                clientScopeMapping.setClient(client);
+                clientScopeMapping.setScope(scopeEntity);
+                return clientScopeMapping;
+            }).collect(Collectors.toSet());
+        client.setClientScopes(clientScopeMappings);
+
         return client;
     }
 
@@ -62,6 +76,10 @@ public class RegisteredClientMapper {
         }
         TokenSettings tokenSettings = tokenSettingsBuilder.build();
 
+        Set<String> scopes = client.getClientScopes().stream()
+            .map(mapping -> mapping.getScope().getScope())
+            .collect(Collectors.toSet());
+
         return RegisteredClient.withId(client.getId())
             .clientId(client.getClientId())
             .clientIdIssuedAt(client.getClientIdIssuedAt())
@@ -72,7 +90,7 @@ public class RegisteredClientMapper {
             .authorizationGrantTypes(grantTypes -> grantTypes.addAll(resolveAuthorizationGrantTypes(client.getAuthorizationGrantTypes())))
             .redirectUris(uris -> uris.addAll(StringUtils.commaDelimitedListToSet(client.getRedirectUris())))
             .postLogoutRedirectUris(uris -> uris.addAll(StringUtils.commaDelimitedListToSet(client.getPostLogoutRedirectUris())))
-            .scopes(sc -> sc.addAll(StringUtils.commaDelimitedListToSet(client.getScopes())))
+            .scopes(sc -> sc.addAll(scopes))
             .clientSettings(clientSettings)
             .tokenSettings(tokenSettings)
             .build();

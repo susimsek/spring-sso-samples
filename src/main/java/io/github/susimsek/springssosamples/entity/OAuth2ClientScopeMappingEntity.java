@@ -1,48 +1,43 @@
 package io.github.susimsek.springssosamples.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import java.util.Objects;
-import java.util.Set;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import java.util.Objects;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "role")
+@Table(name = "oauth2_client_scope_mapping")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class RoleEntity extends BaseEntity {
+public class OAuth2ClientScopeMappingEntity extends BaseEntity {
 
     @Id
-    @Column(length = 36, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator", sequenceName = "seq_oauth2_client_scope_mapping", allocationSize = 1)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
 
-    @Column(length = 50, nullable = false, unique = true)
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", nullable = false)
+    private OAuth2RegisteredClientEntity client;
 
-    @Column(length = 255)
-    private String description;
-
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRoleMappingEntity> userRoles;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "scope_id", nullable = false)
+    private OAuth2ScopeEntity scope;
 
     @Override
     public final boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof RoleEntity otherRole)) {
+        if (!(obj instanceof OAuth2ClientScopeMappingEntity otherMapping)) {
             return false;
         }
         Class<?> objEffectiveClass = obj instanceof HibernateProxy hibernateProxy
@@ -54,7 +49,7 @@ public class RoleEntity extends BaseEntity {
         if (!thisEffectiveClass.equals(objEffectiveClass)) {
             return false;
         }
-        return id != null && Objects.equals(id, otherRole.id);
+        return id != null && Objects.equals(id, otherMapping.id);
     }
 
     @Override

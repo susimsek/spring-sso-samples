@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
-        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
+    <!-- Sequence for oauth2_client_scope_mapping table -->
+    <changeSet id="1699333174982-1" author="susimsek">
+        <createSequence incrementBy="1" minValue="1" maxValue="9999999999999999" cycle="false" cacheSize="50000" sequenceName="seq_oauth2_client_scope_mapping" startValue="1001"/>
+    </changeSet>
+
+    <!-- OAuth2 Client Table -->
     <changeSet id="6" author="susimsek">
-        <createTable tableName="oauth2_registered_client">
+        <createTable tableName="oauth2_client">
             <column name="id" type="varchar(36)">
                 <constraints primaryKey="true" primaryKeyName="pk_oauth2_registered_client" nullable="false"/>
             </column>
@@ -30,9 +36,6 @@
             </column>
             <column name="redirect_uris" type="varchar(255)"/>
             <column name="post_logout_redirect_uris" type="varchar(255)"/>
-            <column name="scopes" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
             <column name="client_settings" type="varchar(4000)">
                 <constraints nullable="false"/>
             </column>
@@ -49,16 +52,16 @@
             <column name="updated_by" type="varchar(50)"/>
         </createTable>
 
-        <createIndex indexName="idx_client_id" tableName="oauth2_registered_client">
+        <createIndex indexName="idx_client_id" tableName="oauth2_client">
             <column name="client_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet id="6-data" author="susimsek (generated)" context="faker">
         <loadData
-                file="config/liquibase/fake-data/oauth2_registered_client.csv"
-                separator=";"
-                tableName="oauth2_registered_client">
+            file="config/liquibase/fake-data/oauth2_client.csv"
+            separator=";"
+            tableName="oauth2_client">
             <column name="id" type="varchar"/>
             <column name="client_id" type="varchar"/>
             <column name="client_id_issued_at" type="datetime"/>
@@ -72,6 +75,108 @@
             <column name="scopes" type="varchar"/>
             <column name="client_settings" type="varchar"/>
             <column name="token_settings" type="varchar"/>
+            <column name="created_at" type="datetime"/>
+            <column name="created_by" type="varchar"/>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="varchar"/>
+        </loadData>
+    </changeSet>
+
+    <!-- OAuth2 Scope Table -->
+    <changeSet id="7" author="susimsek">
+        <createTable tableName="oauth2_scope">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="pk_oauth2_scope" nullable="false"/>
+            </column>
+            <column name="scope" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="varchar(50)"/>
+        </createTable>
+
+        <createIndex indexName="idx_scope" tableName="oauth2_scope">
+            <column name="scope"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="7-data" author="susimsek (generated)" context="faker">
+        <loadData
+            file="config/liquibase/fake-data/oauth2_scope.csv"
+            separator=";"
+            tableName="oauth2_scope">
+            <column name="id" type="uuid"/>
+            <column name="scope" type="varchar"/>
+            <column name="description" type="varchar"/>
+            <column name="created_at" type="datetime"/>
+            <column name="created_by" type="varchar"/>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="varchar"/>
+        </loadData>
+    </changeSet>
+
+    <!-- OAuth2 Client Scope Mapping Table -->
+    <changeSet id="8" author="susimsek">
+        <createTable tableName="oauth2_client_scope_mapping">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_oauth2_client_scope_mapping" nullable="false"/>
+            </column>
+            <column name="client_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scope_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="varchar(50)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+            baseTableName="oauth2_client_scope_mapping"
+            baseColumnNames="client_id"
+            constraintName="fk_oauth2_client_scope_mapping_client_id"
+            referencedTableName="oauth2_client"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+            baseTableName="oauth2_client_scope_mapping"
+            baseColumnNames="scope_id"
+            constraintName="fk_oauth2_client_scope_mapping_scope_id"
+            referencedTableName="oauth2_scope"
+            referencedColumnNames="id"
+            onDelete="CASCADE"/>
+
+        <createIndex indexName="idx_client_scope_mapping_client_id" tableName="oauth2_client_scope_mapping">
+            <column name="client_id"/>
+        </createIndex>
+
+        <createIndex indexName="idx_client_scope_mapping_scope_id" tableName="oauth2_client_scope_mapping">
+            <column name="scope_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="8-data" author="susimsek (generated)" context="faker">
+        <loadData
+            file="config/liquibase/fake-data/oauth2_client_scope_mapping.csv"
+            separator=";"
+            tableName="oauth2_client_scope_mapping">
+            <column name="id" type="bigint"/>
+            <column name="client_id" type="varchar"/>
+            <column name="scope_id" type="varchar"/>
             <column name="created_at" type="datetime"/>
             <column name="created_by" type="varchar"/>
             <column name="updated_at" type="datetime"/>

@@ -1,11 +1,15 @@
 package io.github.susimsek.springssosamples.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
-@Table(name = "oauth2_registered_client")
+@Table(name = "oauth2_client")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -53,8 +57,8 @@ public class OAuth2RegisteredClientEntity extends BaseEntity {
     @Column(name = "post_logout_redirect_uris", length = 255)
     private String postLogoutRedirectUris;
 
-    @Column(name = "scopes", length = 255, nullable = false)
-    private String scopes;
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<OAuth2ClientScopeMappingEntity> clientScopes = new HashSet<>();
 
     @Column(name = "client_settings", length = 4000, nullable = false)
     private String clientSettings;

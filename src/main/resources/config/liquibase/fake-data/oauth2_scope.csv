@@ -1,0 +1,6 @@
+id;scope;description;created_at;created_by;updated_at;updated_by
+f23c9e17-781c-4c42-8a44-1fc5f9b23abc;openid;OpenID Connect scope;2024-07-13 07:19:17.533433;system;;
+f43d4e17-791c-4c42-8b44-1fc5f9b23def;profile;Profile scope;2024-07-13 07:19:17.533433;system;;
+a12d4e17-1234-4c42-8b44-1fc5f9b23abc;email;Email scope;2024-07-13 07:19:17.533433;system;;
+b34d4e17-5678-4c42-8b44-1fc5f9b23abc;address;Address scope;2024-07-13 07:19:17.533433;system;;
+c56d4e17-9101-4c42-8b44-1fc5f9b23abc;phone;Phone scope;2024-07-13 07:19:17.533433;system;;
