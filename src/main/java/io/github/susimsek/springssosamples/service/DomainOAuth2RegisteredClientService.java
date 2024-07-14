@@ -2,19 +2,20 @@ package io.github.susimsek.springssosamples.service;
 
 import io.github.susimsek.springssosamples.entity.OAuth2RegisteredClientEntity;
 import io.github.susimsek.springssosamples.mapper.RegisteredClientMapper;
+import io.github.susimsek.springssosamples.repository.DomainRegisteredClientRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2RegisteredClientRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 @Slf4j
 @RequiredArgsConstructor
-public class DomainOAuth2RegisteredClientService implements RegisteredClientRepository {
+public class DomainOAuth2RegisteredClientService implements DomainRegisteredClientRepository {
 
     private final OAuth2RegisteredClientRepository registeredClientRepository;
     private final RegisteredClientMapper registeredClientMapper;
@@ -74,5 +75,15 @@ public class DomainOAuth2RegisteredClientService implements RegisteredClientRepo
         return registeredClientRepository.findByClientId(clientId)
             .map(registeredClientMapper::toDto)
             .orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public RegisteredClient findByIdOrThrow(String id) {
+        Assert.hasText(id, "id cannot be empty");
+        return registeredClientRepository.findById(id)
+            .map(registeredClientMapper::toDto)
+            .orElseThrow(() -> new DataRetrievalFailureException("The RegisteredClient with id '"
+                + id + "' was not found in the RegisteredClientRepository."));
     }
 }

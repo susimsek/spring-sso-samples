@@ -11,6 +11,7 @@ import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationConsentMapp
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationMapper;
 import io.github.susimsek.springssosamples.mapper.RegisteredClientMapper;
 import io.github.susimsek.springssosamples.mapper.UserMapper;
+import io.github.susimsek.springssosamples.repository.DomainRegisteredClientRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationConsentRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2RegisteredClientRepository;
@@ -48,7 +49,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
@@ -121,7 +121,7 @@ public class SecurityConfig {
                 .permitAll())
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout=true")
-            );;
+            );
         return http.build();
     }
 
@@ -136,7 +136,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public RegisteredClientRepository registeredClientRepository(
+    public DomainRegisteredClientRepository registeredClientRepository(
         OAuth2RegisteredClientRepository oAuth2RegisteredClientRepository,
         RegisteredClientMapper registeredClientMapper) {
         return new  DomainOAuth2RegisteredClientService(
@@ -146,19 +146,21 @@ public class SecurityConfig {
     @Bean
     public OAuth2AuthorizationService oAuth2AuthorizationService(
         OAuth2AuthorizationRepository authorizationRepository,
-        OAuth2AuthorizationMapper authorizationMapper
+        OAuth2AuthorizationMapper authorizationMapper,
+        DomainRegisteredClientRepository registeredClientRepository
     ) {
         return new DomainOAuth2AuthorizationService(
-            authorizationRepository, authorizationMapper);
+            authorizationRepository, authorizationMapper, registeredClientRepository);
     }
 
     @Bean
     public OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService(
         OAuth2AuthorizationConsentRepository authorizationConsentRepository,
-        OAuth2AuthorizationConsentMapper authorizationConsentMapper
+        OAuth2AuthorizationConsentMapper authorizationConsentMapper,
+        DomainRegisteredClientRepository registeredClientRepository
     ) {
         return new DomainOAuth2AuthorizationConsentService
-            (authorizationConsentRepository, authorizationConsentMapper);
+            (authorizationConsentRepository, authorizationConsentMapper, registeredClientRepository);
     }
 
     @Bean

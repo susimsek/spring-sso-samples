@@ -3,11 +3,14 @@ package io.github.susimsek.springssosamples.service;
 import io.github.susimsek.springssosamples.entity.OAuth2AuthorizationConsentEntity;
 import io.github.susimsek.springssosamples.entity.OAuth2AuthorizationConsentId;
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationConsentMapper;
+import io.github.susimsek.springssosamples.repository.DomainRegisteredClientRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationConsentRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsent;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -16,6 +19,7 @@ public class DomainOAuth2AuthorizationConsentService implements OAuth2Authorizat
 
     private final OAuth2AuthorizationConsentRepository repository;
     private final OAuth2AuthorizationConsentMapper mapper;
+    private final DomainRegisteredClientRepository registeredClientRepository;
 
     @Override
     @Transactional
@@ -51,7 +55,14 @@ public class DomainOAuth2AuthorizationConsentService implements OAuth2Authorizat
         Assert.hasText(registeredClientId, "registeredClientId cannot be empty");
         Assert.hasText(principalName, "principalName cannot be empty");
         return repository.findById(new OAuth2AuthorizationConsentId(registeredClientId, principalName))
-            .map(mapper::toModel)
+            .map(entity -> {
+                RegisteredClient registeredClient = registeredClientRepository.findByIdOrThrow(registeredClientId);
+                if (registeredClient == null) {
+                    throw new DataRetrievalFailureException("The RegisteredClient with id '" + registeredClientId
+                        + "' was not found in the RegisteredClientRepository.");
+                }
+                return mapper.toModel(entity, registeredClient);
+            })
             .orElse(null);
     }
 

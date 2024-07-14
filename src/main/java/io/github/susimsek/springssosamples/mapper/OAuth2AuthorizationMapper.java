@@ -2,10 +2,7 @@ package io.github.susimsek.springssosamples.mapper;
 
 import io.github.susimsek.springssosamples.entity.OAuth2AuthorizationEntity;
 import io.github.susimsek.springssosamples.security.oauth2.OAuth2JsonUtils;
-import java.util.Map;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2DeviceCode;
@@ -16,15 +13,16 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import java.util.Map;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthorizationMapper {
 
-    private final RegisteredClientRepository registeredClientRepository;
     private final OAuth2JsonUtils jsonUtils;
 
     public OAuth2AuthorizationEntity toEntity(OAuth2Authorization model) {
@@ -94,18 +92,13 @@ public class OAuth2AuthorizationMapper {
         return entity;
     }
 
-    public OAuth2Authorization toModel(OAuth2AuthorizationEntity entity) {
+    public OAuth2Authorization toModel(OAuth2AuthorizationEntity entity, RegisteredClient registeredClient) {
         if (entity == null) {
             return null;
         }
 
         Set<String> scopes = StringUtils.commaDelimitedListToSet(entity.getAuthorizedScopes());
         Map<String, Object> attributes = jsonUtils.parseMap(entity.getAttributes());
-        RegisteredClient registeredClient = registeredClientRepository.findById(entity.getRegisteredClientId());
-        if (registeredClient == null) {
-            throw new DataRetrievalFailureException("The RegisteredClient with id '" + entity.getRegisteredClientId()
-                + "' was not found in the RegisteredClientRepository.");
-        }
 
         OAuth2Authorization.Builder builder = OAuth2Authorization.withRegisteredClient(registeredClient)
                 .id(String.valueOf(entity.getId()))
