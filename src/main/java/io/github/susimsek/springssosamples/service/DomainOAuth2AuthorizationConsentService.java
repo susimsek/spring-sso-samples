@@ -61,7 +61,7 @@ public class DomainOAuth2AuthorizationConsentService implements OAuth2Authorizat
                     throw new DataRetrievalFailureException("The RegisteredClient with id '" + registeredClientId
                         + "' was not found in the RegisteredClientRepository.");
                 }
-                return mapper.toModel(entity, registeredClient);
+                return mapper.toModel(entity);
             })
             .orElse(null);
     }

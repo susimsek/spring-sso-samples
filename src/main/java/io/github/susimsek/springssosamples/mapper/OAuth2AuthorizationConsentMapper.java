@@ -29,7 +29,7 @@ public class OAuth2AuthorizationConsentMapper {
         return entity;
     }
 
-    public OAuth2AuthorizationConsent toModel(OAuth2AuthorizationConsentEntity entity, RegisteredClient registeredClient) {
+    public OAuth2AuthorizationConsent toModel(OAuth2AuthorizationConsentEntity entity) {
         if (entity == null) {
             return null;
         }
