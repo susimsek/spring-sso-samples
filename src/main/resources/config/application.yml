@@ -7,6 +7,9 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
 
 spring:
+  restclient:
+    connect-timeout: 5s
+    read-timeout: 10s
   web:
     locale: en
   messages:
@@ -31,3 +34,81 @@ spring:
     deserialization:
       fail-on-unknown-properties: false
     default-property-inclusion: non_null
+
+logging:
+  level:
+    ROOT: INFO
+    org.hibernate.SQL: INFO
+    io.github.susimsek.springssosamples: INFO
+  pattern: '%clr(%d{yyyy-MM-dd''T''HH:mm:ss.SSSXXX}){faint} %clr(%5p){highlight} %clr(${PID:- }){magenta} --- [%clr(${spring.application.name:-}){green},%X{traceId:-},%X{spanId:-}] [%clr(%t){faint}] %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%clr(%wEx){red}'
+  async:
+    queueSize: 10000
+    discardingThreshold: 0
+    maxFlushTime: 5000
+    includeCallerData: false
+  loki:
+    enabled: false
+    url: http://localhost:3100/loki/api/v1/push
+    inner-threads-expiration: 5m
+    batch-max-items: 1000
+    batch-max-bytes: 2MB
+    batch-timeout: 5s
+    use-direct-buffers: true
+    drain-on-stop: true
+    metrics-enabled: false
+    drop-rate-limited-batches: false
+    verbose: false
+    internal-queues-check-timeout: 25ms
+    retry:
+      max-retries: 3
+      min-retry-backoff: 500ms
+      max-retry-backoff: 1m
+      max-retry-jitter: 500ms
+  aspect:
+    enabled: true
+    log-level: FULL
+  http:
+    enabled: true
+    log-level: FULL
+  obfuscate:
+    enabled: true
+    mask-value: "****"
+    headers:
+      - Authorization
+      - Cookie
+      - Set-Cookie
+      - X-API-Key
+      - X-CSRF-Token
+      - WWW-Authenticate
+      - X-JWS-Signature
+    parameters:
+      - key
+      - password
+      - token
+      - secret
+      - api_key
+      - access_token
+      - refresh_token
+      - jws_token
+      - jwe_token
+    json-body-fields:
+      - $.token
+      - $.access_token
+      - $.refresh_token
+      - $.id_token
+      - $.email
+      - $.secretKey
+      - $.apiSecret
+      - $.apiKey
+      - $.jwsToken
+      - $.jweToken
+    method-fields:
+      - $.token
+      - $.accessToken
+      - $.refreshToken
+      - $.idToken
+      - $.email
+      - $.secretKey
+      - $.apiSecret
+      - $.apiKey
+      - $.jwsToken
