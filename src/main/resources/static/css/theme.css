@@ -14,11 +14,13 @@
 body {
   background-color: var(--white-color);
   color: var(--dark-gray-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .navbar {
   background-color: var(--light-gray-color);
   color: var(--dark-gray-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .card {
@@ -29,18 +31,21 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 500px;
   margin: auto;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .card-title {
   border-bottom: 1px solid var(--light-border-color);
   padding-bottom: 0.5rem;
   margin-bottom: 1rem;
+  transition: border-bottom-color 0.3s;
 }
 
 .btn-primary {
   background-color: var(--blue-color);
   color: var(--white-color);
   border: none;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 input {
@@ -49,10 +54,12 @@ input {
   border: 1px solid var(--light-border-color);
   border-radius: 0.25rem;
   padding: 0.375rem 0.75rem;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 input::placeholder {
   color: var(--placeholder-color);
+  transition: color 0.3s;
 }
 
 body.dark-mode {

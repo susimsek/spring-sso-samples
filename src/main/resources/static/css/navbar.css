@@ -125,7 +125,7 @@ body.dark-mode .navbar .navbar-brand, body.dark-mode .navbar .nav-link {
 
 .language-toggle .icon {
   position: absolute;
-  left: 0.5rem; /* Icon'un pozisyonunu ayarla */
+  left: 0.5rem;
   font-size: 1.5rem;
   color: var(--dark-gray-color);
   pointer-events: none;
