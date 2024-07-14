@@ -35,6 +35,31 @@ spring:
       fail-on-unknown-properties: false
     default-property-inclusion: non_null
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      probes:
+        enabled: true
+      show-details: always
+  info:
+    env:
+      enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+    enabled: true
+
 logging:
   level:
     ROOT: INFO
@@ -112,3 +137,14 @@ logging:
       - $.apiSecret
       - $.apiKey
       - $.jwsToken
+
+springdoc:
+  swagger-ui:
+    operationsSorter: method
+    defaultModelsExpandDepth: -1
+    display-request-duration: true
+    filter: true
+    show-extensions: true
+    try-it-out-enabled: true
+    persist-authorization: true
+  show-actuator: false
