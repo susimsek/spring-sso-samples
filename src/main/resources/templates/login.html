@@ -16,7 +16,7 @@
       <div class="card mt-5">
         <div class="card-body p-4">
           <h3 class="card-title text-center mb-4" th:text="#{login.title}">Login</h3>
-          <form th:action="@{/login}" method="post">
+          <form th:action="@{/login}" method="post" id="loginForm" onsubmit="disableSubmitButton()">
             <div class="form-group mb-3">
               <label for="username" th:text="#{login.username}">Username</label>
               <input type="text" id="username" name="username" class="form-control" th:placeholder="#{login.username.placeholder}" required />
@@ -38,8 +38,12 @@
             <div th:if="${param.logout}" class="alert alert-success" role="alert" th:text="#{login.logout}">
               You have been logged out.
             </div>
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary" th:text="#{login.submit}">Login</button>
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary" id="submitButton">
+                <span th:text="#{login.submit}">Login</span>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+                <span class="sr-only" style="display: none;">Loading...</span>
+              </button>
             </div>
           </form>
         </div>
