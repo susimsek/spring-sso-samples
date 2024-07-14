@@ -2,29 +2,29 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <title th:text="#{login.title}">Login</title>
   <link rel="stylesheet" th:href="@{/css/login.css}" />
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
   <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.5.2/css/all.min.css}" />
   <link rel="stylesheet" th:href="@{/css/theme.css}" />
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 <div class="container">
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
       <div class="card mt-5">
         <div class="card-body p-4">
-          <h3 class="card-title text-center mb-4">Login</h3>
+          <h3 class="card-title text-center mb-4" th:text="#{login.title}">Login</h3>
           <form th:action="@{/login}" method="post">
             <div class="form-group mb-3">
-              <label for="username">Username</label>
-              <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required />
+              <label for="username" th:text="#{login.username}">Username</label>
+              <input type="text" id="username" name="username" class="form-control" th:placeholder="#{login.username.placeholder}" required />
             </div>
             <div class="form-group mb-3">
-              <label for="password">Password</label>
+              <label for="password" th:text="#{login.password}">Password</label>
               <div class="input-group">
-                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required />
+                <input type="password" id="password" name="password" class="form-control" th:placeholder="#{login.password.placeholder}" required />
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
                     <i class="fa fa-eye" id="toggleIcon"></i>
@@ -32,14 +32,14 @@
                 </div>
               </div>
             </div>
-            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            <div th:if="${param.error}" class="alert alert-danger" role="alert" th:text="#{login.error}">
               Invalid username or password.
             </div>
-            <div th:if="${param.logout}" class="alert alert-success" role="alert">
+            <div th:if="${param.logout}" class="alert alert-success" role="alert" th:text="#{login.logout}">
               You have been logged out.
             </div>
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary">Login</button>
+              <button type="submit" class="btn btn-primary" th:text="#{login.submit}">Login</button>
             </div>
           </form>
         </div>

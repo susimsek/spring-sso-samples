@@ -11,13 +11,37 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
     <a class="navbar-brand" th:href="@{/}">SSO</a>
-    <div class="theme-toggle ms-auto" onclick="toggleTheme()">
-      <input type="checkbox" id="themeSwitch">
-      <div class="slider"></div>
-      <i class="fas fa-sun icon"></i>
-      <i class="fas fa-moon icon"></i>
+    <div class="ms-auto d-flex align-items-center">
+      <div class="theme-toggle me-3" onclick="toggleTheme()">
+        <input type="checkbox" id="themeSwitch">
+        <div class="slider"></div>
+        <i class="fas fa-sun icon"></i>
+        <i class="fas fa-moon icon"></i>
+      </div>
+      <div class="language-toggle custom-select-wrapper">
+        <i class="fas fa-globe"></i>
+        <select class="form-select" id="languageSelect" onchange="setLanguage(this.value)">
+          <option value="en" th:text="#{language.english}" th:selected="${#locale.language == 'en'}">English</option>
+          <option value="tr" th:text="#{language.turkish}" th:selected="${#locale.language == 'tr'}">Türkçe</option>
+        </select>
+      </div>
     </div>
   </div>
 </nav>
+<script>
+  function setLanguage(language) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', language);
+
+    // Check if URL already has 'lang' parameter
+    if (url.searchParams.has('lang')) {
+      url.searchParams.set('lang', language);
+    } else {
+      url.searchParams.append('lang', language);
+    }
+
+    window.location.replace(url.toString());
+  }
+</script>
 </body>
 </html>

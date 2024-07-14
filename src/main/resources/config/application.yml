@@ -7,6 +7,13 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
 
 spring:
+  web:
+    locale: en
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: false
+    use-code-as-default-message: true
+    cache-duration: 1h
   liquibase:
     change-log: classpath:config/liquibase/master.xml
   application:
