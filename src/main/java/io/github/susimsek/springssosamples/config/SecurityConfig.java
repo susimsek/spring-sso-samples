@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
@@ -67,14 +68,20 @@ public class SecurityConfig {
 
     private final SecurityProperties securityProperties;
 
+    private static final String CUSTOM_CONSENT_PAGE_URI = "/oauth2/consent";
+
     @Bean
-    @Order(1)
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
-        HttpSecurity http)
-        throws Exception {
+        HttpSecurity http) throws Exception {
+
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+            .authorizationEndpoint(authorizationEndpoint ->
+                authorizationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI))
             .oidc(Customizer.withDefaults());
+
         http
             .exceptionHandling(exceptions -> exceptions
                 .defaultAuthenticationEntryPointFor(
@@ -82,14 +89,13 @@ public class SecurityConfig {
                     new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                 )
             )
-            .oauth2ResourceServer(resourceServer -> resourceServer
-                .jwt(Customizer.withDefaults()));
-
+            .oauth2ResourceServer(oauth2ResourceServer ->
+                oauth2ResourceServer.jwt(Customizer.withDefaults()));
         return http.build();
     }
 
+
     @Bean
-    @Order(2)
     public SecurityFilterChain defaultSecurityFilterChain(
         HttpSecurity http,
         RequestMatcherConfig requestMatcherConfig) throws Exception {
