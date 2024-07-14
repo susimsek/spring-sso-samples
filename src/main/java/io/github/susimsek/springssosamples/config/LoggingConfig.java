@@ -13,7 +13,7 @@ import com.github.loki4j.logback.JavaHttpSender;
 import com.github.loki4j.logback.JsonEncoder;
 import com.github.loki4j.logback.Loki4jAppender;
 import io.github.susimsek.springssosamples.enums.FilterOrder;
-import io.github.susimsek.springssosamples.logging.aspect.LoggingAspect;
+import io.github.susimsek.springssosamples.aspect.LoggingAspect;
 import io.github.susimsek.springssosamples.logging.config.LoggingProperties;
 import io.github.susimsek.springssosamples.filter.LoggingFilter;
 import io.github.susimsek.springssosamples.logging.formatter.JsonLogFormatter;
@@ -33,12 +33,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
 
 @Configuration
 @EnableConfigurationProperties(LoggingProperties.class)
 @ConditionalOnProperty(name = "logging.http.enabled", havingValue = "true", matchIfMissing = true)
 @RequiredArgsConstructor
+@EnableAspectJAutoProxy
 public class LoggingConfig {
 
     private final LoggingProperties loggingProperties;

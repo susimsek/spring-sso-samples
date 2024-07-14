@@ -1,4 +1,4 @@
-package io.github.susimsek.springssosamples.logging.aspect;
+package io.github.susimsek.springssosamples.aspect;
 
 import io.github.susimsek.springssosamples.logging.handler.LoggingHandler;
 import lombok.RequiredArgsConstructor;
