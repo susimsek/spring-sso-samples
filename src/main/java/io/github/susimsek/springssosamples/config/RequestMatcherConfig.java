@@ -15,6 +15,7 @@ public class RequestMatcherConfig {
             mvc.pattern("/webjars/**"),
             mvc.pattern("/css/**"),
             mvc.pattern("/js/**"),
+            mvc.pattern("/*.html"),
             mvc.pattern("/*.js"),
             mvc.pattern("/*.css"),
             mvc.pattern("/*.ico"),
@@ -27,6 +28,9 @@ public class RequestMatcherConfig {
     public String[] staticResourcePaths() {
         return new String[] {
             "/webjars/**",
+            "/css/**",
+            "/js/**",
+            "/*.html",
             "/*.js",
             "/*.css",
             "/*.ico",
