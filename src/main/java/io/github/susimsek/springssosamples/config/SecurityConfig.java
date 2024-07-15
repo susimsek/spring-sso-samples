@@ -2,6 +2,7 @@ package io.github.susimsek.springssosamples.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import io.github.susimsek.springssosamples.exception.security.OAuth2SecurityProblemSupport;
 import io.github.susimsek.springssosamples.mapper.UserMapper;
 import io.github.susimsek.springssosamples.repository.UserRepository;
 import io.github.susimsek.springssosamples.security.SecurityProperties;
@@ -35,11 +36,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(
         HttpSecurity http,
+        OAuth2SecurityProblemSupport problemSupport,
         RequestMatcherConfig requestMatcherConfig) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
             .cors(withDefaults())
+            .exceptionHandling(exceptionHandling ->
+                exceptionHandling.authenticationEntryPoint(problemSupport)
+                    .accessDeniedHandler(problemSupport))
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp.policyDirectives(securityProperties.getContentSecurityPolicy()))
                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)

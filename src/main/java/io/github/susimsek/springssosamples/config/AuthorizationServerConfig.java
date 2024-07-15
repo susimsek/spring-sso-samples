@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import io.github.susimsek.springssosamples.exception.security.OAuth2SecurityProblemSupport;
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationConsentMapper;
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationMapper;
 import io.github.susimsek.springssosamples.mapper.RegisteredClientMapper;
@@ -54,13 +55,23 @@ public class AuthorizationServerConfig {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
-        HttpSecurity http) throws Exception {
-
+        HttpSecurity http,
+        OAuth2SecurityProblemSupport problemSupport) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-            .authorizationEndpoint(authorizationEndpoint ->
-                authorizationEndpoint.consentPage(CUSTOM_CONSENT_PAGE_URI))
+            .tokenEndpoint(tokenEndpoint -> tokenEndpoint.errorResponseHandler(problemSupport))
+            .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
+                .errorResponseHandler(problemSupport)
+                .consentPage(CUSTOM_CONSENT_PAGE_URI))
+            .tokenIntrospectionEndpoint(tokenIntrospectionEndpoint -> tokenIntrospectionEndpoint
+                .errorResponseHandler(problemSupport))
+            .tokenRevocationEndpoint(tokenRevocationEndpoint -> tokenRevocationEndpoint
+                .errorResponseHandler(problemSupport))
+            .deviceAuthorizationEndpoint(deviceAuthorizationEndpoint ->
+                deviceAuthorizationEndpoint.errorResponseHandler(problemSupport))
+            .deviceVerificationEndpoint(deviceVerificationEndpoint -> deviceVerificationEndpoint
+                .errorResponseHandler(problemSupport))
             .oidc(Customizer.withDefaults());
 
         http
@@ -69,9 +80,20 @@ public class AuthorizationServerConfig {
                     new LoginUrlAuthenticationEntryPoint("/login"),
                     new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                 )
+                .defaultAuthenticationEntryPointFor(
+                    problemSupport,
+                    request -> !new MediaTypeRequestMatcher(MediaType.TEXT_HTML).matches(request)
+                )
+                .defaultAccessDeniedHandlerFor(
+                    problemSupport,
+                    request -> !new MediaTypeRequestMatcher(MediaType.TEXT_HTML).matches(request)
+                )
             )
             .oauth2ResourceServer(oauth2ResourceServer ->
-                oauth2ResourceServer.jwt(Customizer.withDefaults()));
+                oauth2ResourceServer.jwt(Customizer.withDefaults()))
+            .exceptionHandling(exceptionHandling -> exceptionHandling
+                .authenticationEntryPoint(problemSupport)
+                .accessDeniedHandler(problemSupport));
         return http.build();
     }
 
