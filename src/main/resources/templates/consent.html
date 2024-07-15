@@ -7,17 +7,17 @@
   </div>
   <div class="row">
     <div class="col text-center">
-      <p th:text="#{consent.application.access}">
+      <p th:utext="#{consent.application.access(${clientId}, ${principalName})}">
         The application
         <span class="fw-bold text-primary" th:text="${clientId}"></span>
         wants to access your account
-        <span class="fw-bold" th:text="${principalName}"></span>
+        <span class="fw-bold" th:text="${principalName}"></span>.
       </p>
     </div>
   </div>
   <div th:if="${userCode}" class="row">
     <div class="col text-center">
-      <p class="alert alert-warning">
+      <p class="alert alert-warning" th:text="#{consent.userCode(${userCode})}">
         You have provided the code
         <span class="fw-bold" th:text="${userCode}"></span>.
         Verify that this code matches what is shown on your device.
