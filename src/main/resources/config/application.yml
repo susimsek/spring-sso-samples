@@ -10,6 +10,9 @@ spring:
   restclient:
     connect-timeout: 5s
     read-timeout: 10s
+  mvc:
+    problemdetails:
+      enabled: true
   web:
     locale: en
   messages:
