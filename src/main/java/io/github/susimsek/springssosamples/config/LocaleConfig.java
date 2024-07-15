@@ -21,9 +21,9 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import java.time.Duration;
 import java.util.Locale;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import(MessageSourceAutoConfiguration.class)
-public class LocaleConfig implements WebMvcConfigurer {
+public class LocaleConfig {
 
     @Bean
     public LocaleResolver localeResolver() {
@@ -38,11 +38,6 @@ public class LocaleConfig implements WebMvcConfigurer {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");
         return localeChangeInterceptor;
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(localeChangeInterceptor());
     }
 
     @Bean
