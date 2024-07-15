@@ -35,6 +35,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableConfigurationProperties(LoggingProperties.class)
@@ -82,6 +83,7 @@ public class LoggingConfig {
             .requestMatchers(requestMatcherConfig.staticResourcePaths()).permitAll()
             .requestMatchers(requestMatcherConfig.swaggerResourcePaths()).permitAll()
             .requestMatchers(requestMatcherConfig.actuatorEndpoints()).permitAll()
+            .requestMatchers(HttpMethod.GET, "/login").permitAll()
             .anyRequest().logged()
             .build();
     }

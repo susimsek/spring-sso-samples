@@ -2,9 +2,9 @@ package io.github.susimsek.springssosamples.filter;
 
 import io.github.susimsek.springssosamples.enums.FilterOrder;
 import io.github.susimsek.springssosamples.logging.enums.Source;
-import io.github.susimsek.springssosamples.logging.handler.HttpLoggingHandler;
 import io.github.susimsek.springssosamples.logging.handler.LoggingHandler;
 import io.github.susimsek.springssosamples.utils.HttpHeadersUtils;
+import io.github.susimsek.springssosamples.utils.HttpServletWrapperUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 @Slf4j
 @RequiredArgsConstructor
-public class LoggingFilter extends OncePerRequestFilter  implements Ordered {
+public class LoggingFilter extends OncePerRequestFilter implements Ordered {
 
     private final LoggingHandler loggingHandler;
 
@@ -47,8 +47,8 @@ public class LoggingFilter extends OncePerRequestFilter  implements Ordered {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        ContentCachingRequestWrapper wrappedRequest = wrapRequest(request);
-        ContentCachingResponseWrapper wrappedResponse = wrapResponse(response);
+        ContentCachingRequestWrapper wrappedRequest = HttpServletWrapperUtils.wrapRequest(request);
+        ContentCachingResponseWrapper wrappedResponse = HttpServletWrapperUtils.wrapResponse(response);
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -88,22 +88,6 @@ public class LoggingFilter extends OncePerRequestFilter  implements Ordered {
             );
         } catch (URISyntaxException e) {
             log.error("Invalid URI Syntax for request: {}", request.getRequestURL(), e);
-        }
-    }
-
-    private static ContentCachingRequestWrapper wrapRequest(HttpServletRequest request) {
-        if (request instanceof ContentCachingRequestWrapper wrapper) {
-            return wrapper;
-        } else {
-            return new ContentCachingRequestWrapper(request);
-        }
-    }
-
-    private static ContentCachingResponseWrapper wrapResponse(HttpServletResponse response) {
-        if (response instanceof ContentCachingResponseWrapper wrapper) {
-            return wrapper;
-        } else {
-            return new ContentCachingResponseWrapper(response);
         }
     }
 }
