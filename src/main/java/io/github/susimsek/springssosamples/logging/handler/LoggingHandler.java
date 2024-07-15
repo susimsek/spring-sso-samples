@@ -28,6 +28,4 @@ public interface LoggingHandler {
     boolean shouldNotLog(HttpRequest request);
 
     boolean shouldNotMethodLog(ProceedingJoinPoint joinPoint);
-
-    int getOrder();
 }

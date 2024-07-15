@@ -1,8 +1,9 @@
 package io.github.susimsek.springssosamples.filter;
 
+import io.github.susimsek.springssosamples.enums.FilterOrder;
 import io.github.susimsek.springssosamples.logging.enums.Source;
+import io.github.susimsek.springssosamples.logging.handler.HttpLoggingHandler;
 import io.github.susimsek.springssosamples.logging.handler.LoggingHandler;
-import io.github.susimsek.springssosamples.logging.wrapper.CachedBodyHttpServletRequestWrapper;
 import io.github.susimsek.springssosamples.utils.HttpHeadersUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.lang.NonNull;
 import org.springframework.util.StopWatch;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 @Slf4j
@@ -27,9 +30,12 @@ public class LoggingFilter extends OncePerRequestFilter  implements Ordered {
 
     private final LoggingHandler loggingHandler;
 
+    @Setter
+    private int order = FilterOrder.LOGGING.order();
+
     @Override
     public int getOrder() {
-        return loggingHandler.getOrder();
+        return order;
     }
 
     @Override
@@ -41,8 +47,8 @@ public class LoggingFilter extends OncePerRequestFilter  implements Ordered {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        CachedBodyHttpServletRequestWrapper wrappedRequest = new CachedBodyHttpServletRequestWrapper(request);
-        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
+        ContentCachingRequestWrapper wrappedRequest = wrapRequest(request);
+        ContentCachingResponseWrapper wrappedResponse = wrapResponse(response);
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
@@ -56,7 +62,7 @@ public class LoggingFilter extends OncePerRequestFilter  implements Ordered {
         wrappedResponse.copyBodyToResponse();
     }
 
-    private void logRequestAndResponse(CachedBodyHttpServletRequestWrapper request,
+    private void logRequestAndResponse(ContentCachingRequestWrapper request,
                                        ContentCachingResponseWrapper response,
                                        long duration) {
         try {
@@ -82,6 +88,22 @@ public class LoggingFilter extends OncePerRequestFilter  implements Ordered {
             );
         } catch (URISyntaxException e) {
             log.error("Invalid URI Syntax for request: {}", request.getRequestURL(), e);
+        }
+    }
+
+    private static ContentCachingRequestWrapper wrapRequest(HttpServletRequest request) {
+        if (request instanceof ContentCachingRequestWrapper wrapper) {
+            return wrapper;
+        } else {
+            return new ContentCachingRequestWrapper(request);
+        }
+    }
+
+    private static ContentCachingResponseWrapper wrapResponse(HttpServletResponse response) {
+        if (response instanceof ContentCachingResponseWrapper wrapper) {
+            return wrapper;
+        } else {
+            return new ContentCachingResponseWrapper(response);
         }
     }
 }

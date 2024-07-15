@@ -41,12 +41,6 @@ public class HttpLoggingHandler implements LoggingHandler {
     private final Obfuscator obfuscator;
     private final List<RequestMatcherConfig> requestMatcherConfigs;
     private final boolean defaultLogged;
-    private final int order;
-
-    @Override
-    public int getOrder() {
-        return order;
-    }
 
     @Override
     public void logRequest(HttpMethod method, URI uri, HttpHeaders headers, byte[] body,
@@ -215,8 +209,6 @@ public class HttpLoggingHandler implements LoggingHandler {
 
         InitialBuilder methodLogLevel(MethodLogLevel logLevel);
 
-        InitialBuilder order(int order);
-
         AfterRequestMatchersBuilder anyRequest();
 
         AfterRequestMatchersBuilder requestMatchers(HttpMethod method, String... patterns);
@@ -248,7 +240,6 @@ public class HttpLoggingHandler implements LoggingHandler {
         private boolean defaultLogged = true;
         private HttpLogLevel httpLogLevel = HttpLogLevel.FULL;
         private MethodLogLevel methodLogLevel = MethodLogLevel.FULL;
-        private int order = FilterOrder.LOGGING.order();
         private int lastIndex = 0;
 
         private Builder(Tracer tracer, LogFormatter logFormatter,
@@ -311,11 +302,6 @@ public class HttpLoggingHandler implements LoggingHandler {
             return this;
         }
 
-        public Builder order(int order) {
-            this.order = order;
-            return this;
-        }
-
         public Builder httpLogLevel(HttpLogLevel logLevel) {
             this.httpLogLevel = logLevel;
             return this;
@@ -329,7 +315,7 @@ public class HttpLoggingHandler implements LoggingHandler {
         public HttpLoggingHandler build() {
             return new HttpLoggingHandler(
                 tracer, httpLogLevel, methodLogLevel, logFormatter, obfuscator,
-                requestMatcherConfigs, defaultLogged, order);
+                requestMatcherConfigs, defaultLogged);
         }
 
         @Override

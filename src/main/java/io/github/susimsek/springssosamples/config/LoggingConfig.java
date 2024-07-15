@@ -59,7 +59,9 @@ public class LoggingConfig {
 
         @Bean
         public LoggingFilter loggingFilter(LoggingHandler loggingHandler) {
-            return new LoggingFilter(loggingHandler);
+            LoggingFilter loggingFilter = new LoggingFilter(loggingHandler);
+            loggingFilter.setOrder(FilterOrder.LOGGING.order());
+            return loggingFilter;
         }
     }
 
@@ -77,7 +79,6 @@ public class LoggingConfig {
         return HttpLoggingHandler.builder(tracer, logFormatter, obfuscator)
             .httpLogLevel(loggingProperties.getHttp().getLogLevel())
             .methodLogLevel(loggingProperties.getAspect().getLogLevel())
-            .order(FilterOrder.LOGGING.order())
             .requestMatchers(requestMatcherConfig.staticResourcePaths()).permitAll()
             .requestMatchers(requestMatcherConfig.swaggerResourcePaths()).permitAll()
             .requestMatchers(requestMatcherConfig.actuatorEndpoints()).permitAll()
