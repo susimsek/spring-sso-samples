@@ -21,7 +21,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import java.time.Duration;
 import java.util.Locale;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @Import(MessageSourceAutoConfiguration.class)
 public class LocaleConfig implements WebMvcConfigurer {
 
