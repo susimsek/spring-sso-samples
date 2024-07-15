@@ -60,6 +60,12 @@ public class AuthorizationServerConfig {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+            .clientAuthentication(clientAuthentication -> clientAuthentication.errorResponseHandler(problemSupport))
+            .oidc(oidc -> oidc
+                .clientRegistrationEndpoint(clientRegistrationEndpoint ->
+                    clientRegistrationEndpoint.errorResponseHandler(problemSupport))
+                .logoutEndpoint(logoutEndpoint -> logoutEndpoint.errorResponseHandler(problemSupport))
+                .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.errorResponseHandler(problemSupport)))
             .tokenEndpoint(tokenEndpoint -> tokenEndpoint.errorResponseHandler(problemSupport))
             .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
                 .errorResponseHandler(problemSupport)
@@ -71,8 +77,7 @@ public class AuthorizationServerConfig {
             .deviceAuthorizationEndpoint(deviceAuthorizationEndpoint ->
                 deviceAuthorizationEndpoint.errorResponseHandler(problemSupport))
             .deviceVerificationEndpoint(deviceVerificationEndpoint -> deviceVerificationEndpoint
-                .errorResponseHandler(problemSupport))
-            .oidc(Customizer.withDefaults());
+                .errorResponseHandler(problemSupport));
 
         http
             .exceptionHandling(exceptions -> exceptions
@@ -90,10 +95,7 @@ public class AuthorizationServerConfig {
                 )
             )
             .oauth2ResourceServer(oauth2ResourceServer ->
-                oauth2ResourceServer.jwt(Customizer.withDefaults()))
-            .exceptionHandling(exceptionHandling -> exceptionHandling
-                .authenticationEntryPoint(problemSupport)
-                .accessDeniedHandler(problemSupport));
+                oauth2ResourceServer.jwt(Customizer.withDefaults()));
         return http.build();
     }
 
