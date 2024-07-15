@@ -17,6 +17,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.util.StringUtils;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -28,6 +29,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final ParameterMessageSource messageSource;
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(
+        @NonNull HttpMediaTypeNotAcceptableException ex,
+        @NonNull HttpHeaders headers,
+        @NonNull HttpStatusCode status,
+        @NonNull WebRequest request) {
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.MEDIA_TYPE_NOT_ACCEPTABLE;
+        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode, new HttpHeaders(), request);
+    }
 
     @ExceptionHandler(AuthenticationException.class)
     protected ResponseEntity<Object> handleAuthentication(@NonNull AuthenticationException ex,

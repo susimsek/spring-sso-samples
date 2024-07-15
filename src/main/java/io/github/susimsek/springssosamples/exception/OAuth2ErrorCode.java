@@ -25,7 +25,8 @@ public enum OAuth2ErrorCode {
     INVALID_GRANT("invalid_grant", HttpStatus.BAD_REQUEST, "error.oauth2.invalid_grant"),
     UNSUPPORTED_GRANT_TYPE("unsupported_grant_type", HttpStatus.BAD_REQUEST, "error.oauth2.unsupported_grant_type"),
     UNSUPPORTED_TOKEN_TYPE("unsupported_token_type", HttpStatus.BAD_REQUEST, "error.oauth2.unsupported_token_type"),
-    INVALID_REDIRECT_URI("invalid_redirect_uri", HttpStatus.BAD_REQUEST, "error.oauth2.invalid_redirect_uri");
+    INVALID_REDIRECT_URI("invalid_redirect_uri", HttpStatus.BAD_REQUEST, "error.oauth2.invalid_redirect_uri"),
+    MEDIA_TYPE_NOT_ACCEPTABLE("media_type_not_acceptable", HttpStatus.NOT_ACCEPTABLE, "error.oauth2.media_type_not_acceptable");
 
     private final String errorCode;
     private final HttpStatus httpStatus;
