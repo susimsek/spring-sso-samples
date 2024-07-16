@@ -51,7 +51,7 @@ public class AuthorizationServerConfig {
 
     private final SecurityProperties securityProperties;
 
-    private static final String CUSTOM_CONSENT_PAGE_URI = "/oauth2/consent";
+    private static final String CONSENT_PAGE_URI = "/oauth2/consent";
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -71,7 +71,7 @@ public class AuthorizationServerConfig {
             .tokenEndpoint(tokenEndpoint -> tokenEndpoint.errorResponseHandler(oAuth2SecurityProblemSupport))
             .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
                 .errorResponseHandler(oAuth2AuthorizationProblemSupport)
-                .consentPage(CUSTOM_CONSENT_PAGE_URI))
+                .consentPage(CONSENT_PAGE_URI))
             .tokenIntrospectionEndpoint(tokenIntrospectionEndpoint -> tokenIntrospectionEndpoint
                 .errorResponseHandler(oAuth2SecurityProblemSupport))
             .tokenRevocationEndpoint(tokenRevocationEndpoint -> tokenRevocationEndpoint

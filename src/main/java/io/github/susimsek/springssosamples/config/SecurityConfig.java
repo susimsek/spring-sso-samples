@@ -2,7 +2,6 @@ package io.github.susimsek.springssosamples.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import io.github.susimsek.springssosamples.exception.security.OAuth2SecurityProblemSupport;
 import io.github.susimsek.springssosamples.mapper.UserMapper;
 import io.github.susimsek.springssosamples.repository.UserRepository;
 import io.github.susimsek.springssosamples.security.SecurityProperties;
@@ -33,6 +32,8 @@ public class SecurityConfig {
 
     private final SecurityProperties securityProperties;
 
+    private static final String LOGIN_PAGE_URI = "/login";
+
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(
         HttpSecurity http,
@@ -54,11 +55,11 @@ public class SecurityConfig {
                     .requestMatchers(requestMatcherConfig.swaggerPaths()).permitAll()
                     .requestMatchers(requestMatcherConfig.actuatorPaths()).permitAll()
                     .anyRequest().authenticated())
-            .formLogin(formLogin -> formLogin.loginPage("/login")
-                .failureUrl("/login?error=true")
+            .formLogin(formLogin -> formLogin.loginPage(LOGIN_PAGE_URI)
+                .failureUrl(LOGIN_PAGE_URI + "?error=true")
                 .permitAll())
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout=true")
+                .logoutSuccessUrl(LOGIN_PAGE_URI + "?logout=true")
             );
         return http.build();
     }
