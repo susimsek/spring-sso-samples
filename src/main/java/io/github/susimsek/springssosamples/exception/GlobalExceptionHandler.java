@@ -1,8 +1,8 @@
 package io.github.susimsek.springssosamples.exception;
 
-import static io.github.susimsek.springssosamples.exception.ratelimit.RateLimitConstants.RATE_LIMIT_LIMIT_HEADER_NAME;
-import static io.github.susimsek.springssosamples.exception.ratelimit.RateLimitConstants.RATE_LIMIT_REMAINING_HEADER_NAME;
-import static io.github.susimsek.springssosamples.exception.ratelimit.RateLimitConstants.RATE_LIMIT_RESET_HEADER_NAME;
+import static io.github.susimsek.springssosamples.constant.RateLimitConstants.RATE_LIMIT_LIMIT_HEADER_NAME;
+import static io.github.susimsek.springssosamples.constant.RateLimitConstants.RATE_LIMIT_REMAINING_HEADER_NAME;
+import static io.github.susimsek.springssosamples.constant.RateLimitConstants.RATE_LIMIT_RESET_HEADER_NAME;
 
 import io.github.susimsek.springssosamples.exception.ratelimit.RateLimitExceededException;
 import io.github.susimsek.springssosamples.exception.versioning.UnsupportedApiVersionException;

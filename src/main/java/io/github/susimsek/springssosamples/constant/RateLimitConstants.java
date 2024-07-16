@@ -1,4 +1,4 @@
-package io.github.susimsek.springssosamples.exception.ratelimit;
+package io.github.susimsek.springssosamples.constant;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
