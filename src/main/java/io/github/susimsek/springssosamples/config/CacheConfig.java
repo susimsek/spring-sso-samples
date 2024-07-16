@@ -6,6 +6,7 @@ import com.github.benmanes.caffeine.jcache.configuration.CaffeineConfiguration;
 import com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider;
 import io.github.susimsek.springssosamples.cache.CacheName;
 import io.github.susimsek.springssosamples.cache.CacheProperties;
+import io.github.susimsek.springssosamples.cache.SpecificationKeyGenerator;
 import java.util.OptionalLong;
 import java.util.concurrent.TimeUnit;
 import javax.cache.Caching;
@@ -29,6 +30,11 @@ import org.springframework.context.annotation.Configuration;
 public class CacheConfig {
 
     private final CacheProperties cacheProperties;
+
+    @Bean
+    public SpecificationKeyGenerator specificationKeyGenerator() {
+        return new SpecificationKeyGenerator();
+    }
 
     @Bean
     public CacheManager cacheManager() {

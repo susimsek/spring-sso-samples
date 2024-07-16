@@ -53,12 +53,13 @@ spring:
         maximum-size: 10000
     cache-names:
       - oauth2AuthorizationEntity
+      - oauth2AuthorizationEntityBySpecification
       - oauth2AuthorizationConsentEntity
       - oauth2ClientEntity
       - oauth2ClientEntity.clientScopes
       - oauth2ClientEntityByClientId
-      - oauth2ClientEntityCountByClientIdCache
-      - oauth2ClientEntityCountByClientSecretCache
+      - oauth2ClientEntityCountByClientId
+      - oauth2ClientEntityCountByClientSecret
       - oauth2ScopeEntity
       - oauth2ClientScopeMappingEntity
       - roleEntity
@@ -67,7 +68,7 @@ spring:
       - userEntity.userRoles
       - userEntityByUsername
       - userEntityByEmail
-      - userRoleMappingCache
+      - userRoleMappingEntity
 
 management:
   endpoints:
