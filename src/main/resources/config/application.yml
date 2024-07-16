@@ -52,16 +52,22 @@ spring:
         initial-capacity: 5000
         maximum-size: 10000
     cache-names:
-      - oauth2AuthorizationEntityCache
-      - oauth2AuthorizationConsentEntityCache
-      - oauth2ClientEntityCache
-      - oauth2ClientEntityCache.clientScopes
-      - oauth2ScopeEntityCache
-      - oauth2ClientScopeMappingEntityCache
-      - roleEntityCache
-      - userEntityCache
-      - userEntityCache.userRoles
-      - userRoleMappingEntityCache
+      - oauth2AuthorizationEntity
+      - oauth2AuthorizationConsentEntity
+      - oauth2ClientEntity
+      - oauth2ClientEntity.clientScopes
+      - oauth2ClientEntityByClientId
+      - oauth2ClientEntityCountByClientIdCache
+      - oauth2ClientEntityCountByClientSecretCache
+      - oauth2ScopeEntity
+      - oauth2ClientScopeMappingEntity
+      - roleEntity
+      - roleEntityByName
+      - userEntity
+      - userEntity.userRoles
+      - userEntityByUsername
+      - userEntityByEmail
+      - userRoleMappingCache
 
 management:
   endpoints:
