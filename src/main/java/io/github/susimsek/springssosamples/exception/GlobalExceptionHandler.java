@@ -42,6 +42,7 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -224,7 +225,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull HttpHeaders headers,
         @NonNull HttpStatusCode status,
         @NonNull WebRequest request) {
-        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.NO_HANDLER_FOUND;
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.NOT_FOUND;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleNoResourceFoundException(
+        @NonNull NoResourceFoundException ex,
+        @NonNull HttpHeaders headers,
+        @NonNull HttpStatusCode status,
+        @NonNull WebRequest request) {
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.NOT_FOUND;
         return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
             oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
             null, new HttpHeaders(), request);

@@ -37,7 +37,7 @@ public enum OAuth2ErrorCode {
     REQUEST_BINDING(OAuth2ErrorCodes.INVALID_REQUEST, HttpStatus.BAD_REQUEST, "error.oauth2.request_binding"),
     MULTIPART(OAuth2ErrorCodes.INVALID_REQUEST, HttpStatus.BAD_REQUEST, "error.oauth2.multipart"),
     VALIDATION_FAILED(OAuth2ErrorCodes.INVALID_REQUEST, HttpStatus.BAD_REQUEST, "error.oauth2.validation_failed"),
-    NO_HANDLER_FOUND("resource_not_found", HttpStatus.NOT_FOUND, "error.oauth2.no_handler_found"),
+    NOT_FOUND("resource_not_found", HttpStatus.NOT_FOUND, "error.oauth2.not_found"),
     UNSUPPORTED_OPERATION("unsupported_operation", HttpStatus.NOT_IMPLEMENTED, "error.oauth2.unsupported_operation"),
     GATEWAY_TIMEOUT("gateway_timeout", HttpStatus.GATEWAY_TIMEOUT, "error.oauth2.gateway_timeout"),
     RATE_LIMIT_EXCEEDED("rate_limit_exceeded", HttpStatus.TOO_MANY_REQUESTS, "error.oauth2.rate_limit_exceeded"),

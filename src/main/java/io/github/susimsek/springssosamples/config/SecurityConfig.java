@@ -36,15 +36,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(
         HttpSecurity http,
-        OAuth2SecurityProblemSupport problemSupport,
         RequestMatcherConfig requestMatcherConfig) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
             .cors(withDefaults())
-            .exceptionHandling(exceptionHandling ->
-                exceptionHandling.authenticationEntryPoint(problemSupport)
-                    .accessDeniedHandler(problemSupport))
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp.policyDirectives(securityProperties.getContentSecurityPolicy()))
                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
