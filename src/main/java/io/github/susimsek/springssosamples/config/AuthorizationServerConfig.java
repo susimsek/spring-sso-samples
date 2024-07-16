@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import io.github.susimsek.springssosamples.exception.security.OAuth2AuthorizationProblemSupport;
 import io.github.susimsek.springssosamples.exception.security.OAuth2SecurityProblemSupport;
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationConsentMapper;
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationMapper;
@@ -56,28 +57,29 @@ public class AuthorizationServerConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
         HttpSecurity http,
-        OAuth2SecurityProblemSupport problemSupport) throws Exception {
+        OAuth2SecurityProblemSupport oAuth2SecurityProblemSupport,
+        OAuth2AuthorizationProblemSupport oAuth2AuthorizationProblemSupport) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-            .clientAuthentication(clientAuthentication -> clientAuthentication.errorResponseHandler(problemSupport))
+            .clientAuthentication(clientAuthentication -> clientAuthentication.errorResponseHandler(oAuth2SecurityProblemSupport))
             .oidc(oidc -> oidc
                 .clientRegistrationEndpoint(clientRegistrationEndpoint ->
-                    clientRegistrationEndpoint.errorResponseHandler(problemSupport))
-                .logoutEndpoint(logoutEndpoint -> logoutEndpoint.errorResponseHandler(problemSupport))
-                .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.errorResponseHandler(problemSupport)))
-            .tokenEndpoint(tokenEndpoint -> tokenEndpoint.errorResponseHandler(problemSupport))
+                    clientRegistrationEndpoint.errorResponseHandler(oAuth2SecurityProblemSupport))
+                .logoutEndpoint(logoutEndpoint -> logoutEndpoint.errorResponseHandler(oAuth2SecurityProblemSupport))
+                .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.errorResponseHandler(oAuth2SecurityProblemSupport)))
+            .tokenEndpoint(tokenEndpoint -> tokenEndpoint.errorResponseHandler(oAuth2SecurityProblemSupport))
             .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
-                .errorResponseHandler(problemSupport)
+                .errorResponseHandler(oAuth2AuthorizationProblemSupport)
                 .consentPage(CUSTOM_CONSENT_PAGE_URI))
             .tokenIntrospectionEndpoint(tokenIntrospectionEndpoint -> tokenIntrospectionEndpoint
-                .errorResponseHandler(problemSupport))
+                .errorResponseHandler(oAuth2SecurityProblemSupport))
             .tokenRevocationEndpoint(tokenRevocationEndpoint -> tokenRevocationEndpoint
-                .errorResponseHandler(problemSupport))
+                .errorResponseHandler(oAuth2SecurityProblemSupport))
             .deviceAuthorizationEndpoint(deviceAuthorizationEndpoint ->
-                deviceAuthorizationEndpoint.errorResponseHandler(problemSupport))
+                deviceAuthorizationEndpoint.errorResponseHandler(oAuth2SecurityProblemSupport))
             .deviceVerificationEndpoint(deviceVerificationEndpoint -> deviceVerificationEndpoint
-                .errorResponseHandler(problemSupport));
+                .errorResponseHandler(oAuth2SecurityProblemSupport));
 
         http
             .exceptionHandling(exceptions -> exceptions
