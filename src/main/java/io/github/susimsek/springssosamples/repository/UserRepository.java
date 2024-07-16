@@ -1,7 +1,5 @@
 package io.github.susimsek.springssosamples.repository;
 
-
-import static io.github.susimsek.springssosamples.cache.CacheName.ROLE_ENTITY_BY_NAME_CACHE;
 import static io.github.susimsek.springssosamples.cache.CacheName.USER_ENTITY_BY_EMAIL_CACHE;
 import static io.github.susimsek.springssosamples.cache.CacheName.USER_ENTITY_BY_USERNAME_CACHE;
 
