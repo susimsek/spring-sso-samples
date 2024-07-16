@@ -1,17 +1,24 @@
 package io.github.susimsek.springssosamples.exception;
 
+import static io.github.susimsek.springssosamples.exception.ratelimit.RateLimitConstants.RATE_LIMIT_LIMIT_HEADER_NAME;
+import static io.github.susimsek.springssosamples.exception.ratelimit.RateLimitConstants.RATE_LIMIT_REMAINING_HEADER_NAME;
+import static io.github.susimsek.springssosamples.exception.ratelimit.RateLimitConstants.RATE_LIMIT_RESET_HEADER_NAME;
+
+import io.github.susimsek.springssosamples.exception.ratelimit.RateLimitExceededException;
+import io.github.susimsek.springssosamples.exception.versioning.UnsupportedApiVersionException;
 import io.github.susimsek.springssosamples.i18n.ParameterMessageSource;
 import jakarta.validation.ConstraintViolationException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +56,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull HttpHeaders headers,
         @NonNull HttpStatusCode status,
         @NonNull WebRequest request) {
-        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.MEDIA_TYPE_NOT_ACCEPTABLE;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.NOT_ACCEPTABLE;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @Override
@@ -60,9 +68,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull HttpHeaders headers,
         @NonNull HttpStatusCode status,
         @NonNull WebRequest request) {
-        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.MEDIA_TYPE_NOT_SUPPORTED;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.UNSUPPORTED_MEDIA_TYPE;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @Override
@@ -71,9 +80,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull HttpHeaders headers,
         @NonNull HttpStatusCode status,
         @NonNull WebRequest request) {
-        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.REQUEST_METHOD_NOT_SUPPORTED;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.METHOD_NOT_ALLOWED;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @Override
@@ -83,8 +93,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull HttpStatusCode status,
         @NonNull WebRequest request) {
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.MESSAGE_NOT_READABLE;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @Override
@@ -94,8 +105,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull HttpStatusCode status,
         @NonNull WebRequest request) {
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.TYPE_MISMATCH;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @Override
@@ -106,8 +118,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull WebRequest request) {
         Map<String, Object> namedArgs = Map.of("paramName", ex.getParameterName());
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.MISSING_PARAMETER;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, namedArgs, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            namedArgs, new HttpHeaders(), request);
     }
 
     @Override
@@ -118,8 +131,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull WebRequest request) {
         Map<String, Object> namedArgs = Map.of("partName", ex.getRequestPartName());
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.MISSING_PART;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, namedArgs, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            namedArgs, new HttpHeaders(), request);
     }
 
     @Override
@@ -128,17 +142,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull HttpHeaders headers,
         @NonNull HttpStatusCode status,
         @NonNull WebRequest request) {
-        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.REQUEST_BINDING_ERROR;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.REQUEST_BINDING;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @ExceptionHandler(MultipartException.class)
     protected ResponseEntity<Object> handleMultipartException(@NonNull MultipartException ex,
                                                               @NonNull WebRequest request) {
-        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.MULTIPART_ERROR;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.MULTIPART;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @Override
@@ -152,9 +168,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             ex.getGlobalErrors().stream().map(Violation::new)
         ).toList();
 
-        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.VALIDATION_ERROR;
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.VALIDATION_FAILED;
         ProblemDetail problem = createProblemDetail(new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, request);
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, request);
         problem.setProperty(ErrorConstants.PROBLEM_VIOLATION_KEY, violations);
         return handleExceptionInternal(ex, problem, headers, oAuth2ErrorCode.httpStatus(), request);
     }
@@ -165,9 +182,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull WebRequest request) {
         List<Violation> violations = ex.getConstraintViolations().stream().map(Violation::new).toList();
 
-        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.VALIDATION_ERROR;
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.VALIDATION_FAILED;
         ProblemDetail problem = createProblemDetail(new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, request);
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, request);
         problem.setProperty(ErrorConstants.PROBLEM_VIOLATION_KEY, violations);
         return handleExceptionInternal(ex, problem, new HttpHeaders(), oAuth2ErrorCode.httpStatus(), request);
     }
@@ -178,22 +196,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         if (ex instanceof OAuth2AuthenticationException oAuth2AuthenticationException) {
             OAuth2Error oAuth2Error = oAuth2AuthenticationException.getError();
             var optionalOAuth2ErrorCode = OAuth2ErrorCode.fromErrorCode(oAuth2Error.getErrorCode());
-            if (optionalOAuth2ErrorCode.isPresent()){
+            if (optionalOAuth2ErrorCode.isPresent()) {
+                OAuth2ErrorCode oAuth2ErrorCode = optionalOAuth2ErrorCode.get();
                 return createProblemDetailResponse(ex, oAuth2Error,
-                    optionalOAuth2ErrorCode.get(), null, new HttpHeaders(), request);
+                    oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+                    null, new HttpHeaders(), request);
             }
         }
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.INVALID_TOKEN;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     protected ResponseEntity<Object> handleAccessDenied(@NonNull AccessDeniedException ex,
                                                         @NonNull WebRequest request) {
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.ACCESS_DENIED;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @Override
@@ -203,8 +225,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull HttpStatusCode status,
         @NonNull WebRequest request) {
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.NO_HANDLER_FOUND;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
+    }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    protected ResponseEntity<Object> handleRateLimitExceededException(
+        @NonNull RateLimitExceededException ex,
+        @NonNull WebRequest request) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.RETRY_AFTER, String.valueOf(ex.getWaitTime()));
+        headers.add(RATE_LIMIT_LIMIT_HEADER_NAME, String.valueOf(ex.getLimitForPeriod()));
+        headers.add(RATE_LIMIT_REMAINING_HEADER_NAME, String.valueOf(ex.getAvailablePermissions()));
+        headers.add(RATE_LIMIT_RESET_HEADER_NAME, String.valueOf(ex.getResetTime()));
+
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.RATE_LIMIT_EXCEEDED;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, headers, request);
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
@@ -212,16 +252,52 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull UnsupportedOperationException ex,
         @NonNull WebRequest request) {
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.UNSUPPORTED_OPERATION;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey()
+            , null, new HttpHeaders(), request);
+    }
+
+    @ExceptionHandler(UnsupportedApiVersionException.class)
+    public ResponseEntity<Object> handleUnsupportedApiVersionException(
+        @NonNull UnsupportedApiVersionException ex,
+        @NonNull WebRequest request) {
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.UNSUPPORTED_API_VERSION;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey()
+            , null, new HttpHeaders(), request);
     }
 
     @ExceptionHandler(SocketTimeoutException.class)
     public ResponseEntity<Object> handleSocketTimeoutException(@NonNull SocketTimeoutException ex,
                                                                @NonNull WebRequest request) {
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.GATEWAY_TIMEOUT;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
+    }
+
+    @ExceptionHandler(ResourceException.class)
+    public ResponseEntity<Object> handleResourceException(@NonNull ResourceException ex,
+                                                          @NonNull WebRequest request) {
+        Locale locale = request.getLocale();
+        String localizedResourceName = messageSource.getMessage(
+            "resource." + ex.getResourceName().toLowerCase(), null, locale);
+        String searchCriteria = messageSource.getMessage(
+            "search.criteria." + ex.getSearchCriteria().toLowerCase(), null, locale);
+        Map<String, Object> namedArgs = createNamedArgs(
+            localizedResourceName, searchCriteria, ex.getSearchValue());
+        return createProblemDetailResponse(ex, new OAuth2Error(ex.getErrorCode()),
+            ex.getStatus(), ex.getMessage(),
+            namedArgs, new HttpHeaders(), request);
+    }
+
+
+    @ExceptionHandler(LocalizedException.class)
+    public ResponseEntity<Object> handleLocalizedException(@NonNull LocalizedException ex,
+                                                           @NonNull WebRequest request) {
+        return createProblemDetailResponse(ex, new OAuth2Error(ex.getErrorCode()),
+            ex.getStatus(), ex.getMessage(),
+            null, new HttpHeaders(), request);
     }
 
     @ExceptionHandler(Exception.class)
@@ -229,8 +305,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull Exception ex,
         @NonNull WebRequest request) {
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.SERVER_ERROR;
-        return createProblemDetailResponse(ex,  new OAuth2Error(oAuth2ErrorCode.errorCode()),
-            oAuth2ErrorCode, null, new HttpHeaders(), request);
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
     }
 
     @Override
@@ -247,23 +324,40 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> createProblemDetailResponse(
         Exception ex,
         OAuth2Error oAuth2Error,
-        OAuth2ErrorCode oAuth2ErrorCode,
+        HttpStatusCode httpStatus,
+        String messageKey,
         Map<String, Object> namedArgs,
         HttpHeaders headers,
         WebRequest request) {
-        ProblemDetail problem = createProblemDetail(oAuth2Error, oAuth2ErrorCode, namedArgs, request);
-        return handleExceptionInternal(ex, problem, headers, oAuth2ErrorCode.httpStatus(), request);
+        ProblemDetail problem = createProblemDetail(
+            oAuth2Error,
+            httpStatus,
+            messageKey,
+            namedArgs, request);
+        return handleExceptionInternal(ex, problem, headers, httpStatus, request);
     }
 
-    private ProblemDetail createProblemDetail(OAuth2Error oAuth2Error, OAuth2ErrorCode oAuth2ErrorCode,
-                                           Map<String, Object> namedArgs, WebRequest request) {
+    private ProblemDetail createProblemDetail(OAuth2Error oAuth2Error,
+                                              HttpStatusCode httpStatus,
+                                              String messageKey,
+                                              Map<String, Object> namedArgs, WebRequest request) {
         String errorMessage = messageSource.getMessageWithNamedArgs(
-            oAuth2ErrorCode.messageKey(), namedArgs, request.getLocale());
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(oAuth2ErrorCode.httpStatus(), errorMessage);
+            messageKey, namedArgs, request.getLocale());
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(httpStatus, errorMessage);
         if (StringUtils.hasText(oAuth2Error.getUri())) {
             problem.setType(URI.create(oAuth2Error.getUri()));
         }
         problem.setProperty("error", oAuth2Error.getErrorCode());
         return problem;
+    }
+
+    private Map<String, Object> createNamedArgs(String resourceName,
+                                                String searchCriteria,
+                                                Object searchValue) {
+        Map<String, Object> namedArgs = new HashMap<>();
+        namedArgs.put("resource", resourceName);
+        namedArgs.put("criteria", searchCriteria);
+        namedArgs.put("value", searchValue.toString());
+        return namedArgs;
     }
 }
