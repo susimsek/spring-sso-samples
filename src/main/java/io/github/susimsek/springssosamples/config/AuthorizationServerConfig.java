@@ -85,14 +85,6 @@ public class AuthorizationServerConfig {
                     new LoginUrlAuthenticationEntryPoint("/login"),
                     new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
                 )
-                .defaultAuthenticationEntryPointFor(
-                    problemSupport,
-                    request -> !new MediaTypeRequestMatcher(MediaType.TEXT_HTML).matches(request)
-                )
-                .defaultAccessDeniedHandlerFor(
-                    problemSupport,
-                    request -> !new MediaTypeRequestMatcher(MediaType.TEXT_HTML).matches(request)
-                )
             )
             .oauth2ResourceServer(oauth2ResourceServer ->
                 oauth2ResourceServer.jwt(Customizer.withDefaults()));
