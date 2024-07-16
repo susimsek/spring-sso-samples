@@ -37,6 +37,31 @@ spring:
     deserialization:
       fail-on-unknown-properties: false
     default-property-inclusion: non_null
+  cache:
+    default-config:
+      ttl: 1h
+      initial-capacity: 5000
+      maximum-size: 10000
+    hibernate:
+      default-update-timestamps-region:
+        ttl: 1h
+        initial-capacity: 5000
+        maximum-size: 10000
+      default-query-results-region:
+        ttl: 1h
+        initial-capacity: 5000
+        maximum-size: 10000
+    cache-names:
+      - oauth2AuthorizationEntityCache
+      - oauth2AuthorizationConsentEntityCache
+      - oauth2ClientEntityCache
+      - oauth2ClientEntityCache.clientScopes
+      - oauth2ScopeEntityCache
+      - oauth2ClientScopeMappingEntityCache
+      - roleEntityCache
+      - userEntityCache
+      - userEntityCache.userRoles
+      - userRoleMappingEntityCache
 
 management:
   endpoints:

@@ -1,5 +1,6 @@
 package io.github.susimsek.springssosamples.entity;
 
+import io.github.susimsek.springssosamples.cache.CacheName;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
@@ -24,6 +27,7 @@ import org.hibernate.proxy.HibernateProxy;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = CacheName.OAUTH2_CLIENT_ENTITY_CACHE)
 public class OAuth2RegisteredClientEntity extends BaseEntity {
 
     @Id
@@ -58,6 +62,8 @@ public class OAuth2RegisteredClientEntity extends BaseEntity {
     private String postLogoutRedirectUris;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE,
+        region = CacheName.OAUTH2_CLIENT_ENTITY_CACHE + ".clientScopes")
     private Set<OAuth2ClientScopeMappingEntity> clientScopes = new HashSet<>();
 
     @Column(name = "client_settings", length = 4000, nullable = false)

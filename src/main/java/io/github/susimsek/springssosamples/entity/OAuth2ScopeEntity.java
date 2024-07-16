@@ -1,5 +1,6 @@
 package io.github.susimsek.springssosamples.entity;
 
+import io.github.susimsek.springssosamples.cache.CacheName;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity
@@ -19,6 +22,7 @@ import org.hibernate.proxy.HibernateProxy;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = CacheName.OAUTH2_SCOPE_ENTITY_CACHE)
 public class OAuth2ScopeEntity extends BaseEntity {
 
     @Id

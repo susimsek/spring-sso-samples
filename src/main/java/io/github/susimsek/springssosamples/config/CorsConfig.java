@@ -1,5 +1,6 @@
 package io.github.susimsek.springssosamples.config;
 
+import io.github.susimsek.springssosamples.security.cors.CorsProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

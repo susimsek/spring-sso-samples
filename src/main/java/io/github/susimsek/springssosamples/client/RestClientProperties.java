@@ -1,4 +1,4 @@
-package io.github.susimsek.springssosamples.config;
+package io.github.susimsek.springssosamples.client;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;

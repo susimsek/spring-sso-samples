@@ -1,11 +1,24 @@
 package io.github.susimsek.springssosamples.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.proxy.HibernateProxy;
 
+import io.github.susimsek.springssosamples.cache.CacheName;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.proxy.HibernateProxy;
 
 @Entity
 @Table(name = "user_role_mapping")
@@ -15,6 +28,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = CacheName.USER_ROLE_MAPPING_ENTITY_CACHE)
 public class UserRoleMappingEntity extends BaseEntity {
 
     @Id

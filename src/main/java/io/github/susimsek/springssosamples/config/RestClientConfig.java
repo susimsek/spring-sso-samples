@@ -1,5 +1,6 @@
 package io.github.susimsek.springssosamples.config;
 
+import io.github.susimsek.springssosamples.client.RestClientProperties;
 import io.github.susimsek.springssosamples.logging.wrapper.HttpLoggingWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.ObjectProvider;

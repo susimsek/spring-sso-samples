@@ -1,4 +1,4 @@
-package io.github.susimsek.springssosamples.config;
+package io.github.susimsek.springssosamples.security.cors;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
