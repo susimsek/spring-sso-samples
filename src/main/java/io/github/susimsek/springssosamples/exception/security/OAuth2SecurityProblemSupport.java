@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationException;
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2AuthorizationCodeRequestAuthenticationToken;
@@ -59,7 +60,14 @@ public class OAuth2SecurityProblemSupport
         handlerExceptionResolver.resolveException(request, response, null, ex);
     }
 
-    public void sendErrorResponse(HttpServletRequest request,
+    public void sendClientAuthenticationErrorResponse(HttpServletRequest request,
+                                                       HttpServletResponse response,
+                                                       AuthenticationException ex) {
+        SecurityContextHolder.clearContext();
+        handlerExceptionResolver.resolveException(request, response, null, ex);
+    }
+
+    public void sendAuthorizationEndpointErrorResponse(HttpServletRequest request,
                                   HttpServletResponse response,
                                   AuthenticationException exception) throws
         IOException {

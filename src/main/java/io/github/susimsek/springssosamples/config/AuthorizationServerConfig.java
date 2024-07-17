@@ -60,7 +60,8 @@ public class AuthorizationServerConfig {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-            .clientAuthentication(clientAuthentication -> clientAuthentication.errorResponseHandler(problemSupport))
+            .clientAuthentication(clientAuthentication -> clientAuthentication.errorResponseHandler(
+                problemSupport::sendClientAuthenticationErrorResponse))
             .oidc(oidc -> oidc
                 .clientRegistrationEndpoint(clientRegistrationEndpoint ->
                     clientRegistrationEndpoint.errorResponseHandler(problemSupport))
@@ -68,7 +69,7 @@ public class AuthorizationServerConfig {
                 .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.errorResponseHandler(problemSupport)))
             .tokenEndpoint(tokenEndpoint -> tokenEndpoint.errorResponseHandler(problemSupport))
             .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
-                .errorResponseHandler(problemSupport::sendErrorResponse)
+                .errorResponseHandler(problemSupport::sendAuthorizationEndpointErrorResponse)
                 .consentPage(CONSENT_PAGE_URI))
             .tokenIntrospectionEndpoint(tokenIntrospectionEndpoint -> tokenIntrospectionEndpoint
                 .errorResponseHandler(problemSupport))
