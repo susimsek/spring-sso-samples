@@ -130,31 +130,35 @@ public class OpenAPIConfig {
                 .responses(createTokenResponses())
                 .requestBody(new io.swagger.v3.oas.models.parameters.RequestBody()
                     .content(new Content()
-                        .addMediaType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE, new MediaType()
-                            .schema(new MapSchema()
-                                .properties(Map.of(
-                                    "grant_type", new StringSchema()
-                                        .description("The type of grant being requested.")
-                                        ._enum(List.of("authorization_code", PARAM_REFRESH_TOKEN))
-                                        .example("authorization_code"),
-                                    "code", new StringSchema()
-                                        .description("The authorization code received from the authorization server. Required if grant_type is 'authorization_code'.")
-                                        .example("authorization_code_here"),
-                                    PARAM_REDIRECT_URI, new StringSchema()
-                                        .description("The redirect URI registered with the authorization server. Required if grant_type is 'authorization_code'.")
-                                        .example("http://localhost:8080/callback"),
-                                    PARAM_CLIENT_ID, new StringSchema()
-                                        .description("The client ID issued to the client during registration.")
-                                        .example("client_id_here"),
-                                    PARAM_CLIENT_SECRET, new StringSchema()
-                                        .description("The client secret issued to the client during registration.")
-                                        .example("client_secret_here"),
-                                    PARAM_REFRESH_TOKEN, new StringSchema()
-                                        .description("The refresh token used to obtain new access tokens. Required if grant_type is 'refresh_token'.")
-                                        .example("refresh_token_here")
-                                ))
-                                .required(List.of("grant_type", PARAM_CLIENT_ID, PARAM_CLIENT_SECRET))
-                            )
+                        .addMediaType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+                            new MediaType()
+                                .schema(new MapSchema()
+                                    .properties(Map.of(
+                                        "grant_type", new StringSchema()
+                                            .description("The type of grant being requested.")
+                                            ._enum(List.of("authorization_code", PARAM_REFRESH_TOKEN))
+                                            .example("authorization_code"),
+                                        "code", new StringSchema()
+                                            .description(
+                                                "The authorization code received from the authorization server. Required if grant_type is 'authorization_code'.")
+                                            .example("authorization_code_here"),
+                                        PARAM_REDIRECT_URI, new StringSchema()
+                                            .description(
+                                                "The redirect URI registered with the authorization server. Required if grant_type is 'authorization_code'.")
+                                            .example("http://127.0.0.1:8080/login/oauth2/code/oidc-client"),
+                                        PARAM_CLIENT_ID, new StringSchema()
+                                            .description("The client ID issued to the client during registration.")
+                                            .example("oidc-client"),
+                                        PARAM_CLIENT_SECRET, new StringSchema()
+                                            .description("The client secret issued to the client during registration.")
+                                            .example("secret"),
+                                        PARAM_REFRESH_TOKEN, new StringSchema()
+                                            .description(
+                                                "The refresh token used to obtain new access tokens. Required if grant_type is 'refresh_token'.")
+                                            .example("refresh_token_here")
+                                    ))
+                                    .required(List.of("grant_type"))
+                                )
                         )
                     )
                 )
@@ -206,10 +210,12 @@ public class OpenAPIConfig {
                 .description("Endpoint to revoke an access or refresh token")
                 .requestBody(new io.swagger.v3.oas.models.parameters.RequestBody()
                     .content(new Content()
-                        .addMediaType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE, new MediaType()
-                            .schema(new MapSchema()
-                                .properties(createRevokeTokenProperties())
-                            )
+                        .addMediaType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+                            new MediaType()
+                                .schema(new MapSchema()
+                                    .properties(createRevokeTokenProperties())
+                                    .required(List.of("token_type_hint", "token"))
+                                )
                         )
                     )
                 )
@@ -319,14 +325,17 @@ public class OpenAPIConfig {
                     )
                 )
             )
-            .addApiResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()), new ApiResponse().description(HttpStatus.BAD_REQUEST.getReasonPhrase()))
-            .addApiResponse(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), new ApiResponse().description(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()));
+            .addApiResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()),
+                new ApiResponse().description(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+            .addApiResponse(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
+                new ApiResponse().description(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()));
     }
 
     private Map<String, Schema> createOpenIDConfigProperties() {
         Map<String, Schema> properties = new HashMap<>();
         properties.put("issuer", new StringSchema()
-            .description("URL using the https scheme with no query or fragment component that the OP asserts as its Issuer Identifier.")
+            .description(
+                "URL using the https scheme with no query or fragment component that the OP asserts as its Issuer Identifier.")
             .example("https://example.com"));
         properties.put("authorization_endpoint", new StringSchema()
             .description("URL of the authorization server's authorization endpoint.")
@@ -349,7 +358,8 @@ public class OpenAPIConfig {
             .items(new StringSchema().example("public"))
             .example(List.of("public", "pairwise")));
         properties.put("id_token_signing_alg_values_supported", new ArraySchema()
-            .description("List of the JWS signing algorithms (alg values) supported by the authorization server for the ID Token to encode the Claims in a JWT.")
+            .description(
+                "List of the JWS signing algorithms (alg values) supported by the authorization server for the ID Token to encode the Claims in a JWT.")
             .items(new StringSchema().example(RS256))
             .example(List.of(RS256)));
         properties.put("scopes_supported", new ArraySchema()
@@ -361,7 +371,8 @@ public class OpenAPIConfig {
             .items(new StringSchema().example("client_secret_post"))
             .example(List.of("client_secret_post", "client_secret_basic")));
         properties.put("claims_supported", new ArraySchema()
-            .description("List of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for.")
+            .description(
+                "List of the Claim Names of the Claims that the OpenID Provider MAY be able to supply values for.")
             .items(new StringSchema().example("sub"))
             .example(List.of("sub", "iss", "name", "email")));
         return properties;
@@ -375,14 +386,14 @@ public class OpenAPIConfig {
             "token_type_hint", new StringSchema()
                 .type("string")
                 .description("A hint about the type of the token submitted for revocation.")
-                .example(PARAM_REFRESH_TOKEN)
+                .example("access_token")
                 ._enum(List.of("access_token", PARAM_REFRESH_TOKEN)),
             PARAM_CLIENT_ID, new StringSchema()
                 .description("The client ID issued to the client during registration.")
-                .example("client_id_here"),
+                .example("oidc-client"),
             PARAM_CLIENT_SECRET, new StringSchema()
                 .description("The client secret issued to the client during registration.")
-                .example("client_secret_here")
+                .example("secret")
         );
     }
 }
