@@ -99,4 +99,4 @@ jobs:
       # Build and Publish Docker Image using Spring Boot Maven Plugin
       - name: Build and Publish Docker Image
         run: |
-          run: mvn -ntp -Pprod jib:build -DskipTests -Djib.to.auth.username=${{ secrets.DOCKER_USERNAME }} -Djib.to.auth.password=${{ secrets.DOCKER_PASSWORD }} -Djib.to.image=docker.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ env.BRANCH_NAME }}
+          mvn -ntp -Pprod jib:build -DskipTests -Djib.to.auth.username=${{ secrets.DOCKER_USERNAME }} -Djib.to.auth.password=${{ secrets.DOCKER_PASSWORD }} -Djib.to.image=docker.io/${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ env.BRANCH_NAME }}
