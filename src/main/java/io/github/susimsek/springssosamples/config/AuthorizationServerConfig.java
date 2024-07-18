@@ -27,8 +27,10 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
@@ -132,6 +134,7 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public JWKSource<SecurityContext> jwkSource(KeyPair jwtKeyPair) {
         RSAPublicKey publicKey = (RSAPublicKey) jwtKeyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) jwtKeyPair.getPrivate();
