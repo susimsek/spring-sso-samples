@@ -39,7 +39,8 @@ public class SecurityConfig {
     @Order(org.springframework.boot.autoconfigure.security.SecurityProperties.BASIC_AUTH_ORDER)
     public SecurityFilterChain defaultSecurityFilterChain(
         HttpSecurity http,
-        RequestMatcherConfig requestMatcherConfig) throws Exception {
+        RequestMatcherConfig requestMatcherConfig,
+        MvcRequestMatcher.Builder mvc) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
@@ -56,10 +57,10 @@ public class SecurityConfig {
                     .requestMatchers(requestMatcherConfig.staticResources()).permitAll()
                     .requestMatchers(requestMatcherConfig.swaggerPaths()).permitAll()
                     .requestMatchers(requestMatcherConfig.actuatorPaths()).permitAll()
+                    .requestMatchers(mvc.pattern(LOGIN_PAGE_URI)).permitAll()
                     .anyRequest().authenticated())
             .formLogin(formLogin -> formLogin.loginPage(LOGIN_PAGE_URI)
-                .failureUrl(LOGIN_PAGE_URI + "?error=true")
-                .permitAll())
+                .failureUrl(LOGIN_PAGE_URI + "?error=true"))
             .logout(logout -> logout
                 .logoutSuccessUrl(LOGIN_PAGE_URI + "?logout=true")
             );

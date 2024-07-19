@@ -1,10 +1,15 @@
 package io.github.susimsek.springssosamples.config;
 
+import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.JWSKeySelector;
+import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
+import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import io.github.susimsek.springssosamples.exception.security.OAuth2SecurityProblemSupport;
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationConsentMapper;
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationMapper;
@@ -14,6 +19,8 @@ import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationConsent
 import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2RegisteredClientRepository;
 import io.github.susimsek.springssosamples.security.SecurityProperties;
+import io.github.susimsek.springssosamples.security.oauth2.JweDecoder;
+import io.github.susimsek.springssosamples.security.oauth2.JweEncoder;
 import io.github.susimsek.springssosamples.service.DomainOAuth2AuthorizationConsentService;
 import io.github.susimsek.springssosamples.service.DomainOAuth2AuthorizationService;
 import io.github.susimsek.springssosamples.service.DomainOAuth2RegisteredClientService;
@@ -24,6 +31,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +46,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.converter.RsaKeyConverters;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -147,8 +156,22 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+    public JwtEncoder jwtEncoder(KeyPair jwtKeyPair)  {
+        return new JweEncoder(jwtKeyPair);
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder(KeyPair jwtKeyPair, JWKSource<SecurityContext> jwkSource) {
+        Set<JWSAlgorithm> jwsAlgs = new HashSet<>();
+        jwsAlgs.addAll(JWSAlgorithm.Family.RSA);
+        jwsAlgs.addAll(JWSAlgorithm.Family.EC);
+        jwsAlgs.addAll(JWSAlgorithm.Family.HMAC_SHA);
+        ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
+        JWSKeySelector<SecurityContext> jwsKeySelector = new JWSVerificationKeySelector<>(jwsAlgs, jwkSource);
+        jwtProcessor.setJWSKeySelector(jwsKeySelector);
+        jwtProcessor.setJWTClaimsSetVerifier((claims, context) -> {
+        });
+        return new JweDecoder(jwtKeyPair, jwtProcessor);
     }
 
     @Bean
