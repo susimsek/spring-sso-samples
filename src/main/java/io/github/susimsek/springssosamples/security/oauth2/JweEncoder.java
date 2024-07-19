@@ -1,9 +1,11 @@
 package io.github.susimsek.springssosamples.security.oauth2;
 
+import com.nimbusds.jose.Algorithm;
 import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWEAlgorithm;
+import com.nimbusds.jose.JWEEncrypter;
 import com.nimbusds.jose.JWEHeader;
 import com.nimbusds.jose.JWEObject;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -12,7 +14,16 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.RSAEncrypter;
 import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.crypto.factories.DefaultJWSSignerFactory;
 import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKMatcher;
+import com.nimbusds.jose.jwk.JWKSelector;
+import com.nimbusds.jose.jwk.KeyType;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jose.produce.JWSSignerFactory;
 import com.nimbusds.jose.util.Base64;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.jwt.JWTClaimsSet;
@@ -29,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -45,7 +57,9 @@ import org.springframework.util.StringUtils;
 public class JweEncoder implements JwtEncoder {
 
     private static final String ENCODING_ERROR_MESSAGE_TEMPLATE = "An error occurred while attempting to encode the Jwt: %s";
-    private final KeyPair jwtKeyPair;
+    private final JWKSource<SecurityContext> jwkSource;
+    private static final JWSSignerFactory JWS_SIGNER_FACTORY;
+    private final Map<JWK, JWSSigner> jwsSigners = new ConcurrentHashMap<>();
 
     @Override
     public Jwt encode(JwtEncoderParameters parameters) throws JwtEncodingException {
@@ -59,9 +73,10 @@ public class JweEncoder implements JwtEncoder {
 
         JWSHeader jwsHeader = convert(headers);
         JWTClaimsSet claimsSet = convert(claims);
+        JWK jwk = selectJwk(headers);
 
         SignedJWT signedJWT = new SignedJWT(jwsHeader, claimsSet);
-        JWSSigner signer = createSigner(this.jwtKeyPair);
+        JWSSigner signer = this.jwsSigners.computeIfAbsent(jwk, JweEncoder::createSigner);
 
         try {
             signedJWT.sign(signer);
@@ -70,7 +85,8 @@ public class JweEncoder implements JwtEncoder {
                 .build();
             JWEObject jweObject = new JWEObject(jweHeader,
                 new Payload(signedJWT));
-            RSAEncrypter encrypter = new RSAEncrypter((RSAPublicKey) this.jwtKeyPair.getPublic());
+
+            JWEEncrypter encrypter = createEncrypter(jwk);
             jweObject.encrypt(encrypter);
             return Jwt.withTokenValue(jweObject.serialize())
                 .headers(h -> h.putAll(jweHeader.toJSONObject()))
@@ -210,5 +226,59 @@ public class JweEncoder implements JwtEncoder {
 
     private static JWSSigner createSigner(KeyPair jwtKeyPair) {
         return new RSASSASigner(jwtKeyPair.getPrivate());
+    }
+
+    private JWK selectJwk(JwsHeader headers) {
+        List jwks;
+        try {
+            JWKSelector jwkSelector = new JWKSelector(createJwkMatcher(headers));
+            jwks = this.jwkSource.get(jwkSelector, null);
+        } catch (Exception var4) {
+            Exception ex = var4;
+            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Failed to select a JWK signing key -> " + ex.getMessage()), ex);
+        }
+
+        if (jwks.size() > 1) {
+            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Found multiple JWK signing keys for algorithm '" + headers.getAlgorithm().getName() + "'"));
+        } else if (jwks.isEmpty()) {
+            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Failed to select a JWK signing key"));
+        } else {
+            return (JWK)jwks.get(0);
+        }
+    }
+
+    private static JWKMatcher createJwkMatcher(JwsHeader headers) {
+        JWSAlgorithm jwsAlgorithm = JWSAlgorithm.parse(headers.getAlgorithm().getName());
+        if (!JWSAlgorithm.Family.RSA.contains(jwsAlgorithm) && !JWSAlgorithm.Family.EC.contains(jwsAlgorithm)) {
+            return JWSAlgorithm.Family.HMAC_SHA.contains(jwsAlgorithm) ? (new JWKMatcher.Builder()).keyType(KeyType.forAlgorithm(jwsAlgorithm))
+                .keyID(headers.getKeyId()).privateOnly(true).algorithms(new Algorithm[]{jwsAlgorithm, null}).build() : null;
+        } else {
+            return (new JWKMatcher.Builder()).keyType(KeyType.forAlgorithm(jwsAlgorithm)).keyID(headers.getKeyId()).keyUses(
+                KeyUse.SIGNATURE, null).algorithms(jwsAlgorithm, null).x509CertSHA256Thumbprint(Base64URL.from(headers.getX509SHA256Thumbprint())).build();
+        }
+    }
+
+    private static JWSSigner createSigner(JWK jwk) {
+        try {
+            return JWS_SIGNER_FACTORY.createJWSSigner(jwk);
+        } catch (JOSEException var2) {
+            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
+                "Failed to create a JWS Signer -> " + var2.getMessage()), var2);
+        }
+    }
+
+    public static JWEEncrypter createEncrypter(JWK jwk) {
+        try {
+            RSAKey rsaKey = (RSAKey) jwk;
+            RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
+            return new RSAEncrypter(publicKey);
+        } catch (JOSEException var2) {
+            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
+                "Failed to create a JWE Encrypter -> " + var2.getMessage()), var2);
+        }
+    }
+
+    static {
+        JWS_SIGNER_FACTORY = new DefaultJWSSignerFactory();
     }
 }

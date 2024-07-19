@@ -156,8 +156,8 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public JwtEncoder jwtEncoder(KeyPair jwtKeyPair)  {
-        return new JweEncoder(jwtKeyPair);
+    public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource)  {
+        return new JweEncoder(jwkSource);
     }
 
     @Bean

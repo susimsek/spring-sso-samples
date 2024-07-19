@@ -7,6 +7,7 @@ import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.JWTProcessor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public final class JweDecoder implements JwtDecoder {
 
     private static final String DECODING_ERROR_MESSAGE_TEMPLATE = "An error occurred while attempting to decode the Jwt: %s";
@@ -30,14 +32,9 @@ public final class JweDecoder implements JwtDecoder {
     private final KeyPair jwtKeyPair;
     private final JWTProcessor<SecurityContext> jwtProcessor;
     private OAuth2TokenValidator<Jwt> jwtValidator = JwtValidators.createDefault();
-    private Converter<Map<String, Object>, Map<String, Object>> claimSetConverter = MappedJwtClaimSetConverter.withDefaults(Collections.emptyMap());
+    private Converter<Map<String, Object>, Map<String, Object>> claimSetConverter =
+        MappedJwtClaimSetConverter.withDefaults(Collections.emptyMap());
 
-    public JweDecoder(KeyPair jwtKeyPair, JWTProcessor<SecurityContext> jwtProcessor) {
-        Assert.notNull(jwtKeyPair, "jwtKeyPair cannot be null");
-        Assert.notNull(jwtProcessor, "jwtProcessor cannot be null");
-        this.jwtKeyPair = jwtKeyPair;
-        this.jwtProcessor = jwtProcessor;
-    }
 
     public void setJwtValidator(OAuth2TokenValidator<Jwt> jwtValidator) {
         Assert.notNull(jwtValidator, "jwtValidator cannot be null");
