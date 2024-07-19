@@ -3,11 +3,8 @@ package io.github.susimsek.springssosamples.security.oauth2;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.JWTParser;
-import com.nimbusds.jwt.PlainJWT;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.JWTProcessor;
 import org.springframework.security.oauth2.core.OAuth2Error;
@@ -67,9 +64,9 @@ public final class JweDecoder implements JwtDecoder {
         } catch (Exception ex) {
             this.logger.trace("Failed to parse token", ex);
             if (ex instanceof ParseException) {
-                throw new BadJwtException(String.format("An error occurred while attempting to decode the Jwt: %s", "Malformed token"), ex);
+                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, "Malformed token"), ex);
             } else {
-                throw new BadJwtException(String.format("An error occurred while attempting to decode the Jwt: %s", ex.getMessage()), ex);
+                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, ex.getMessage()), ex);
             }
         }
     }
