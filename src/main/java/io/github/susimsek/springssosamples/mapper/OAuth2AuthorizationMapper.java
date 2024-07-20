@@ -2,7 +2,9 @@ package io.github.susimsek.springssosamples.mapper;
 
 import io.github.susimsek.springssosamples.entity.OAuth2AuthorizationEntity;
 import io.github.susimsek.springssosamples.security.oauth2.OAuth2JsonUtils;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2DeviceCode;
@@ -13,17 +15,16 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.Set;
 
-@Component
-@RequiredArgsConstructor
-public class OAuth2AuthorizationMapper {
+@Mapper(componentModel = "spring")
+public abstract class OAuth2AuthorizationMapper {
 
-    private final OAuth2JsonUtils jsonUtils;
+    @Setter(onMethod_={@Autowired})
+    private OAuth2JsonUtils jsonUtils;
 
     public OAuth2AuthorizationEntity toEntity(OAuth2Authorization model) {
         if (model == null) {

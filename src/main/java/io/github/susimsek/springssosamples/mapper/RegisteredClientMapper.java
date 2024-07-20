@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -17,14 +19,13 @@ import org.springframework.security.oauth2.server.authorization.settings.ClientS
 import org.springframework.security.oauth2.server.authorization.settings.ConfigurationSettingNames;
 import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-@Component
-@RequiredArgsConstructor
-public class RegisteredClientMapper {
+@Mapper(componentModel = "spring")
+public abstract class RegisteredClientMapper {
 
-    private final OAuth2JsonUtils oAuth2JsonUtils;
+    @Setter(onMethod_={@Autowired})
+    private OAuth2JsonUtils oAuth2JsonUtils;
 
     public OAuth2RegisteredClientEntity toEntity(RegisteredClient registeredClient) {
         OAuth2RegisteredClientEntity client = new OAuth2RegisteredClientEntity();

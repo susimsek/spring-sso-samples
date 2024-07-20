@@ -4,17 +4,16 @@ import io.github.susimsek.springssosamples.entity.OAuth2AuthorizationConsentEnti
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.mapstruct.Mapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsent;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-@Component
-public class OAuth2AuthorizationConsentMapper {
+@Mapper(componentModel = "spring")
+public interface OAuth2AuthorizationConsentMapper {
 
-    public OAuth2AuthorizationConsentEntity toEntity(OAuth2AuthorizationConsent model) {
+    default OAuth2AuthorizationConsentEntity toEntity(OAuth2AuthorizationConsent model) {
         if (model == null) {
             return null;
         }
@@ -29,7 +28,7 @@ public class OAuth2AuthorizationConsentMapper {
         return entity;
     }
 
-    public OAuth2AuthorizationConsent toModel(OAuth2AuthorizationConsentEntity entity) {
+    default OAuth2AuthorizationConsent toModel(OAuth2AuthorizationConsentEntity entity) {
         if (entity == null) {
             return null;
         }

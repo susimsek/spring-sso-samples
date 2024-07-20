@@ -1,17 +1,17 @@
 package io.github.susimsek.springssosamples.mapper;
 
 import io.github.susimsek.springssosamples.entity.UserEntity;
+import org.mapstruct.Mapper;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-@Component
-public class UserMapper {
+@Mapper(componentModel = "spring")
+public interface UserMapper {
 
-    public UserDetails toDto(UserEntity userEntity) {
+    default UserDetails toDto(UserEntity userEntity) {
         return User.builder()
             .username(userEntity.getUsername())
             .password(userEntity.getPassword())
