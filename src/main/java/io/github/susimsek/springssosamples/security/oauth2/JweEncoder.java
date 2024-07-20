@@ -75,7 +75,7 @@ public class JweEncoder implements JwtEncoder {
         JWSHeader jwsHeader = convert(headers);
         JWTClaimsSet claimsSet = convert(claims);
         JWK jwk = selectJwk(headers);
-
+        headers = addKeyIdentifierHeadersIfNecessary(headers, jwk);
         SignedJWT signedJWT = new SignedJWT(jwsHeader, claimsSet);
         JWSSigner signer = this.jwsSigners.computeIfAbsent(jwk, JweEncoder::createSigner);
 
@@ -83,6 +83,7 @@ public class JweEncoder implements JwtEncoder {
             signedJWT.sign(signer);
             JWEHeader jweHeader = new JWEHeader.Builder(JWEAlgorithm.RSA_OAEP_256, EncryptionMethod.A256GCM)
                 .contentType("JWT")
+                .keyID(headers.getKeyId())
                 .build();
             JWEObject jweObject = new JWEObject(jweHeader,
                 new Payload(signedJWT));
@@ -265,6 +266,25 @@ public class JweEncoder implements JwtEncoder {
         } catch (JOSEException var2) {
             throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
                 "Failed to create a JWS Signer -> " + var2.getMessage()), var2);
+        }
+    }
+
+    private static JwsHeader addKeyIdentifierHeadersIfNecessary(JwsHeader headers, JWK jwk) {
+        if (StringUtils.hasText(headers.getKeyId()) && StringUtils.hasText(headers.getX509SHA256Thumbprint())) {
+            return headers;
+        } else if (!StringUtils.hasText(jwk.getKeyID()) && jwk.getX509CertSHA256Thumbprint() == null) {
+            return headers;
+        } else {
+            JwsHeader.Builder headersBuilder = JwsHeader.from(headers);
+            if (!StringUtils.hasText(headers.getKeyId()) && StringUtils.hasText(jwk.getKeyID())) {
+                headersBuilder.keyId(jwk.getKeyID());
+            }
+
+            if (!StringUtils.hasText(headers.getX509SHA256Thumbprint()) && jwk.getX509CertSHA256Thumbprint() != null) {
+                headersBuilder.x509SHA256Thumbprint(jwk.getX509CertSHA256Thumbprint().toString());
+            }
+
+            return headersBuilder.build();
         }
     }
 
