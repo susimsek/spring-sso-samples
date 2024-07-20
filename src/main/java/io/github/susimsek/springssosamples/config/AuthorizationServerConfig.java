@@ -47,6 +47,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.converter.RsaKeyConverters;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
@@ -143,6 +145,16 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
+    public KeyPair jweKeyPair() {
+        var jweProperties = securityProperties.getJwe();
+        PublicKey publicKey = RsaKeyConverters.x509().convert(new ByteArrayInputStream(jweProperties
+            .getFormattedPublicKey().getBytes(StandardCharsets.UTF_8)));
+        PrivateKey privateKey = RsaKeyConverters.pkcs8().convert(new ByteArrayInputStream(jweProperties
+            .getFormattedPrivateKey().getBytes(StandardCharsets.UTF_8)));
+        return new KeyPair(publicKey, privateKey);
+    }
+
+    @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public JWKSource<SecurityContext> jwkSource(KeyPair jwtKeyPair) {
         RSAPublicKey publicKey = (RSAPublicKey) jwtKeyPair.getPublic();
@@ -156,12 +168,17 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource)  {
-        return new JweEncoder(jwkSource);
+    public JwtEncoder jwtEncoder(KeyPair jweKeyPair, JWKSource<SecurityContext> jwkSource)  {
+       var jweProperties = securityProperties.getJwe();
+       if (jweProperties.getEnabled()) {
+           return new JweEncoder(jweKeyPair, jwkSource);
+       }
+        return new NimbusJwtEncoder(jwkSource);
     }
 
     @Bean
-    public JwtDecoder jwtDecoder(KeyPair jwtKeyPair, JWKSource<SecurityContext> jwkSource) {
+    public JwtDecoder jwtDecoder(KeyPair jweKeyPair, JWKSource<SecurityContext> jwkSource) {
+        var jweProperties = securityProperties.getJwe();
         Set<JWSAlgorithm> jwsAlgs = new HashSet<>();
         jwsAlgs.addAll(JWSAlgorithm.Family.RSA);
         jwsAlgs.addAll(JWSAlgorithm.Family.EC);
@@ -171,7 +188,10 @@ public class AuthorizationServerConfig {
         jwtProcessor.setJWSKeySelector(jwsKeySelector);
         jwtProcessor.setJWTClaimsSetVerifier((claims, context) -> {
         });
-        return new JweDecoder(jwtKeyPair, jwtProcessor);
+        if (jweProperties.getEnabled()) {
+            return new JweDecoder(jweKeyPair, jwtProcessor);
+        }
+        return new NimbusJwtDecoder(jwtProcessor);
     }
 
     @Bean

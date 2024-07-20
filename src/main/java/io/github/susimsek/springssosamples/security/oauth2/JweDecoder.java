@@ -29,7 +29,7 @@ public final class JweDecoder implements JwtDecoder {
     private static final String DECODING_ERROR_MESSAGE_TEMPLATE = "An error occurred while attempting to decode the Jwt: %s";
 
     private final Log logger = LogFactory.getLog(this.getClass());
-    private final KeyPair jwtKeyPair;
+    private final KeyPair jweKeyPair;
     private final JWTProcessor<SecurityContext> jwtProcessor;
     private OAuth2TokenValidator<Jwt> jwtValidator = JwtValidators.createDefault();
     private Converter<Map<String, Object>, Map<String, Object>> claimSetConverter =
@@ -70,7 +70,7 @@ public final class JweDecoder implements JwtDecoder {
 
     private void decrypt(JWEObject jweObject) {
         try {
-            RSADecrypter decrypter = new RSADecrypter(this.jwtKeyPair.getPrivate());
+            RSADecrypter decrypter = new RSADecrypter(this.jweKeyPair.getPrivate());
             jweObject.decrypt(decrypter);
         } catch (JOSEException e) {
             throw new JwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, "Unable to decrypt token"), e);

@@ -57,6 +57,7 @@ import org.springframework.util.StringUtils;
 public class JweEncoder implements JwtEncoder {
 
     private static final String ENCODING_ERROR_MESSAGE_TEMPLATE = "An error occurred while attempting to encode the Jwt: %s";
+    private final KeyPair jweKeyPair;
     private final JWKSource<SecurityContext> jwkSource;
     private static final JWSSignerFactory JWS_SIGNER_FACTORY;
     private final Map<JWK, JWSSigner> jwsSigners = new ConcurrentHashMap<>();
@@ -86,7 +87,7 @@ public class JweEncoder implements JwtEncoder {
             JWEObject jweObject = new JWEObject(jweHeader,
                 new Payload(signedJWT));
 
-            JWEEncrypter encrypter = createEncrypter(jwk);
+            JWEEncrypter encrypter = createEncrypter();
             jweObject.encrypt(encrypter);
             return Jwt.withTokenValue(jweObject.serialize())
                 .headers(h -> h.putAll(jweHeader.toJSONObject()))
@@ -267,15 +268,9 @@ public class JweEncoder implements JwtEncoder {
         }
     }
 
-    public static JWEEncrypter createEncrypter(JWK jwk) {
-        try {
-            RSAKey rsaKey = (RSAKey) jwk;
-            RSAPublicKey publicKey = rsaKey.toRSAPublicKey();
-            return new RSAEncrypter(publicKey);
-        } catch (JOSEException var2) {
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
-                "Failed to create a JWE Encrypter -> " + var2.getMessage()), var2);
-        }
+    public JWEEncrypter createEncrypter() {
+        RSAPublicKey publicKey = (RSAPublicKey) jweKeyPair.getPublic();
+        return new RSAEncrypter(publicKey);
     }
 
     static {
