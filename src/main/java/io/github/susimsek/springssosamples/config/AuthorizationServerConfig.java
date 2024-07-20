@@ -161,7 +161,7 @@ public class AuthorizationServerConfig {
         RSAPrivateKey privateKey = (RSAPrivateKey) jwtKeyPair.getPrivate();
         RSAKey rsaKey = new RSAKey.Builder(publicKey)
             .privateKey(privateKey)
-            .keyID(UUID.randomUUID().toString())
+            .keyID("430b5ff6-522c-4b49-b8a7-de101d14df6e")
             .build();
         JWKSet jwkSet = new JWKSet(rsaKey);
         return new ImmutableJWKSet<>(jwkSet);
@@ -170,7 +170,7 @@ public class AuthorizationServerConfig {
     @Bean
     public JwtEncoder jwtEncoder(KeyPair jweKeyPair, JWKSource<SecurityContext> jwkSource)  {
        var jweProperties = securityProperties.getJwe();
-       if (jweProperties.getEnabled()) {
+       if (Boolean.TRUE.equals(jweProperties.getEnabled())) {
            return new JweEncoder(jweKeyPair, jwkSource);
        }
         return new NimbusJwtEncoder(jwkSource);
@@ -188,7 +188,7 @@ public class AuthorizationServerConfig {
         jwtProcessor.setJWSKeySelector(jwsKeySelector);
         jwtProcessor.setJWTClaimsSetVerifier((claims, context) -> {
         });
-        if (jweProperties.getEnabled()) {
+        if (Boolean.TRUE.equals(jweProperties.getEnabled())) {
             return new JweDecoder(jweKeyPair, jwtProcessor);
         }
         return new NimbusJwtDecoder(jwtProcessor);
