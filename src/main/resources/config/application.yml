@@ -37,6 +37,24 @@ spring:
     deserialization:
       fail-on-unknown-properties: false
     default-property-inclusion: non_null
+  task:
+    execution:
+      thread-name-prefix: AsyncExecutor
+      pool:
+        core-size: 20
+        max-size: 100
+        queue-capacity: 1000
+        keep-alive: 60s
+      shutdown:
+        await-termination: true
+        await-termination-period: 30s
+    scheduling:
+      thread-name-prefix: ScheduledTask-
+      pool:
+        size: 20
+      shutdown:
+        await-termination: true
+        await-termination-period: 60s
   cache:
     default-config:
       ttl: 1h
