@@ -20,7 +20,6 @@ import com.nimbusds.jose.jwk.JWKMatcher;
 import com.nimbusds.jose.jwk.JWKSelector;
 import com.nimbusds.jose.jwk.KeyType;
 import com.nimbusds.jose.jwk.KeyUse;
-import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jose.produce.JWSSignerFactory;
@@ -46,6 +45,7 @@ import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.JwtEncodingException;
@@ -54,16 +54,17 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @RequiredArgsConstructor
-public class JweEncoder implements JwtEncoder {
+public class DomainTokenEncoder implements TokenEncoder {
 
-    private static final String ENCODING_ERROR_MESSAGE_TEMPLATE = "An error occurred while attempting to encode the Jwt: %s";
+    private static final String ENCODING_ERROR_MESSAGE_TEMPLATE =
+        "An error occurred while attempting to encode the Jwt: %s";
     private final KeyPair jweKeyPair;
     private final JWKSource<SecurityContext> jwkSource;
     private static final JWSSignerFactory JWS_SIGNER_FACTORY;
     private final Map<JWK, JWSSigner> jwsSigners = new ConcurrentHashMap<>();
 
     @Override
-    public Jwt encode(JwtEncoderParameters parameters) throws JwtEncodingException {
+    public Jwt encode(TokenEncoderParameters parameters) throws JwtEncodingException {
         Assert.notNull(parameters, "parameters cannot be null");
 
         JwtClaimsSet claims = parameters.getClaims();
@@ -76,24 +77,23 @@ public class JweEncoder implements JwtEncoder {
         JWTClaimsSet claimsSet = convert(claims);
         JWK jwk = selectJwk(headers);
         headers = addKeyIdentifierHeadersIfNecessary(headers, jwk);
-        SignedJWT signedJWT = new SignedJWT(jwsHeader, claimsSet);
-        JWSSigner signer = this.jwsSigners.computeIfAbsent(jwk, JweEncoder::createSigner);
+        SignedJWT signedJwt = new SignedJWT(jwsHeader, claimsSet);
+        JWSSigner signer = this.jwsSigners.computeIfAbsent(jwk, DomainTokenEncoder::createSigner);
 
         try {
-            signedJWT.sign(signer);
-            JWEHeader jweHeader = new JWEHeader.Builder(JWEAlgorithm.RSA_OAEP_256, EncryptionMethod.A256GCM)
-                .contentType("JWT")
-                .keyID(headers.getKeyId())
-                .build();
+            signedJwt.sign(signer);
+            if (parameters.getJweHeader() == null) {
+                return new Jwt(signedJwt.serialize(),
+                    claims.getIssuedAt(), claims.getExpiresAt(), headers.getHeaders(), claims.getClaims());
+            }
+            JWEHeader jweHeader = parameters.getJweHeader();
             JWEObject jweObject = new JWEObject(jweHeader,
-                new Payload(signedJWT));
+                new Payload(signedJwt));
 
             JWEEncrypter encrypter = createEncrypter();
             jweObject.encrypt(encrypter);
-            return Jwt.withTokenValue(jweObject.serialize())
-                .headers(h -> h.putAll(jweHeader.toJSONObject()))
-                .claims(c -> c.putAll(claims.getClaims()))
-                .build();
+            return new Jwt(jweObject.serialize(),
+                claims.getIssuedAt(), claims.getExpiresAt(), jweHeader.toJSONObject(), claims.getClaims());
         } catch (JOSEException e) {
             throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Unable to encrypt JWT"), e);
         }
@@ -110,7 +110,8 @@ public class JweEncoder implements JwtEncoder {
             try {
                 builder.jwk(JWK.parse(jwk));
             } catch (Exception ex) {
-                throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Unable to convert 'jwk' JOSE header"), ex);
+                throw new JwtEncodingException(
+                    String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Unable to convert 'jwk' JOSE header"), ex);
             }
         }
 
@@ -216,7 +217,8 @@ public class JweEncoder implements JwtEncoder {
         try {
             return url.toURI();
         } catch (Exception ex) {
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Unable to convert '" + header + "' JOSE header to a URI"), ex);
+            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
+                "Unable to convert '" + header + "' JOSE header to a URI"), ex);
         }
     }
 
@@ -226,10 +228,6 @@ public class JweEncoder implements JwtEncoder {
         return x5cList;
     }
 
-    private static JWSSigner createSigner(KeyPair jwtKeyPair) {
-        return new RSASSASigner(jwtKeyPair.getPrivate());
-    }
-
     private JWK selectJwk(JwsHeader headers) {
         List jwks;
         try {
@@ -237,26 +235,33 @@ public class JweEncoder implements JwtEncoder {
             jwks = this.jwkSource.get(jwkSelector, null);
         } catch (Exception var4) {
             Exception ex = var4;
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Failed to select a JWK signing key -> " + ex.getMessage()), ex);
+            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
+                "Failed to select a JWK signing key -> " + ex.getMessage()), ex);
         }
 
         if (jwks.size() > 1) {
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Found multiple JWK signing keys for algorithm '" + headers.getAlgorithm().getName() + "'"));
+            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
+                "Found multiple JWK signing keys for algorithm '" + headers.getAlgorithm().getName() + "'"));
         } else if (jwks.isEmpty()) {
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Failed to select a JWK signing key"));
+            throw new JwtEncodingException(
+                String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Failed to select a JWK signing key"));
         } else {
-            return (JWK)jwks.get(0);
+            return (JWK) jwks.get(0);
         }
     }
 
     private static JWKMatcher createJwkMatcher(JwsHeader headers) {
         JWSAlgorithm jwsAlgorithm = JWSAlgorithm.parse(headers.getAlgorithm().getName());
         if (!JWSAlgorithm.Family.RSA.contains(jwsAlgorithm) && !JWSAlgorithm.Family.EC.contains(jwsAlgorithm)) {
-            return JWSAlgorithm.Family.HMAC_SHA.contains(jwsAlgorithm) ? (new JWKMatcher.Builder()).keyType(KeyType.forAlgorithm(jwsAlgorithm))
-                .keyID(headers.getKeyId()).privateOnly(true).algorithms(new Algorithm[]{jwsAlgorithm, null}).build() : null;
+            return JWSAlgorithm.Family.HMAC_SHA.contains(jwsAlgorithm) ?
+                (new JWKMatcher.Builder()).keyType(KeyType.forAlgorithm(jwsAlgorithm))
+                    .keyID(headers.getKeyId()).privateOnly(true).algorithms(new Algorithm[] {jwsAlgorithm, null})
+                    .build() : null;
         } else {
-            return (new JWKMatcher.Builder()).keyType(KeyType.forAlgorithm(jwsAlgorithm)).keyID(headers.getKeyId()).keyUses(
-                KeyUse.SIGNATURE, null).algorithms(jwsAlgorithm, null).x509CertSHA256Thumbprint(Base64URL.from(headers.getX509SHA256Thumbprint())).build();
+            return (new JWKMatcher.Builder()).keyType(KeyType.forAlgorithm(jwsAlgorithm)).keyID(headers.getKeyId())
+                .keyUses(
+                    KeyUse.SIGNATURE, null).algorithms(jwsAlgorithm, null)
+                .x509CertSHA256Thumbprint(Base64URL.from(headers.getX509SHA256Thumbprint())).build();
         }
     }
 

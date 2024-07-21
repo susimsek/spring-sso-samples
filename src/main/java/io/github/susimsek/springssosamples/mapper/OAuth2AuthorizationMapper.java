@@ -1,7 +1,7 @@
 package io.github.susimsek.springssosamples.mapper;
 
 import io.github.susimsek.springssosamples.entity.OAuth2AuthorizationEntity;
-import io.github.susimsek.springssosamples.security.oauth2.OAuth2JsonUtils;
+import io.github.susimsek.springssosamples.security.oauth2.json.OAuth2JsonUtils;
 import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;

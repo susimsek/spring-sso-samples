@@ -1,4 +1,4 @@
-package io.github.susimsek.springssosamples.security.oauth2;
+package io.github.susimsek.springssosamples.security.oauth2.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
@@ -20,6 +20,7 @@ public class OAuth2JsonUtils {
         List<Module> securityModules = SecurityJackson2Modules.getModules(classLoader);
         this.objectMapper.registerModules(securityModules);
         this.objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
+        this.objectMapper.registerModule(new JweJacksonModule());
     }
 
     public String writeMap(Map<String, Object> data) {

@@ -3,7 +3,7 @@ package io.github.susimsek.springssosamples.mapper;
 import io.github.susimsek.springssosamples.entity.OAuth2ClientScopeMappingEntity;
 import io.github.susimsek.springssosamples.entity.OAuth2RegisteredClientEntity;
 import io.github.susimsek.springssosamples.entity.OAuth2ScopeEntity;
-import io.github.susimsek.springssosamples.security.oauth2.OAuth2JsonUtils;
+import io.github.susimsek.springssosamples.security.oauth2.json.OAuth2JsonUtils;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;

@@ -1,5 +1,7 @@
 package io.github.susimsek.springssosamples.config;
 
+import com.nimbusds.jose.EncryptionMethod;
+import com.nimbusds.jose.JWEAlgorithm;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -18,9 +20,12 @@ import io.github.susimsek.springssosamples.repository.DomainRegisteredClientRepo
 import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationConsentRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2RegisteredClientRepository;
+import io.github.susimsek.springssosamples.security.JweToken;
 import io.github.susimsek.springssosamples.security.SecurityProperties;
 import io.github.susimsek.springssosamples.security.oauth2.JweDecoder;
-import io.github.susimsek.springssosamples.security.oauth2.JweEncoder;
+import io.github.susimsek.springssosamples.security.oauth2.DomainTokenEncoder;
+import io.github.susimsek.springssosamples.security.oauth2.JweGenerator;
+import io.github.susimsek.springssosamples.security.oauth2.TokenEncoder;
 import io.github.susimsek.springssosamples.service.DomainOAuth2AuthorizationConsentService;
 import io.github.susimsek.springssosamples.service.DomainOAuth2AuthorizationService;
 import io.github.susimsek.springssosamples.service.DomainOAuth2RegisteredClientService;
@@ -45,15 +50,27 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.converter.RsaKeyConverters;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2AccessTokenGenerator;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2RefreshTokenGenerator;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenClaimsContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -111,8 +128,25 @@ public class AuthorizationServerConfig {
     public DomainRegisteredClientRepository registeredClientRepository(
         OAuth2RegisteredClientRepository oAuth2RegisteredClientRepository,
         RegisteredClientMapper registeredClientMapper) {
-        return new  DomainOAuth2RegisteredClientService(
+        var registeredClientRepository = new  DomainOAuth2RegisteredClientService(
             oAuth2RegisteredClientRepository, registeredClientMapper);
+        RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+            .clientId("oidc-client1")
+            .clientSecret("{noop}secret")
+            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+            .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+            .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
+            .postLogoutRedirectUri("http://127.0.0.1:8080/")
+            .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+            .tokenSettings(TokenSettings.builder()
+                .setting(JweToken.ENABLED, true)
+                .setting(JweToken.ALGORITHM, JWEAlgorithm.RSA_OAEP_256)
+                .setting(JweToken.ENCRYPTION_METHOD, EncryptionMethod.A256GCM)
+                .build())
+            .build();
+        registeredClientRepository.save(oidcClient);
+        return registeredClientRepository;
     }
 
     @Bean
@@ -168,12 +202,8 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public JwtEncoder jwtEncoder(KeyPair jweKeyPair, JWKSource<SecurityContext> jwkSource)  {
-       var jweProperties = securityProperties.getJwe();
-       if (Boolean.TRUE.equals(jweProperties.getEnabled())) {
-           return new JweEncoder(jweKeyPair, jwkSource);
-       }
-        return new NimbusJwtEncoder(jwkSource);
+    public TokenEncoder tokenEncoder(KeyPair jweKeyPair, JWKSource<SecurityContext> jwkSource)  {
+        return new DomainTokenEncoder(jweKeyPair, jwkSource);
     }
 
     @Bean
@@ -192,6 +222,22 @@ public class AuthorizationServerConfig {
             return new JweDecoder(jweKeyPair, jwtProcessor);
         }
         return new NimbusJwtDecoder(jwtProcessor);
+    }
+
+    @Bean
+    public OAuth2TokenCustomizer<OAuth2TokenClaimsContext> accessTokenCustomizer() {
+        return context -> {};
+    }
+
+    @Bean
+    public OAuth2TokenGenerator<?> tokenGenerator(TokenEncoder tokenEncoder,
+                                                  OAuth2TokenCustomizer<OAuth2TokenClaimsContext> accessTokenCustomizer) {
+        var jwtGenerator = new JweGenerator(tokenEncoder);
+        OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
+        accessTokenGenerator.setAccessTokenCustomizer(accessTokenCustomizer);
+        OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
+        return new DelegatingOAuth2TokenGenerator(
+            jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
     }
 
     @Bean
