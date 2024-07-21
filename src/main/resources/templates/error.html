@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body}, 'Error')}">
+<body>
+<div class="container">
+  <div class="row py-5 justify-content-center">
+    <h1 class="text-center text-danger" th:text="${errorTitle}">Error</h1>
+  </div>
+  <div class="row">
+    <div class="col text-center">
+      <p th:text="${errorMessage}">
+        An internal server error occurred. Please try again later
+      </p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
