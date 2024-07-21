@@ -10,4 +10,5 @@
     <include file="config/liquibase/changelog/06-07-added-oauth2-client-entity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/06-07-added-oauth2-authorization-entity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/06-07-added-oauth2-authotization-consent-entity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/06-07-added-oauth2-key-entity.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

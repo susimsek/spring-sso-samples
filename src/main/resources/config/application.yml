@@ -80,6 +80,8 @@ spring:
       - oauth2ClientEntityCountByClientSecret
       - oauth2ScopeEntity
       - oauth2ClientScopeMappingEntity
+      - oauth2KeyEntity
+      - oauth2KeyEntityByKid
       - roleEntity
       - roleEntityByName
       - userEntity
