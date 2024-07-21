@@ -22,36 +22,12 @@ public class SecurityProperties {
     @Valid
     private JwtProperties jwt;
 
-    @Valid
-    private JweProperties jwe;
-
     @NotBlank(message = "{validation.field.notBlank}")
     private String contentSecurityPolicy;
 
     @Getter
     @Setter
     public static class JwtProperties {
-
-        @NotBlank(message = "{validation.field.notBlank}")
-        private String publicKey;
-
-        @NotBlank(message = "{validation.field.notBlank}")
-        private String privateKey;
-
-        public String getFormattedPublicKey() {
-            return PUBLIC_KEY_HEADER + publicKey + PUBLIC_KEY_FOOTER;
-        }
-
-        public String getFormattedPrivateKey() {
-            return PRIVATE_KEY_HEADER + privateKey + PRIVATE_KEY_FOOTER;
-        }
-    }
-
-    @Getter
-    @Setter
-    public static class JweProperties {
-        @NotNull(message = "{validation.field.notNull}")
-        private Boolean enabled = false;
 
         @NotBlank(message = "{validation.field.notBlank}")
         private String publicKey;

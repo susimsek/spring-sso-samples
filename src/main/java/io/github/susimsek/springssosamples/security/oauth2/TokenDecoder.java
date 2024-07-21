@@ -2,9 +2,11 @@ package io.github.susimsek.springssosamples.security.oauth2;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.RSADecrypter;
+import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.JWTProcessor;
 import lombok.RequiredArgsConstructor;
@@ -17,19 +19,18 @@ import org.springframework.core.convert.converter.Converter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.security.KeyPair;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public final class JweDecoder implements JwtDecoder {
+public final class TokenDecoder implements JwtDecoder {
 
     private static final String DECODING_ERROR_MESSAGE_TEMPLATE = "An error occurred while attempting to decode the Jwt: %s";
 
     private final Log logger = LogFactory.getLog(this.getClass());
-    private final KeyPair jweKeyPair;
+    private final OAuth2KeyService oAuth2KeyService;
     private final JWTProcessor<SecurityContext> jwtProcessor;
     private OAuth2TokenValidator<Jwt> jwtValidator = JwtValidators.createDefault();
     private Converter<Map<String, Object>, Map<String, Object>> claimSetConverter =
@@ -48,14 +49,22 @@ public final class JweDecoder implements JwtDecoder {
 
     @Override
     public Jwt decode(String token) throws JwtException {
-        JWEObject jweObject = this.parse(token);
-        decrypt(jweObject);
-        SignedJWT signedJWT = getSignedJWT(jweObject);
-        Jwt createdJwt = createJwt(token, signedJWT);
+        JWT jwt;
+        if (isJweToken(token)) {
+            JWEObject jweObject = this.parseJwe(token);
+            JWEHeader jweHeader = jweObject.getHeader();
+            String jweKeyId = jweHeader.getKeyID();
+            OAuth2Key oAuth2Key = oAuth2KeyService.findByKidOrThrow(jweKeyId);
+            decrypt(jweObject, oAuth2Key.toRSAKey());
+            jwt = getSignedJWT(jweObject);
+        } else {
+            jwt = this.parseJwt(token);
+        }
+        Jwt createdJwt = this.createJwt(token, jwt);
         return this.validateJwt(createdJwt);
     }
 
-    private JWEObject parse(String token) {
+    private JWEObject parseJwe(String token) {
         try {
             return JWEObject.parse(token);
         } catch (Exception ex) {
@@ -68,9 +77,22 @@ public final class JweDecoder implements JwtDecoder {
         }
     }
 
-    private void decrypt(JWEObject jweObject) {
+    private JWT parseJwt(String token) {
         try {
-            RSADecrypter decrypter = new RSADecrypter(this.jweKeyPair.getPrivate());
+            return JWTParser.parse(token);
+        } catch (Exception ex) {
+            this.logger.trace("Failed to parse token", ex);
+            if (ex instanceof ParseException) {
+                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, "Malformed token"), ex);
+            } else {
+                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, ex.getMessage()), ex);
+            }
+        }
+    }
+
+    private void decrypt(JWEObject jweObject, RSAKey rsaKey) {
+        try {
+            RSADecrypter decrypter = new RSADecrypter(rsaKey);
             jweObject.decrypt(decrypter);
         } catch (JOSEException e) {
             throw new JwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, "Unable to decrypt token"), e);
@@ -116,6 +138,10 @@ public final class JweDecoder implements JwtDecoder {
             throw new JwtValidationException(getJwtValidationExceptionMessage(result.getErrors()), result.getErrors());
         }
         return jwt;
+    }
+
+    public boolean isJweToken(String token) {
+        return token.split("\\.").length == 5;
     }
 
     private String getJwtValidationExceptionMessage(Iterable<OAuth2Error> errors) {

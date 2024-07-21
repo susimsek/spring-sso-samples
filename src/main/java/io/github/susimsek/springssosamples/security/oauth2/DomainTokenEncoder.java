@@ -287,7 +287,7 @@ public class DomainTokenEncoder implements TokenEncoder {
     }
 
     public JWEEncrypter createEncrypter(RSAKey rsaKey) throws JOSEException {
-        return new RSAEncrypter(  rsaKey.toRSAPublicKey());
+        return new RSAEncrypter(rsaKey);
     }
 
     static {

@@ -21,7 +21,7 @@ import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationReposit
 import io.github.susimsek.springssosamples.repository.OAuth2KeyRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2RegisteredClientRepository;
 import io.github.susimsek.springssosamples.security.SecurityProperties;
-import io.github.susimsek.springssosamples.security.oauth2.JweDecoder;
+import io.github.susimsek.springssosamples.security.oauth2.TokenDecoder;
 import io.github.susimsek.springssosamples.security.oauth2.DomainTokenEncoder;
 import io.github.susimsek.springssosamples.security.oauth2.TokenGenerator;
 import io.github.susimsek.springssosamples.security.oauth2.OAuth2KeyService;
@@ -161,16 +161,6 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public KeyPair jweKeyPair() {
-        var jweProperties = securityProperties.getJwe();
-        PublicKey publicKey = RsaKeyConverters.x509().convert(new ByteArrayInputStream(jweProperties
-            .getFormattedPublicKey().getBytes(StandardCharsets.UTF_8)));
-        PrivateKey privateKey = RsaKeyConverters.pkcs8().convert(new ByteArrayInputStream(jweProperties
-            .getFormattedPrivateKey().getBytes(StandardCharsets.UTF_8)));
-        return new KeyPair(publicKey, privateKey);
-    }
-
-    @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     public JWKSource<SecurityContext> jwkSource(KeyPair jwtKeyPair) {
         RSAPublicKey publicKey = (RSAPublicKey) jwtKeyPair.getPublic();
@@ -189,8 +179,9 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder(KeyPair jweKeyPair, JWKSource<SecurityContext> jwkSource) {
-        var jweProperties = securityProperties.getJwe();
+    public JwtDecoder jwtDecoder (
+        OAuth2KeyService oAuth2KeyService,
+        JWKSource<SecurityContext> jwkSource) {
         Set<JWSAlgorithm> jwsAlgs = new HashSet<>();
         jwsAlgs.addAll(JWSAlgorithm.Family.RSA);
         jwsAlgs.addAll(JWSAlgorithm.Family.EC);
@@ -200,10 +191,7 @@ public class AuthorizationServerConfig {
         jwtProcessor.setJWSKeySelector(jwsKeySelector);
         jwtProcessor.setJWTClaimsSetVerifier((claims, context) -> {
         });
-        if (Boolean.TRUE.equals(jweProperties.getEnabled())) {
-            return new JweDecoder(jweKeyPair, jwtProcessor);
-        }
-        return new NimbusJwtDecoder(jwtProcessor);
+        return new TokenDecoder(oAuth2KeyService, jwtProcessor);
     }
 
     @Bean
