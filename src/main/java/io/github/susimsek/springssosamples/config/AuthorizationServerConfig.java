@@ -143,6 +143,7 @@ public class AuthorizationServerConfig {
                 .setting(JweToken.ENABLED, true)
                 .setting(JweToken.ALGORITHM, JWEAlgorithm.RSA_OAEP_256)
                 .setting(JweToken.ENCRYPTION_METHOD, EncryptionMethod.A256GCM)
+                .setting(JweToken.KEY_ID, "3f8a8e5b-89f4-4b7d-91e1-5b5c1d4e7b9c")
                 .build())
             .build();
         registeredClientRepository.save(oidcClient);

@@ -55,19 +55,29 @@ public final class JweGenerator implements OAuth2TokenGenerator<Jwt> {
                 EncryptionMethod encryptionMethod = EncryptionMethod.A256GCM;
                 var tokenSettings = context.getRegisteredClient().getTokenSettings();
                 Instant expiresAt;
+                Boolean jweEnabled = tokenSettings
+                    .getSetting(JweToken.ENABLED);
                 if ("id_token".equals(context.getTokenType().getValue())) {
                     expiresAt = issuedAt.plus(30L, ChronoUnit.MINUTES);
                     if (tokenSettings.getIdTokenSignatureAlgorithm() != null) {
                         jwsAlgorithm = tokenSettings.getIdTokenSignatureAlgorithm();
                     }
-                    if (tokenSettings.getSetting(JweToken.ALGORITHM) != null) {
-                        jweAlgorithm = tokenSettings.getSetting(JweToken.ALGORITHM);
-                    }
-                    if (tokenSettings.getSetting(JweToken.ENCRYPTION_METHOD) != null) {
-                        encryptionMethod = tokenSettings.getSetting(JweToken.ENCRYPTION_METHOD);
+                    if (Boolean.TRUE.equals(jweEnabled)) {
+                        if (tokenSettings.getSetting(JweToken.ALGORITHM) != null) {
+                            jweAlgorithm = tokenSettings.getSetting(JweToken.ALGORITHM);
+                        }
+                        if (tokenSettings.getSetting(JweToken.ENCRYPTION_METHOD) != null) {
+                            encryptionMethod = tokenSettings.getSetting(JweToken.ENCRYPTION_METHOD);
+                        }
                     }
                 } else {
                     expiresAt = issuedAt.plus(tokenSettings.getAccessTokenTimeToLive());
+                }
+
+                String jweKeyId = null;
+                if (Boolean.TRUE.equals(jweEnabled) &&
+                    StringUtils.hasText(tokenSettings.getSetting(JweToken.KEY_ID))) {
+                    jweKeyId = tokenSettings.getSetting(JweToken.KEY_ID);
                 }
 
 
@@ -141,16 +151,16 @@ public final class JweGenerator implements OAuth2TokenGenerator<Jwt> {
                 }
 
                 JwsHeader jwsHeader = jwsHeaderBuilder.build();
-                JWEHeader jweHeader = new JWEHeader.Builder(jweAlgorithm, encryptionMethod)
-                    .contentType("JWT")
-                    .build();
+                JWEHeader.Builder jweHeaderBuilder = new JWEHeader.Builder(jweAlgorithm, encryptionMethod)
+                    .contentType("JWT");
+                if (jweKeyId != null) {
+                    jweHeaderBuilder.keyID(jweKeyId);
+                }
                 JwtClaimsSet claims = claimsBuilder.build();
-                Boolean jweEnabled = tokenSettings
-                    .getSetting(JweToken.ENABLED);
                 if (Boolean.FALSE.equals(jweEnabled)) {
                     return tokenEncoder.encode(TokenEncoderParameters.from(jwsHeader, null, claims));
                 }
-                return tokenEncoder.encode(TokenEncoderParameters.from(jwsHeader, jweHeader, claims));
+                return tokenEncoder.encode(TokenEncoderParameters.from(jwsHeader, jweHeaderBuilder.build(), claims));
             }
         } else {
             return null;
