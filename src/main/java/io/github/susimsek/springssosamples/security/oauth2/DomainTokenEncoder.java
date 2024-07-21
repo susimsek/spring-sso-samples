@@ -1,10 +1,8 @@
 package io.github.susimsek.springssosamples.security.oauth2;
 
 import com.nimbusds.jose.Algorithm;
-import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;
-import com.nimbusds.jose.JWEAlgorithm;
 import com.nimbusds.jose.JWEEncrypter;
 import com.nimbusds.jose.JWEHeader;
 import com.nimbusds.jose.JWEObject;
@@ -13,13 +11,13 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.RSAEncrypter;
-import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.factories.DefaultJWSSignerFactory;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKMatcher;
 import com.nimbusds.jose.jwk.JWKSelector;
 import com.nimbusds.jose.jwk.KeyType;
 import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jose.produce.JWSSignerFactory;
@@ -29,7 +27,6 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import java.net.URI;
 import java.net.URL;
-import java.security.KeyPair;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -45,9 +42,6 @@ import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.JwtEncodingException;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -58,13 +52,12 @@ public class DomainTokenEncoder implements TokenEncoder {
 
     private static final String ENCODING_ERROR_MESSAGE_TEMPLATE =
         "An error occurred while attempting to encode the Jwt: %s";
-    private final KeyPair jweKeyPair;
     private final JWKSource<SecurityContext> jwkSource;
     private static final JWSSignerFactory JWS_SIGNER_FACTORY;
     private final Map<JWK, JWSSigner> jwsSigners = new ConcurrentHashMap<>();
 
     @Override
-    public Jwt encode(TokenEncoderParameters parameters) throws JwtEncodingException {
+    public Jwt encode(TokenEncoderParameters parameters, RSAKey rsaKey) throws JwtEncodingException {
         Assert.notNull(parameters, "parameters cannot be null");
 
         JwtClaimsSet claims = parameters.getClaims();
@@ -90,7 +83,7 @@ public class DomainTokenEncoder implements TokenEncoder {
             JWEObject jweObject = new JWEObject(jweHeader,
                 new Payload(signedJwt));
 
-            JWEEncrypter encrypter = createEncrypter();
+            JWEEncrypter encrypter = createEncrypter(rsaKey);
             jweObject.encrypt(encrypter);
             return new Jwt(jweObject.serialize(),
                 claims.getIssuedAt(), claims.getExpiresAt(), jweHeader.toJSONObject(), claims.getClaims());
@@ -293,9 +286,8 @@ public class DomainTokenEncoder implements TokenEncoder {
         }
     }
 
-    public JWEEncrypter createEncrypter() {
-        RSAPublicKey publicKey = (RSAPublicKey) jweKeyPair.getPublic();
-        return new RSAEncrypter(publicKey);
+    public JWEEncrypter createEncrypter(RSAKey rsaKey) throws JOSEException {
+        return new RSAEncrypter(  rsaKey.toRSAPublicKey());
     }
 
     static {

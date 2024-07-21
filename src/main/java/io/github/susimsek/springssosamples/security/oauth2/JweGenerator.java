@@ -33,6 +33,7 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public final class JweGenerator implements OAuth2TokenGenerator<Jwt> {
     private final TokenEncoder tokenEncoder;
+    private final OAuth2KeyService oAuth2KeyService;
     private OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer;
 
     @Nullable
@@ -55,28 +56,23 @@ public final class JweGenerator implements OAuth2TokenGenerator<Jwt> {
                 EncryptionMethod encryptionMethod = EncryptionMethod.A256GCM;
                 var tokenSettings = context.getRegisteredClient().getTokenSettings();
                 Instant expiresAt;
-                Boolean jweEnabled = tokenSettings
-                    .getSetting(JweToken.ENABLED);
                 if ("id_token".equals(context.getTokenType().getValue())) {
                     expiresAt = issuedAt.plus(30L, ChronoUnit.MINUTES);
                     if (tokenSettings.getIdTokenSignatureAlgorithm() != null) {
                         jwsAlgorithm = tokenSettings.getIdTokenSignatureAlgorithm();
                     }
-                    if (Boolean.TRUE.equals(jweEnabled)) {
-                        if (tokenSettings.getSetting(JweToken.ALGORITHM) != null) {
-                            jweAlgorithm = tokenSettings.getSetting(JweToken.ALGORITHM);
-                        }
-                        if (tokenSettings.getSetting(JweToken.ENCRYPTION_METHOD) != null) {
-                            encryptionMethod = tokenSettings.getSetting(JweToken.ENCRYPTION_METHOD);
-                        }
+                    if (tokenSettings.getSetting(JweToken.ALGORITHM) != null) {
+                        jweAlgorithm = tokenSettings.getSetting(JweToken.ALGORITHM);
+                    }
+                    if (tokenSettings.getSetting(JweToken.ENCRYPTION_METHOD) != null) {
+                        encryptionMethod = tokenSettings.getSetting(JweToken.ENCRYPTION_METHOD);
                     }
                 } else {
                     expiresAt = issuedAt.plus(tokenSettings.getAccessTokenTimeToLive());
                 }
 
                 String jweKeyId = null;
-                if (Boolean.TRUE.equals(jweEnabled) &&
-                    StringUtils.hasText(tokenSettings.getSetting(JweToken.KEY_ID))) {
+                if (StringUtils.hasText(tokenSettings.getSetting(JweToken.KEY_ID))) {
                     jweKeyId = tokenSettings.getSetting(JweToken.KEY_ID);
                 }
 
@@ -157,10 +153,16 @@ public final class JweGenerator implements OAuth2TokenGenerator<Jwt> {
                     jweHeaderBuilder.keyID(jweKeyId);
                 }
                 JwtClaimsSet claims = claimsBuilder.build();
+                Boolean jweEnabled = tokenSettings
+                    .getSetting(JweToken.ENABLED);
                 if (Boolean.FALSE.equals(jweEnabled)) {
-                    return tokenEncoder.encode(TokenEncoderParameters.from(jwsHeader, null, claims));
+                    return tokenEncoder.encode(TokenEncoderParameters.from(jwsHeader, null, claims),
+                       null);
                 }
-                return tokenEncoder.encode(TokenEncoderParameters.from(jwsHeader, jweHeaderBuilder.build(), claims));
+                OAuth2Key oAuth2Key = oAuth2KeyService.findByKidOrThrow(jweKeyId);
+                return tokenEncoder.encode(
+                    TokenEncoderParameters.from(jwsHeader, jweHeaderBuilder.build(), claims),
+                    oAuth2Key.toRSAKey());
             }
         } else {
             return null;

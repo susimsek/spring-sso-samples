@@ -1,7 +1,5 @@
 package io.github.susimsek.springssosamples.config;
 
-import com.nimbusds.jose.EncryptionMethod;
-import com.nimbusds.jose.JWEAlgorithm;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -15,19 +13,22 @@ import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import io.github.susimsek.springssosamples.exception.security.OAuth2SecurityProblemSupport;
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationConsentMapper;
 import io.github.susimsek.springssosamples.mapper.OAuth2AuthorizationMapper;
+import io.github.susimsek.springssosamples.mapper.OAuth2KeyMapper;
 import io.github.susimsek.springssosamples.mapper.RegisteredClientMapper;
 import io.github.susimsek.springssosamples.repository.DomainRegisteredClientRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationConsentRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2AuthorizationRepository;
+import io.github.susimsek.springssosamples.repository.OAuth2KeyRepository;
 import io.github.susimsek.springssosamples.repository.OAuth2RegisteredClientRepository;
-import io.github.susimsek.springssosamples.security.JweToken;
 import io.github.susimsek.springssosamples.security.SecurityProperties;
 import io.github.susimsek.springssosamples.security.oauth2.JweDecoder;
 import io.github.susimsek.springssosamples.security.oauth2.DomainTokenEncoder;
 import io.github.susimsek.springssosamples.security.oauth2.JweGenerator;
+import io.github.susimsek.springssosamples.security.oauth2.OAuth2KeyService;
 import io.github.susimsek.springssosamples.security.oauth2.TokenEncoder;
 import io.github.susimsek.springssosamples.service.DomainOAuth2AuthorizationConsentService;
 import io.github.susimsek.springssosamples.service.DomainOAuth2AuthorizationService;
+import io.github.susimsek.springssosamples.service.DomainOAuth2KeyService;
 import io.github.susimsek.springssosamples.service.DomainOAuth2RegisteredClientService;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -38,7 +39,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -50,21 +50,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.converter.RsaKeyConverters;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
-import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2AccessTokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2RefreshTokenGenerator;
@@ -153,6 +145,13 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
+    public OAuth2KeyService oAuth2KeyService(
+        OAuth2KeyRepository authorizationRepository,
+        OAuth2KeyMapper authorizationMapper) {
+        return new DomainOAuth2KeyService(authorizationRepository, authorizationMapper);
+    }
+
+    @Bean
     public KeyPair jwtKeyPair() {
         PublicKey publicKey = RsaKeyConverters.x509().convert(new ByteArrayInputStream(securityProperties.getJwt()
             .getFormattedPublicKey().getBytes(StandardCharsets.UTF_8)));
@@ -185,8 +184,8 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public TokenEncoder tokenEncoder(KeyPair jweKeyPair, JWKSource<SecurityContext> jwkSource)  {
-        return new DomainTokenEncoder(jweKeyPair, jwkSource);
+    public TokenEncoder tokenEncoder(JWKSource<SecurityContext> jwkSource)  {
+        return new DomainTokenEncoder(jwkSource);
     }
 
     @Bean
@@ -214,8 +213,9 @@ public class AuthorizationServerConfig {
 
     @Bean
     public OAuth2TokenGenerator<?> tokenGenerator(TokenEncoder tokenEncoder,
+                                                  OAuth2KeyService oAuth2KeyService,
                                                   OAuth2TokenCustomizer<OAuth2TokenClaimsContext> accessTokenCustomizer) {
-        var jwtGenerator = new JweGenerator(tokenEncoder);
+        var jwtGenerator = new JweGenerator(tokenEncoder, oAuth2KeyService);
         OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
         accessTokenGenerator.setAccessTokenCustomizer(accessTokenCustomizer);
         OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
