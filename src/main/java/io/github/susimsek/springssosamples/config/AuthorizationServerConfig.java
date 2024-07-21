@@ -128,26 +128,8 @@ public class AuthorizationServerConfig {
     public DomainRegisteredClientRepository registeredClientRepository(
         OAuth2RegisteredClientRepository oAuth2RegisteredClientRepository,
         RegisteredClientMapper registeredClientMapper) {
-        var registeredClientRepository = new  DomainOAuth2RegisteredClientService(
+        return new DomainOAuth2RegisteredClientService(
             oAuth2RegisteredClientRepository, registeredClientMapper);
-        RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-            .clientId("oidc-client1")
-            .clientSecret("{noop}secret")
-            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-            .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-            .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
-            .postLogoutRedirectUri("http://127.0.0.1:8080/")
-            .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-            .tokenSettings(TokenSettings.builder()
-                .setting(JweToken.ENABLED, true)
-                .setting(JweToken.ALGORITHM, JWEAlgorithm.RSA_OAEP_256)
-                .setting(JweToken.ENCRYPTION_METHOD, EncryptionMethod.A256GCM)
-                .setting(JweToken.KEY_ID, "3f8a8e5b-89f4-4b7d-91e1-5b5c1d4e7b9c")
-                .build())
-            .build();
-        registeredClientRepository.save(oidcClient);
-        return registeredClientRepository;
     }
 
     @Bean
