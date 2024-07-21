@@ -63,9 +63,10 @@ public class DomainOAuth2KeyService implements OAuth2KeyService {
     public OAuth2Key findByKidOrThrow(String kid) {
         Assert.hasText(kid, "kid cannot be empty");
         return authorizationRepository.findById(kid)
+            .filter(OAuth2KeyEntity::isActive)
             .map(authorizationMapper::toModel)
             .orElseThrow(() -> new DataRetrievalFailureException("The OAuth2Key with kid '"
-                + kid + "' was not found in the OAuth2KeyRepository."));
+                + kid + "' not found or not active in the OAuth2KeyRepository."));
     }
 
     @Override

@@ -23,7 +23,7 @@ import io.github.susimsek.springssosamples.repository.OAuth2RegisteredClientRepo
 import io.github.susimsek.springssosamples.security.SecurityProperties;
 import io.github.susimsek.springssosamples.security.oauth2.JweDecoder;
 import io.github.susimsek.springssosamples.security.oauth2.DomainTokenEncoder;
-import io.github.susimsek.springssosamples.security.oauth2.JweGenerator;
+import io.github.susimsek.springssosamples.security.oauth2.TokenGenerator;
 import io.github.susimsek.springssosamples.security.oauth2.OAuth2KeyService;
 import io.github.susimsek.springssosamples.security.oauth2.TokenEncoder;
 import io.github.susimsek.springssosamples.service.DomainOAuth2AuthorizationConsentService;
@@ -215,12 +215,12 @@ public class AuthorizationServerConfig {
     public OAuth2TokenGenerator<?> tokenGenerator(TokenEncoder tokenEncoder,
                                                   OAuth2KeyService oAuth2KeyService,
                                                   OAuth2TokenCustomizer<OAuth2TokenClaimsContext> accessTokenCustomizer) {
-        var jwtGenerator = new JweGenerator(tokenEncoder, oAuth2KeyService);
+        var tokenGenerator = new TokenGenerator(tokenEncoder, oAuth2KeyService);
         OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
         accessTokenGenerator.setAccessTokenCustomizer(accessTokenCustomizer);
         OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
         return new DelegatingOAuth2TokenGenerator(
-            jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
+            tokenGenerator, accessTokenGenerator, refreshTokenGenerator);
     }
 
     @Bean

@@ -31,7 +31,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @RequiredArgsConstructor
-public final class JweGenerator implements OAuth2TokenGenerator<Jwt> {
+public final class TokenGenerator implements OAuth2TokenGenerator<Jwt> {
     private final TokenEncoder tokenEncoder;
     private final OAuth2KeyService oAuth2KeyService;
     private OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer;
