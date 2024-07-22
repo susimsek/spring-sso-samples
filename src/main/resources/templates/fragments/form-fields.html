@@ -1,23 +1,28 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <body>
 <th:block th:fragment="inputField (label, id, name, type, placeholder)">
-  <div class="form-group mb-3">
+  <div th:with="valid=${!#fields.hasErrors(name)}"
+       th:classappend="${valid ? '' : ' has-error'}"
+       class="form-group mb-3">
     <label th:for="${id}" th:text="${label}">Label</label>
-    <input th:type="${type}" th:id="${id}" th:name="${name}" class="form-control" th:placeholder="${placeholder}" required autocomplete="off" />
+    <input th:type="${type}" th:id="${id}" th:field="*{__${name}__}" class="form-control" th:placeholder="${placeholder}" required autocomplete="off" />
+    <div th:if="${#fields.hasErrors(name)}" class="invalid-feedback" th:errors="*{__${name}__}">Error</div>
   </div>
 </th:block>
 
 <th:block th:fragment="passwordField (label, id, name, placeholder)">
-  <div class="form-group mb-3">
+  <div th:with="valid=${!#fields.hasErrors(name)}"
+       th:classappend="${valid ? '' : ' has-error'}"
+       class="form-group mb-3">
     <label th:for="${id}" th:text="${label}">Label</label>
     <div class="input-group">
-      <input type="password" th:id="${id}" th:name="${name}" class="form-control" th:placeholder="${placeholder}" required autocomplete="off" />
+      <input type="password" th:id="${id}" th:field="*{__${name}__}" class="form-control" th:placeholder="${placeholder}" required autocomplete="off" />
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
           <i class="fa fa-eye" id="toggleIcon"></i>
         </button>
       </div>
+      <div th:if="${#fields.hasErrors(name)}" class="invalid-feedback d-block" th:errors="*{__${name}__}">Error</div>
     </div>
   </div>
 </th:block>

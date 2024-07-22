@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+  <script th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>
   <title th:text="#{login.title}">Login</title>
 </head>
 <body>
@@ -13,11 +15,11 @@
       <div class="card mt-5">
         <div class="card-body p-4">
           <h3 class="card-title text-center mb-4" th:text="#{login.title}">Login</h3>
-          <form th:action="@{/login}" method="post" id="loginForm" onsubmit="disableSubmitButton()" novalidate>
-            <div th:replace="fragments/form-fields :: inputField(
-              #{login.username}, 'username', 'username', 'text', #{login.username.placeholder})"></div>
-            <div th:replace="fragments/form-fields :: passwordField(
-              #{login.password}, 'password', 'password', #{login.password.placeholder})"></div>
+          <form th:action="@{/login}" method="post" id="loginForm" th:object="${loginForm}" novalidate>
+            <div th:replace="~{fragments/form-fields :: inputField(
+              #{login.username}, 'username', 'username', 'text', #{login.username.placeholder})}"></div>
+            <div th:replace="~{fragments/form-fields :: passwordField(
+              #{login.password}, 'password', 'password', #{login.password.placeholder})}"></div>
             <div th:if="${param.error}" class="alert alert-danger" role="alert" th:text="#{login.error}">
               Invalid username or password.
             </div>
