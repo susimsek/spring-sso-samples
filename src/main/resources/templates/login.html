@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body}, 'Login')}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <title th:text="#{login.title}">Login</title>
+</head>
 <body>
 <div class="container">
   <div class="row justify-content-center">
@@ -7,15 +13,15 @@
       <div class="card mt-5">
         <div class="card-body p-4">
           <h3 class="card-title text-center mb-4" th:text="#{login.title}">Login</h3>
-          <form th:action="@{/login}" method="post" id="loginForm" onsubmit="disableSubmitButton()">
+          <form th:action="@{/login}" method="post" id="loginForm" onsubmit="disableSubmitButton()" novalidate>
             <div class="form-group mb-3">
               <label for="username" th:text="#{login.username}">Username</label>
-              <input type="text" id="username" name="username" class="form-control" th:placeholder="#{login.username.placeholder}" required />
+              <input type="text" id="username" name="username" class="form-control" th:placeholder="#{login.username.placeholder}" required autocomplete="off" />
             </div>
             <div class="form-group mb-3">
               <label for="password" th:text="#{login.password}">Password</label>
               <div class="input-group">
-                <input type="password" id="password" name="password" class="form-control" th:placeholder="#{login.password.placeholder}" required />
+                <input type="password" id="password" name="password" class="form-control" th:placeholder="#{login.password.placeholder}" required autocomplete="off" />
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
                     <i class="fa fa-eye" id="toggleIcon"></i>
