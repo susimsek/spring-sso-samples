@@ -14,21 +14,10 @@
         <div class="card-body p-4">
           <h3 class="card-title text-center mb-4" th:text="#{login.title}">Login</h3>
           <form th:action="@{/login}" method="post" id="loginForm" onsubmit="disableSubmitButton()" novalidate>
-            <div class="form-group mb-3">
-              <label for="username" th:text="#{login.username}">Username</label>
-              <input type="text" id="username" name="username" class="form-control" th:placeholder="#{login.username.placeholder}" required autocomplete="off" />
-            </div>
-            <div class="form-group mb-3">
-              <label for="password" th:text="#{login.password}">Password</label>
-              <div class="input-group">
-                <input type="password" id="password" name="password" class="form-control" th:placeholder="#{login.password.placeholder}" required autocomplete="off" />
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
-                    <i class="fa fa-eye" id="toggleIcon"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
+            <div th:replace="fragments/form-fields :: inputField(
+              #{login.username}, 'username', 'username', 'text', #{login.username.placeholder})"></div>
+            <div th:replace="fragments/form-fields :: passwordField(
+              #{login.password}, 'password', 'password', #{login.password.placeholder})"></div>
             <div th:if="${param.error}" class="alert alert-danger" role="alert" th:text="#{login.error}">
               Invalid username or password.
             </div>
