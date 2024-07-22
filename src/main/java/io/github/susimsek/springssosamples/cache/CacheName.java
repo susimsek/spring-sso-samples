@@ -20,6 +20,8 @@ public final class CacheName {
     public static final String OAUTH2_KEY_ENTITY_BY_KID_CACHE = "oauth2KeyEntityByKid";
     public static final String ROLE_ENTITY_CACHE = "roleEntity";
     public static final String USER_ENTITY_CACHE = "userEntity";
+    public static final String MESSAGE_ENTITY_CACHE = "messageEntity";
+    public static final String MESSAGES_CACHE = "messagesCache";
     public static final String USER_ROLE_MAPPING_ENTITY_CACHE = "userRoleMappingEntity";
     public static final String ROLE_ENTITY_BY_NAME_CACHE = "roleEntityByName";
     public static final String USER_ENTITY_BY_USERNAME_CACHE = "userEntityByUsername";

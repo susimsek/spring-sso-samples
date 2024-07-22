@@ -2,6 +2,7 @@ package io.github.susimsek.springssosamples.config;
 
 import io.github.susimsek.springssosamples.i18n.SimpleParameterMessageSource;
 import io.github.susimsek.springssosamples.i18n.ParameterMessageSource;
+import io.github.susimsek.springssosamples.service.MessageService;
 import jakarta.validation.MessageInterpolator;
 import jakarta.validation.Validator;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
@@ -47,8 +48,9 @@ public class LocaleConfig {
     }
 
     @Bean
-    public ParameterMessageSource messageSource(MessageSourceProperties properties) {
-        SimpleParameterMessageSource messageSource = new SimpleParameterMessageSource();
+    public ParameterMessageSource messageSource(MessageSourceProperties properties,
+                                                MessageService messageService) {
+        SimpleParameterMessageSource messageSource = new SimpleParameterMessageSource(messageService);
         if (StringUtils.hasText(properties.getBasename())) {
             messageSource.setBasenames(StringUtils
                 .commaDelimitedListToStringArray(StringUtils.trimAllWhitespace(properties.getBasename())));

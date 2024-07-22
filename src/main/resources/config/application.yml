@@ -89,6 +89,8 @@ spring:
       - userEntityByUsername
       - userEntityByEmail
       - userRoleMappingEntity
+      - messageEntity
+      - messagesCache
 
 management:
   endpoints:
