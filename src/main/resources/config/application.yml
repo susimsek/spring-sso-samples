@@ -15,6 +15,10 @@ spring:
       enabled: true
   web:
     locale: en
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 30d
   messages:
     basename: i18n/messages
     fallback-to-system-locale: false
@@ -91,7 +95,6 @@ spring:
       - userRoleMappingEntity
       - messageEntity
       - messagesCache
-
 management:
   endpoints:
     web:
