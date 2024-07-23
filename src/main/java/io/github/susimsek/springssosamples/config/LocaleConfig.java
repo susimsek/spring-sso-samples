@@ -28,10 +28,11 @@ public class LocaleConfig {
 
    public static final Locale TR = new Locale("tr", "TR");
    public static final Locale EN = Locale.ENGLISH;
+    public static final String COOKIE_NAME = "lang";
 
     @Bean
     public LocaleResolver localeResolver(WebProperties webProperties) {
-        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver(COOKIE_NAME);
         cookieLocaleResolver.setDefaultLocale(webProperties.getLocale());
         cookieLocaleResolver.setCookieMaxAge(Duration.ofDays(365));
         return cookieLocaleResolver;
