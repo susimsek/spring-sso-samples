@@ -11,19 +11,24 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
     <a class="navbar-brand" th:href="@{/}">SSO</a>
-    <div class="ms-auto d-flex align-items-center">
-      <div class="theme-toggle me-3" onclick="toggleTheme()">
-        <input type="checkbox" id="themeSwitch">
-        <div class="slider"></div>
-        <i class="fas fa-sun icon"></i>
-        <i class="fas fa-moon icon"></i>
-      </div>
-      <div class="custom-select-wrapper language-toggle">
-        <select class="form-select" id="languageSelect" onchange="setLanguage(this.value)">
-          <option value="en" th:text="#{language.english}" th:selected="${#locale.language == 'en'}">English</option>
-          <option value="tr" th:text="#{language.turkish}" th:selected="${#locale.language == 'tr'}">Türkçe</option>
-        </select>
-        <i class="fas fa-globe icon"></i>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="ms-auto d-flex align-items-center">
+        <div class="theme-toggle me-3" onclick="toggleTheme()">
+          <input type="checkbox" id="themeSwitch">
+          <div class="slider"></div>
+          <i class="fas fa-sun icon"></i>
+          <i class="fas fa-moon icon"></i>
+        </div>
+        <div class="custom-select-wrapper language-toggle">
+          <select class="form-select" id="languageSelect" onchange="setLanguage(this.value)">
+            <option value="en" th:text="#{language.english}" th:selected="${#locale.language == 'en'}">English</option>
+            <option value="tr" th:text="#{language.turkish}" th:selected="${#locale.language == 'tr'}">Türkçe</option>
+          </select>
+          <i class="fas fa-globe icon"></i>
+        </div>
       </div>
     </div>
   </div>
