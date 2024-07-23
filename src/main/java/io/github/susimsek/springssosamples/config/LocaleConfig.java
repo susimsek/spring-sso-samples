@@ -9,6 +9,7 @@ import java.util.List;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.context.MessageSourceProperties;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,9 +30,9 @@ public class LocaleConfig {
    public static final Locale EN = Locale.ENGLISH;
 
     @Bean
-    public LocaleResolver localeResolver() {
+    public LocaleResolver localeResolver(WebProperties webProperties) {
         CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
-        cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+        cookieLocaleResolver.setDefaultLocale(webProperties.getLocale());
         cookieLocaleResolver.setCookieMaxAge(Duration.ofDays(365));
         return cookieLocaleResolver;
     }
