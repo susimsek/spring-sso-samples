@@ -5,7 +5,6 @@ import io.github.susimsek.springssosamples.i18n.ParameterMessageSource;
 import io.github.susimsek.springssosamples.service.MessageService;
 import jakarta.validation.MessageInterpolator;
 import jakarta.validation.Validator;
-import java.util.List;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.context.MessageSourceProperties;
