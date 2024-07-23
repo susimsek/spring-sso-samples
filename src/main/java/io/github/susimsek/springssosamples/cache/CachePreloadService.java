@@ -1,7 +1,11 @@
 package io.github.susimsek.springssosamples.cache;
 
+import static io.github.susimsek.springssosamples.config.LocaleConfig.EN;
+import static io.github.susimsek.springssosamples.config.LocaleConfig.TR;
+
 import io.github.susimsek.springssosamples.service.MessageService;
 import java.util.List;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -14,9 +18,9 @@ public class CachePreloadService {
 
     @Async
     public void preloadCache() {
-        List<String> locales = List.of("tr", "en");
-        for (String locale : locales) {
-            messageService.getMessages(locale);
+        List<Locale> locales = List.of(TR, EN);
+        for (Locale locale : locales) {
+            messageService.getMessages(locale.getLanguage());
         }
     }
 }

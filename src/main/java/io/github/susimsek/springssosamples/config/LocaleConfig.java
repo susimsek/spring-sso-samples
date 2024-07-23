@@ -5,6 +5,7 @@ import io.github.susimsek.springssosamples.i18n.ParameterMessageSource;
 import io.github.susimsek.springssosamples.service.MessageService;
 import jakarta.validation.MessageInterpolator;
 import jakarta.validation.Validator;
+import java.util.List;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.context.MessageSourceProperties;
@@ -23,6 +24,9 @@ import java.util.Locale;
 @Configuration(proxyBeanMethods = false)
 @Import(MessageSourceAutoConfiguration.class)
 public class LocaleConfig {
+
+   public static final Locale TR = new Locale("tr", "TR");
+   public static final Locale EN = Locale.ENGLISH;
 
     @Bean
     public LocaleResolver localeResolver() {
