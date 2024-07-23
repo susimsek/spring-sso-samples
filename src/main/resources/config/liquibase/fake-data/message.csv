@@ -161,3 +161,9 @@ id;locale;code;content;created_at;created_by;updated_at;updated_by
 160;en;scope.phone.description;This application will be able to read your phone number.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
 161;tr;error.title;Hata;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
 162;en;error.title;Error;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+163;tr;error.page.title;Hata;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+164;en;error.page.title;Error;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+165;tr;login.page.title;Giriş;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+166;en;login.page.title;Login;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+167;tr;consent.page.title;Rıza;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+168;en;consent.page.title;Consent;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system

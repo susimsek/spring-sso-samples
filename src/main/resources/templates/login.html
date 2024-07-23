@@ -1,13 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body}, 'Login')}">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
-  <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
-  <script th:src="@{/bootstrap/js/bootstrap.bundle.min.js}"></script>
-  <title th:text="#{login.title}">Login</title>
-</head>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body}, #{login.page.title})}">
 <body>
 <div class="container">
   <div class="row justify-content-center">
