@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 /**
  * A custom message source that retrieves messages from a database.
@@ -140,7 +141,11 @@ public class DatabaseMessageSource extends AbstractNamedParameterMessageSource {
                                         String format,
                                         ClassLoader loader,
                                         boolean reload) {
-            Map<String, String> messages = messageService.getMessages(locale.getLanguage());
+            String language = locale.getLanguage();
+            if (!StringUtils.hasText(language)) {
+                language = LocaleContextHolder.getLocale().getLanguage();
+            }
+            Map<String, String> messages = messageService.getMessages(language);
             return new DatabaseResourceBundle(messages);
         }
 
