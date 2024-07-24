@@ -3,6 +3,7 @@ package io.github.susimsek.springssosamples.config;
 import static io.github.susimsek.springssosamples.constant.Constants.SPRING_PROFILE_DEVELOPMENT;
 import static io.github.susimsek.springssosamples.constant.Constants.SYSTEM;
 
+import io.github.susimsek.springssosamples.h2.H2ConfigurationHelper;
 import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -55,22 +56,7 @@ public class DatabaseConfig {
     public Object h2TCPServer(Environment environment) throws SQLException {
         String port = getValidPortForH2(environment);
         log.debug("Starting H2 database on port {}", port);
-        try {
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            Class<?> serverClass = Class.forName("org.h2.tools.Server", true, loader);
-            Method createServer = serverClass.getMethod("createTcpServer", String[].class);
-            return createServer.invoke(null, (Object) new String[]{"-tcp", "-tcpAllowOthers", "-tcpPort", port});
-        } catch (ClassNotFoundException | LinkageError | NoSuchMethodException | IllegalAccessException e) {
-            log.error("Failed to initialize H2 database server", e);
-            throw new IllegalStateException("Failed to initialize H2 database server", e);
-        } catch (InvocationTargetException e) {
-            Throwable t = e.getTargetException();
-            if (t instanceof SQLException sqlException) {
-                throw sqlException;
-            }
-            log.error("Unchecked exception in org.h2.tools.Server.createTcpServer()", t);
-            throw new IllegalStateException("Unchecked exception in org.h2.tools.Server.createTcpServer()", t);
-        }
+        return H2ConfigurationHelper.createServer(port);
     }
 
     private String getValidPortForH2(Environment env) {
