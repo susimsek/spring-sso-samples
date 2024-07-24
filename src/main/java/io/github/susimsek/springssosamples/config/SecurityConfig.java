@@ -1,5 +1,7 @@
 package io.github.susimsek.springssosamples.config;
 
+import static io.github.susimsek.springssosamples.constant.Constants.SPRING_PROFILE_DEVELOPMENT;
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import io.github.susimsek.springssosamples.mapper.UserMapper;
@@ -11,6 +13,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,6 +36,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 public class SecurityConfig {
 
     private final SecurityProperties securityProperties;
+    private final Environment env;
 
     private static final String LOGIN_PAGE_URI = "/login";
 
@@ -41,6 +46,9 @@ public class SecurityConfig {
         HttpSecurity http,
         RequestMatcherConfig requestMatcherConfig,
         MvcRequestMatcher.Builder mvc) throws Exception {
+        if (env.acceptsProfiles(Profiles.of(SPRING_PROFILE_DEVELOPMENT))) {
+            http.authorizeHttpRequests(authz -> authz.requestMatchers(toH2Console()).permitAll());
+        }
         http
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
