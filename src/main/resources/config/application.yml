@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: '@spring.profiles.active@'
   application:
     name: spring-sso-samples
   main:
