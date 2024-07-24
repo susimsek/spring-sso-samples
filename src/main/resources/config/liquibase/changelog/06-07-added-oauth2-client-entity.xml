@@ -7,12 +7,12 @@
     objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
 
     <!-- Sequence for oauth2_client_scope_mapping table -->
-    <changeSet id="1699333174982-1" author="susimsek">
+    <changeSet id="1699444800003-1" author="susimsek">
         <createSequence incrementBy="1" minValue="1" maxValue="9999999999999999" cycle="false" cacheSize="50000" sequenceName="seq_oauth2_client_scope_mapping" startValue="1001"/>
     </changeSet>
 
     <!-- OAuth2 Client Table -->
-    <changeSet id="6" author="susimsek">
+    <changeSet id="1699444800003-2" author="susimsek">
         <createTable tableName="oauth2_client">
             <column name="id" type="varchar(36)">
                 <constraints primaryKey="true" primaryKeyName="pk_oauth2_registered_client" nullable="false"/>
@@ -57,7 +57,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="6-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800003-2-data" author="susimsek (generated)" context="faker">
         <loadData
             file="config/liquibase/fake-data/oauth2_client.csv"
             separator=";"
@@ -83,9 +83,9 @@
     </changeSet>
 
     <!-- OAuth2 Scope Table -->
-    <changeSet id="7" author="susimsek">
+    <changeSet id="1699444800003-3" author="susimsek">
         <createTable tableName="oauth2_scope">
-            <column name="id" type="uuid">
+            <column name="id" type="varchar(36)">
                 <constraints primaryKey="true" primaryKeyName="pk_oauth2_scope" nullable="false"/>
             </column>
             <column name="scope" type="varchar(255)">
@@ -107,12 +107,12 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="7-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800003-3-data" author="susimsek (generated)" context="faker">
         <loadData
             file="config/liquibase/fake-data/oauth2_scope.csv"
             separator=";"
             tableName="oauth2_scope">
-            <column name="id" type="uuid"/>
+            <column name="id" type="varchar"/>
             <column name="scope" type="varchar"/>
             <column name="description" type="varchar"/>
             <column name="created_at" type="datetime"/>
@@ -123,7 +123,7 @@
     </changeSet>
 
     <!-- OAuth2 Client Scope Mapping Table -->
-    <changeSet id="8" author="susimsek">
+    <changeSet id="1699444800003-4" author="susimsek">
         <createTable tableName="oauth2_client_scope_mapping">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="pk_oauth2_client_scope_mapping" nullable="false"/>
@@ -169,7 +169,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="8-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800003-4-data" author="susimsek (generated)" context="faker">
         <loadData
             file="config/liquibase/fake-data/oauth2_client_scope_mapping.csv"
             separator=";"

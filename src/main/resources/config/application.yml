@@ -34,7 +34,7 @@ spring:
     ansi:
       enabled: always
   profiles:
-    active: local
+    active: prod
   jackson:
     serialization:
       write-dates-as-timestamps: false

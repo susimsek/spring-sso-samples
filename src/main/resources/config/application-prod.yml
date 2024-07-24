@@ -1,0 +1,64 @@
+server:
+  port: 7080
+
+spring:
+  liquibase:
+    contexts: local, faker
+  mvc:
+    cors:
+      enabled: false
+      allowed-origins: "http://localhost:8100"
+      allowed-methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
+      allowed-headers: "Authorization,Content-Type,Accept,Cache-Control,X-Requested-With,Origin,Referer,User-Agent,X-Request-ID,X-Correlation-ID,X-Idempotency-Key,X-JWS-Signature"
+      allow-credentials: true
+      max-age: 3600
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sso
+    username: admin
+    password: root
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 1
+      pool-name: Hikari
+      auto-commit: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.batch_size: 25
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+      hibernate.query.in_clause_parameter_padding: true
+      jakarta.persistence.sharedCache.mode: ENABLE_SELECTIVE
+
+
+security:
+  content-security-policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' maxcdn.bootstrapcdn.com getbootstrap.com; worker-src 'self' blob:; img-src 'self' data:; frame-src 'self' data:; font-src 'self' data:"
+  jwt:
+    public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvjmNBc/Yzx2gFZmd6DhCoSUf1BnlIczVR7lxKJwCla6n9tIj3x6YXIwvZgjIb2A1I2CaqBIy7Ud6eUILJ3PHwuXGCOBCOcX7xm/a95A3NTEZKpNDNHpIISh6FF9rSR3+D52+LOuDO2kL9/aE5hwFkPk4Z/DLA8+cxuFIGuSJXStuGM6MG1vtpStKdzdt8EE+1l1vNmnpkiBnMWYZEBkmflyZB7/C53zcRttdtNBOPOHktfvEWR2JwSYctnqNXU+eE4VvVIWBvY/HhzURzAQst6GPLF7pKDjg8wpN4Dn/eSDhg7A4S9tUVPCFYzK+c+4M75ZAk31dXEkBw7nuCdEYLwIDAQAB
+    private-key: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC+OY0Fz9jPHaAVmZ3oOEKhJR/UGeUhzNVHuXEonAKVrqf20iPfHphcjC9mCMhvYDUjYJqoEjLtR3p5Qgsnc8fC5cYI4EI5xfvGb9r3kDc1MRkqk0M0ekghKHoUX2tJHf4Pnb4s64M7aQv39oTmHAWQ+Thn8MsDz5zG4Uga5IldK24YzowbW+2lK0p3N23wQT7WXW82aemSIGcxZhkQGSZ+XJkHv8LnfNxG21200E484eS1+8RZHYnBJhy2eo1dT54ThW9UhYG9j8eHNRHMBCy3oY8sXukoOODzCk3gOf95IOGDsDhL21RU8IVjMr5z7gzvlkCTfV1cSQHDue4J0RgvAgMBAAECggEAGGGoAaayU1mouxwFcU5EvALWIYlwJPTsIVVTe7EDY8wPG0Oz9VUmkjYlnR5jEmNybCZlrEUo4eDXgdNFOrlMUV7CE0ErO9x0eOq9Vh3V9atlXl+hrYg+1oEppJLWXXjKp5XAWmGVYHgGYLHoNtZAoGRRJoFmhAaIQbV+WHQSZy6A6PtcpKFPAdUC+65AIBYi1gSysoFlVVCVSPSPtFMLOLCknHe3vsT5AMmYfQMiAgIE+UQqeK3IdIZ4nSSkRn+cJjjm6gBALEwuAASnGTpGHJve4PRq1fhp9Qxji7+irTOQDS/zKx54QEZ210lHQlt4WQUBpqyDlsYwISPhT2wggQKBgQD4EZ9P88B1PiqO9U6QrLxJuO80UIfr99SoAZm/dYiw9aXmPrwkdzKwQ2gGz+wsane74m+MoTj6UpPLtMtpLgK/VaGzYI+ueQ6t0sBLOhnQKlXHf3JclrOoYko01EyZJPY39pZvYYTg/IzY8tXl7HLcHa2X+cf6WKuJ3sh5j/IQkwKBgQDETn2R+dVi2fVe1re+G1gB6QaW1qRPzkpy09Nmf6lXboIeJkLhiEh44bnC8bPjQAGYooHdHgqPXI/3LK2ioE86PIQ/hYo9L6XYetYVJCjMAcbMKSqa4WQQqHNHnCpmbNhWohF8BZgtKpehx6SR9RzBBLOrqGSd6nLVyA0ssgaHdQKBgQCUx6zu/Nhu+Ov5dbK7Hn6HEL2WeL4sjiUi5mLZ65oh2BK59uJMVJk4EhVwEIArW2eYbgRNKdzMdX5i7HobCRdovekPdlh2YfCl3AKsm5ojuWBdGFj0owX5dYngCXwvVXW+tswe3TQe5BltfKdBEQEKd1pIDe0cftXTCKTgE68wtQKBgCXn/ilk88Z9zfq9PYfRIeJki+gulFXwwMGBk820ExAV/7wwqTOBrHTjKYqyP4k/P8+oeakn9uQN/KK/FtxTVlkpfGQDtljwTXcK6TH15IbYRPoBbP+xTDBHRtNqHWnf1LqN2xB2yBbYpaUQtv+UNDQ1YzhfcOZpcjlDwv+BdO9NAoGAXzA4qgD0czU54+MdxW6aT7TNJWq1Jwbb/QIEzvzgk92QhMYzCOuscCFNvLzKiEIUCyBmkMGyqmfXzM6+3CBATDa2pBa077g4EmO7/eAKgPX6grcup0PZeOEEuJiGdkb5nY4O3faZWWEFk295Ad8/8wmA1Tq8x7fvaPgokiQQg9U=
+logging:
+  level:
+    ROOT: DEBUG
+    org.hibernate.SQL: DEBUG
+    io.github.susimsek.springssosamples: DEBUG
+  loki:
+    enabled: false
+  aspect:
+    enabled: true
+    log-level: FULL
+  http:
+    enabled: true
+    log-level: FULL
+  obfuscate:
+    enabled: true
