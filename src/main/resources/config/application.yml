@@ -1,15 +1,10 @@
-server:
-  port: 7080
-  shutdown: graceful
-  compression:
-    enabled: true
-    min-response-size: 1024
-    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
-
 spring:
-  restclient:
-    connect-timeout: 5s
-    read-timeout: 10s
+  profiles:
+    active: local
+  application:
+    name: spring-sso-samples
+  main:
+    allow-bean-definition-overriding: true
   mvc:
     problemdetails:
       enabled: true
@@ -23,18 +18,11 @@ spring:
     basename: i18n/messages
     fallback-to-system-locale: false
     use-code-as-default-message: true
-    cache-duration: 1h
   liquibase:
     change-log: classpath:config/liquibase/master.xml
-  application:
-    name: spring-sso-samples
-  main:
-    allow-bean-definition-overriding: true
   output:
     ansi:
       enabled: always
-  profiles:
-    active: prod
   jackson:
     serialization:
       write-dates-as-timestamps: false
@@ -60,19 +48,6 @@ spring:
         await-termination: true
         await-termination-period: 60s
   cache:
-    default-config:
-      ttl: 1h
-      initial-capacity: 5000
-      maximum-size: 10000
-    hibernate:
-      default-update-timestamps-region:
-        ttl: 1h
-        initial-capacity: 5000
-        maximum-size: 10000
-      default-query-results-region:
-        ttl: 1h
-        initial-capacity: 5000
-        maximum-size: 10000
     cache-names:
       - oauth2AuthorizationEntity
       - oauth2AuthorizationEntityBySpecification
@@ -95,6 +70,29 @@ spring:
       - userRoleMappingEntity
       - messageEntity
       - messagesCache
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: deferred
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.batch_size: 25
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+      hibernate.query.in_clause_parameter_padding: true
+      jakarta.persistence.sharedCache.mode: ENABLE_SELECTIVE
 management:
   endpoints:
     web:
@@ -120,43 +118,12 @@ management:
       probability: 1.0
     enabled: true
 
+security:
+  content-security-policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' maxcdn.bootstrapcdn.com getbootstrap.com; worker-src 'self' blob:; img-src 'self' data:; frame-src 'self' data:; font-src 'self' data:"
+
 logging:
-  level:
-    ROOT: INFO
-    org.hibernate.SQL: INFO
-    io.github.susimsek.springssosamples: INFO
   pattern: '%clr(%d{yyyy-MM-dd''T''HH:mm:ss.SSSXXX}){faint} %clr(%5p){highlight} %clr(${PID:- }){magenta} --- [%clr(${spring.application.name:-}){green},%X{traceId:-},%X{spanId:-}] [%clr(%t){faint}] %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%clr(%wEx){red}'
-  async:
-    queueSize: 10000
-    discardingThreshold: 0
-    maxFlushTime: 5000
-    includeCallerData: false
-  loki:
-    enabled: false
-    url: http://localhost:3100/loki/api/v1/push
-    inner-threads-expiration: 5m
-    batch-max-items: 1000
-    batch-max-bytes: 2MB
-    batch-timeout: 5s
-    use-direct-buffers: true
-    drain-on-stop: true
-    metrics-enabled: false
-    drop-rate-limited-batches: false
-    verbose: false
-    internal-queues-check-timeout: 25ms
-    retry:
-      max-retries: 3
-      min-retry-backoff: 500ms
-      max-retry-backoff: 1m
-      max-retry-jitter: 500ms
-  aspect:
-    enabled: true
-    log-level: FULL
-  http:
-    enabled: true
-    log-level: FULL
   obfuscate:
-    enabled: true
     mask-value: "****"
     headers:
       - Authorization

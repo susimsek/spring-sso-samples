@@ -1,9 +1,19 @@
 server:
   port: 7080
+  shutdown: graceful
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
 
 spring:
+  messages:
+    cache-duration: 1h
+  restclient:
+    connect-timeout: 5s
+    read-timeout: 10s
   liquibase:
-    contexts: local, faker
+    contexts: prod, faker
   mvc:
     cors:
       enabled: false
@@ -21,39 +31,54 @@ spring:
       minimum-idle: 1
       pool-name: Hikari
       auto-commit: false
-  jpa:
+  cache:
+    default-config:
+      ttl: 1h
+      initial-capacity: 5000
+      maximum-size: 10000
     hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-    show-sql: true
-    open-in-view: false
-    properties:
-      hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: true
-      hibernate.cache.use_query_cache: true
-      hibernate.generate_statistics: false
-      hibernate.jdbc.batch_size: 25
-      hibernate.order_inserts: true
-      hibernate.order_updates: true
-      hibernate.query.fail_on_pagination_over_collection_fetch: true
-      hibernate.query.in_clause_parameter_padding: true
-      jakarta.persistence.sharedCache.mode: ENABLE_SELECTIVE
-
+      default-update-timestamps-region:
+        ttl: 1h
+        initial-capacity: 5000
+        maximum-size: 10000
+      default-query-results-region:
+        ttl: 1h
+        initial-capacity: 5000
+        maximum-size: 10000
 
 security:
-  content-security-policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' maxcdn.bootstrapcdn.com getbootstrap.com; worker-src 'self' blob:; img-src 'self' data:; frame-src 'self' data:; font-src 'self' data:"
   jwt:
     public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvjmNBc/Yzx2gFZmd6DhCoSUf1BnlIczVR7lxKJwCla6n9tIj3x6YXIwvZgjIb2A1I2CaqBIy7Ud6eUILJ3PHwuXGCOBCOcX7xm/a95A3NTEZKpNDNHpIISh6FF9rSR3+D52+LOuDO2kL9/aE5hwFkPk4Z/DLA8+cxuFIGuSJXStuGM6MG1vtpStKdzdt8EE+1l1vNmnpkiBnMWYZEBkmflyZB7/C53zcRttdtNBOPOHktfvEWR2JwSYctnqNXU+eE4VvVIWBvY/HhzURzAQst6GPLF7pKDjg8wpN4Dn/eSDhg7A4S9tUVPCFYzK+c+4M75ZAk31dXEkBw7nuCdEYLwIDAQAB
     private-key: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC+OY0Fz9jPHaAVmZ3oOEKhJR/UGeUhzNVHuXEonAKVrqf20iPfHphcjC9mCMhvYDUjYJqoEjLtR3p5Qgsnc8fC5cYI4EI5xfvGb9r3kDc1MRkqk0M0ekghKHoUX2tJHf4Pnb4s64M7aQv39oTmHAWQ+Thn8MsDz5zG4Uga5IldK24YzowbW+2lK0p3N23wQT7WXW82aemSIGcxZhkQGSZ+XJkHv8LnfNxG21200E484eS1+8RZHYnBJhy2eo1dT54ThW9UhYG9j8eHNRHMBCy3oY8sXukoOODzCk3gOf95IOGDsDhL21RU8IVjMr5z7gzvlkCTfV1cSQHDue4J0RgvAgMBAAECggEAGGGoAaayU1mouxwFcU5EvALWIYlwJPTsIVVTe7EDY8wPG0Oz9VUmkjYlnR5jEmNybCZlrEUo4eDXgdNFOrlMUV7CE0ErO9x0eOq9Vh3V9atlXl+hrYg+1oEppJLWXXjKp5XAWmGVYHgGYLHoNtZAoGRRJoFmhAaIQbV+WHQSZy6A6PtcpKFPAdUC+65AIBYi1gSysoFlVVCVSPSPtFMLOLCknHe3vsT5AMmYfQMiAgIE+UQqeK3IdIZ4nSSkRn+cJjjm6gBALEwuAASnGTpGHJve4PRq1fhp9Qxji7+irTOQDS/zKx54QEZ210lHQlt4WQUBpqyDlsYwISPhT2wggQKBgQD4EZ9P88B1PiqO9U6QrLxJuO80UIfr99SoAZm/dYiw9aXmPrwkdzKwQ2gGz+wsane74m+MoTj6UpPLtMtpLgK/VaGzYI+ueQ6t0sBLOhnQKlXHf3JclrOoYko01EyZJPY39pZvYYTg/IzY8tXl7HLcHa2X+cf6WKuJ3sh5j/IQkwKBgQDETn2R+dVi2fVe1re+G1gB6QaW1qRPzkpy09Nmf6lXboIeJkLhiEh44bnC8bPjQAGYooHdHgqPXI/3LK2ioE86PIQ/hYo9L6XYetYVJCjMAcbMKSqa4WQQqHNHnCpmbNhWohF8BZgtKpehx6SR9RzBBLOrqGSd6nLVyA0ssgaHdQKBgQCUx6zu/Nhu+Ov5dbK7Hn6HEL2WeL4sjiUi5mLZ65oh2BK59uJMVJk4EhVwEIArW2eYbgRNKdzMdX5i7HobCRdovekPdlh2YfCl3AKsm5ojuWBdGFj0owX5dYngCXwvVXW+tswe3TQe5BltfKdBEQEKd1pIDe0cftXTCKTgE68wtQKBgCXn/ilk88Z9zfq9PYfRIeJki+gulFXwwMGBk820ExAV/7wwqTOBrHTjKYqyP4k/P8+oeakn9uQN/KK/FtxTVlkpfGQDtljwTXcK6TH15IbYRPoBbP+xTDBHRtNqHWnf1LqN2xB2yBbYpaUQtv+UNDQ1YzhfcOZpcjlDwv+BdO9NAoGAXzA4qgD0czU54+MdxW6aT7TNJWq1Jwbb/QIEzvzgk92QhMYzCOuscCFNvLzKiEIUCyBmkMGyqmfXzM6+3CBATDa2pBa077g4EmO7/eAKgPX6grcup0PZeOEEuJiGdkb5nY4O3faZWWEFk295Ad8/8wmA1Tq8x7fvaPgokiQQg9U=
 logging:
   level:
-    ROOT: DEBUG
-    org.hibernate.SQL: DEBUG
-    io.github.susimsek.springssosamples: DEBUG
+    ROOT: INFO
+    org.hibernate.SQL: INFO
+    io.github.susimsek.springssosamples: INFO
+  pattern: '%clr(%d{yyyy-MM-dd''T''HH:mm:ss.SSSXXX}){faint} %clr(%5p){highlight} %clr(${PID:- }){magenta} --- [%clr(${spring.application.name:-}){green},%X{traceId:-},%X{spanId:-}] [%clr(%t){faint}] %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%clr(%wEx){red}'
+  async:
+    queueSize: 10000
+    discardingThreshold: 0
+    maxFlushTime: 5000
+    includeCallerData: false
   loki:
     enabled: false
+    url: http://localhost:3100/loki/api/v1/push
+    inner-threads-expiration: 5m
+    batch-max-items: 1000
+    batch-max-bytes: 2MB
+    batch-timeout: 5s
+    use-direct-buffers: true
+    drain-on-stop: true
+    metrics-enabled: false
+    drop-rate-limited-batches: false
+    verbose: false
+    internal-queues-check-timeout: 25ms
+    retry:
+      max-retries: 3
+      min-retry-backoff: 500ms
+      max-retry-backoff: 1m
+      max-retry-jitter: 500ms
   aspect:
     enabled: true
     log-level: FULL
