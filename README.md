@@ -1,4 +1,4 @@
-# Spring SSO Samples
+# Spring Authorization Server Samples
 
 ## Overview
 
@@ -7,9 +7,7 @@ Spring Authorization Server is a framework that provides implementations of the 
 ## Prerequisites
 
 - Java 17
-- Kotlin
 - Maven 3.x
-- Open AI
 
 ## Build
 
