@@ -40,6 +40,8 @@ spring:
         ttl: 1h
         initial-capacity: 5000
         maximum-size: 10000
+  thymeleaf:
+    cache: false
 
 
 security:
