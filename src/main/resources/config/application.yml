@@ -103,6 +103,8 @@ management:
       enabled: true
     liveness-state:
       enabled: true
+    mail:
+      enabled: false
   endpoint:
     shutdown:
       enabled: true
@@ -116,6 +118,8 @@ management:
         readiness:
           include: readinessState,db
   info:
+    git:
+      mode: full
     env:
       enabled: true
   tracing:
