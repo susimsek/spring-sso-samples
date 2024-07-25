@@ -1,0 +1,28 @@
+services:
+  network-deploy-service:
+    networks:
+      - sso
+
+  sso-base-config:
+    extends:
+      service: network-deploy-service
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+
+
+  sso-db-config:
+    extends:
+      service: network-deploy-service
+    image: suayb/bitnami-debezium-postgresql:15.4.0
+    healthcheck:
+      test: pg_isready -U postgres
+      timeout: 10s
+      retries: 10
+      interval: 10s
+      start_period: 10s
+    environment:
+      POSTGRESQL_PASSWORD: root

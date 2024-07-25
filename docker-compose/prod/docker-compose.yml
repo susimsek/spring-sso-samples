@@ -1,0 +1,41 @@
+services:
+  postgresql:
+    container_name: postgresql
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgresql/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+      - postgresql:/bitnami/postgresql
+    extends:
+      file: common-config.yml
+      service: sso-db-config
+
+  sso:
+    image: suayb/spring-sso-samples:main
+    container_name: sso
+    ports:
+      - 7080:7080
+    environment:
+      SPRING_APPLICATION_NAME: sso
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/sso
+      SPRING_DATASOURCE_USERNAME: sso
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent localhost:7080/actuator/health/readiness | grep UP || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: sso-base-config
+
+networks:
+  sso:
+    driver: "bridge"
+
+volumes:
+  postgresql:
