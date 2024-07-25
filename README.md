@@ -46,17 +46,37 @@ mvn verify jib:dockerBuild
 ## Used Technologies
 
 - Java 17
+- Checkstyle
+- SonarQube
 - Docker
+- Kubernetes
+- Helm
 - Sonarqube
+- GitHub Actions
 - Spring Boot 3.x
-- Spring Boot Web
-- Spring Boot Validation
-- Spring Boot Jpa
-- Spring Boot OAuth2 Authorization Server
-- Spring Boot Security
-- Liquibase
-- Hibernate Jpamodelgen
+- Spring Boot Starter Web
+- Spring Boot Starter Validation
+- Spring Boot Starter Data JPA
+- Spring Boot Starter OAuth2 Authorization Server
+- Spring Boot Starter Security
+- Spring Security OAuth2 Jose
+- Spring Boot Starter AOP
+- Spring Boot Starter Cache
+- Spring Boot Starter Thymeleaf
 - Spring Boot Actuator
+- Spring Boot Configuration Processor
+- SpringDoc OpenAPI Starter WebMVC UI
+- Liquibase
+- PostgreSQL
+- H2
+- Spring Boot DevTools
+- Caffeine Cache
+- Hibernate Jpamodelgen
+- Hibernate JCache
 - Lombok
 - Mapstruct
-- Springdoc
+- Micrometer Tracing
+- Micrometer Tracing Bridge OTel
+- Logback Appender For Loki
+- Bootstrap
+- Font Awesome
