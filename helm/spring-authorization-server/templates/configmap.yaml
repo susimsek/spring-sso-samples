@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "spring-authorization-server.fullname" . | quote }}
+  namespace: {{ include "spring-authorization-server.namespace" . | quote }}
+  labels: {{- include "spring-authorization-server.labels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: spring-authorization-server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "spring-authorization-server.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  SPRING_APPLICATION_NAME: {{ include "spring-authorization-server.fullname" . | quote }}
+  SPRING_PROFILES_ACTIVE: {{ .Values.spring.profiles.active | quote }}
+  SPRING_DATASOURCE_URL: {{ .Values.spring.datasource.url | quote }}
+  SPRING_DATASOURCE_USERNAME: {{ .Values.spring.datasource.username | quote }}
+  SPRING_DATASOURCE_PASSWORD: {{ .Values.spring.datasource.password | quote }}

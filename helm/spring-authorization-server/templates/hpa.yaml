@@ -1,0 +1,44 @@
+{{- if .Values.autoscaling.enabled }}
+apiVersion: {{ include "spring-authorization-server.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "spring-authorization-server.fullname" . }}
+  namespace: {{ include "spring-authorization-server.namespace" . | quote }}
+  labels: {{- include "spring-authorization-server.labels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: spring-authorization-server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "spring-authorization-server.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "spring-authorization-server.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: {{ template "spring-authorization-server.fullname" . }}
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.autoscaling.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "spring-authorization-server.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.autoscaling.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetCPU }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.autoscaling.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "spring-authorization-server.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.autoscaling.targetMemory }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.targetMemory }}
+        {{- end }}
+    {{- end }}
+{{- end }}

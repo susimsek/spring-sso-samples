@@ -10,13 +10,13 @@ services:
       file: common-config.yml
       service: sso-db-config
 
-  sso:
+  spring-authorization-server:
     image: suayb/spring-sso-samples:main
-    container_name: sso
+    container_name: spring-authorization-server
     ports:
       - 7080:7080
     environment:
-      SPRING_APPLICATION_NAME: sso
+      SPRING_APPLICATION_NAME: spring-authorization-server
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/sso
       SPRING_DATASOURCE_USERNAME: sso
       SPRING_DATASOURCE_PASSWORD: root

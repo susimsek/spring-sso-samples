@@ -1,0 +1,17 @@
+architecture: standalone
+global:
+  postgresql:
+    auth:
+      postgresPassword: root
+primary:
+  service:
+    type: LoadBalancer
+  initdb:
+    scripts:
+      initdb.sql: |
+        CREATE USER sso WITH PASSWORD 'root';
+        CREATE DATABASE sso WITH OWNER = sso ENCODING = 'UTF8' TABLESPACE = pg_default CONNECTION LIMIT = -1;
+
+image:
+  repository: suayb/bitnami-debezium-postgresql
+  tag: 15.4.0

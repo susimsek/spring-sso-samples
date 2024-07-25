@@ -1,0 +1,20 @@
+{{- if and .Values.serviceAccount.create .Values.rbac.create }}
+kind: RoleBinding
+apiVersion: {{ include "spring-authorization-server.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ template "spring-authorization-server.fullname" . }}
+  namespace: {{ include "spring-authorization-server.namespace" . | quote }}
+  labels: {{- include "spring-authorization-server.labels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: spring-authorization-server
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "spring-authorization-server.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "spring-authorization-server.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "spring-authorization-server.serviceAccountName" . }}
+    namespace: {{ include "spring-authorization-server.namespace" . | quote }}
+{{- end }}
