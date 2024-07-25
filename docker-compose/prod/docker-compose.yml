@@ -11,7 +11,7 @@ services:
       service: sso-db-config
 
   spring-authorization-server:
-    image: suayb/spring-sso-samples:main
+    image: suayb/spring-authorization-server:main
     container_name: spring-authorization-server
     ports:
       - 7080:7080

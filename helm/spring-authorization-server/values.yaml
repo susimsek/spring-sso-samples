@@ -204,7 +204,7 @@ updateStrategy:
 
 image:
   registry: docker.io
-  repository: suayb/spring-sso-samples
+  repository: suayb/spring-authorization-server
   tag: main
   digest: ""
   ## Specify a imagePullPolicy
