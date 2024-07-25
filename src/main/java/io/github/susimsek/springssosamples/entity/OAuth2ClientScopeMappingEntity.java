@@ -31,8 +31,8 @@ import org.hibernate.proxy.HibernateProxy;
 public class OAuth2ClientScopeMappingEntity extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator", sequenceName = "seq_oauth2_client_scope_mapping", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "oauth2ClientScopeMappingSequenceGenerator")
+    @SequenceGenerator(name = "oauth2ClientScopeMappingSequenceGenerator", sequenceName = "seq_oauth2_client_scope_mapping", allocationSize = 1)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 

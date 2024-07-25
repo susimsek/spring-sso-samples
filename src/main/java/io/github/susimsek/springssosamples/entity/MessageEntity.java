@@ -29,8 +29,8 @@ import org.hibernate.proxy.HibernateProxy;
 public class MessageEntity extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator", sequenceName = "seq_message", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "messageSequenceGenerator")
+    @SequenceGenerator(name = "messageSequenceGenerator", sequenceName = "seq_message", allocationSize = 1)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
