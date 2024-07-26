@@ -49,9 +49,9 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1699444800004-1-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800004-1-data" author="susimsek">
         <loadData
-            file="config/liquibase/fake-data/oauth2_key.csv"
+            file="config/liquibase/data/oauth2_key.csv"
             separator=";"
             tableName="oauth2_key">
             <column name="id" type="varchar"/>

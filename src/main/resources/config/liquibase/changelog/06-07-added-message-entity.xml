@@ -41,9 +41,9 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1699444800000-4-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800000-4-data" author="susimsek">
         <loadData
-                file="config/liquibase/fake-data/message.csv"
+                file="config/liquibase/data/message.csv"
                 separator=";"
                 tableName="message">
             <column name="id" type="numeric"/>

@@ -8,7 +8,7 @@ spring:
     connect-timeout: 5s
     read-timeout: 10s
   liquibase:
-    contexts: local, faker
+    contexts: local
   mvc:
     cors:
       enabled: false

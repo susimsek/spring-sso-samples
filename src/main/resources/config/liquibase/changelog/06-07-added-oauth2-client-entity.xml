@@ -57,9 +57,9 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1699444800003-2-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800003-2-data" author="susimsek">
         <loadData
-            file="config/liquibase/fake-data/oauth2_client.csv"
+            file="config/liquibase/data/oauth2_client.csv"
             separator=";"
             tableName="oauth2_client">
             <column name="id" type="varchar"/>
@@ -107,9 +107,9 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1699444800003-3-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800003-3-data" author="susimsek">
         <loadData
-            file="config/liquibase/fake-data/oauth2_scope.csv"
+            file="config/liquibase/data/oauth2_scope.csv"
             separator=";"
             tableName="oauth2_scope">
             <column name="id" type="varchar"/>
@@ -169,9 +169,9 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="1699444800003-4-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800003-4-data" author="susimsek">
         <loadData
-            file="config/liquibase/fake-data/oauth2_client_scope_mapping.csv"
+            file="config/liquibase/data/oauth2_client_scope_mapping.csv"
             separator=";"
             tableName="oauth2_client_scope_mapping">
             <column name="id" type="bigint"/>

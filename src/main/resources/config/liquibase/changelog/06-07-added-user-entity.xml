@@ -105,9 +105,9 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="1699444800005-1-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800005-1-data" author="susimsek">
         <loadData
-                file="config/liquibase/fake-data/user.csv"
+                file="config/liquibase/data/user.csv"
                 separator=";"
                 tableName="user_identity">
             <column name="id" type="varchar"/>
@@ -124,9 +124,9 @@
         </loadData>
     </changeSet>
 
-    <changeSet id="1699444800005-2-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800005-2-data" author="susimsek">
         <loadData
-                file="config/liquibase/fake-data/role.csv"
+                file="config/liquibase/data/role.csv"
                 separator=";"
                 tableName="role">
             <column name="id" type="varchar"/>
@@ -139,9 +139,9 @@
         </loadData>
     </changeSet>
 
-    <changeSet id="1699444800005-3-data" author="susimsek (generated)" context="faker">
+    <changeSet id="1699444800005-3-data" author="susimsek">
         <loadData
-                file="config/liquibase/fake-data/user_role_mapping.csv"
+                file="config/liquibase/data/user_role_mapping.csv"
                 separator=";"
                 tableName="user_role_mapping">
             <column name="user_id" type="varchar"/>

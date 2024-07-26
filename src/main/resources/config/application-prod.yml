@@ -13,7 +13,7 @@ spring:
     connect-timeout: 5s
     read-timeout: 10s
   liquibase:
-    contexts: prod, faker
+    contexts: prod
   mvc:
     cors:
       enabled: false
