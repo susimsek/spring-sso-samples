@@ -1,4 +1,4 @@
-<html lang="en">
+<html  th:lang="${#locale.language}" lang="en">
 <body>
 <th:block th:fragment="inputField (label, id, name, type, placeholder)">
   <div th:with="valid=${!#fields.hasErrors(name)}"
