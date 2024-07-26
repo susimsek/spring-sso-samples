@@ -95,11 +95,25 @@ spec:
           args: {{- include "spring-authorization-server.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
           env:
+            -  name: SPRING_PROFILES_ACTIVE
+               value: {{ .Values.spring.profiles.active | quote }}
+            -  name: SPRING_DATASOURCE_USERNAME
+               valueFrom:
+                 secretKeyRef:
+                   name: {{ include "spring-authorization-server.fullname" . | quote }}
+                   key: datasource-username
+            -  name: SPRING_DATASOURCE_PASSWORD
+               valueFrom:
+                 secretKeyRef:
+                   name: {{ include "spring-authorization-server.fullname" . | quote }}
+                   key: datasource-password
             {{- if .Values.extraEnvVars }}
             {{- include "spring-authorization-server.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
             - configMapRef:
+                name: {{ include "spring-authorization-server.fullname" . | quote }}
+            - secretRef:
                 name: {{ include "spring-authorization-server.fullname" . | quote }}
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
