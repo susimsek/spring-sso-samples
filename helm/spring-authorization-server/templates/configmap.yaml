@@ -9,7 +9,6 @@ metadata:
   annotations: {{- include "spring-authorization-server.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  SPRING_APPLICATION_NAME: {{ include "spring-authorization-server.fullname" . | quote }}
   SPRING_PROFILES_ACTIVE: {{ .Values.spring.profiles.active | quote }}
   SPRING_DATASOURCE_URL: {{ .Values.spring.datasource.url | quote }}
   SPRING_DATASOURCE_USERNAME: {{ .Values.spring.datasource.username | quote }}

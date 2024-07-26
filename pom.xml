@@ -9,11 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.github.susimsek</groupId>
-    <artifactId>spring-sso-samples</artifactId>
+    <artifactId>spring-authorization-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>spring-sso-samples</name>
-    <description>spring-sso-samples</description>
+    <name>spring-authorization-server</name>
+    <description>spring-authorization-server</description>
 
     <url>https://github.com/susimsek/spring-sso-samples/</url>
 

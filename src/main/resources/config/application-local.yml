@@ -54,7 +54,7 @@ logging:
   level:
     ROOT: DEBUG
     org.hibernate.SQL: DEBUG
-    io.github.susimsek.springssosamples: DEBUG
+    io.github.susimsek.springauthorizationserver: DEBUG
   async:
     queueSize: 10000
     discardingThreshold: 0

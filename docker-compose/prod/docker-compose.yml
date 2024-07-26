@@ -16,7 +16,6 @@ services:
     ports:
       - 7080:7080
     environment:
-      SPRING_APPLICATION_NAME: spring-authorization-server
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/sso
       SPRING_DATASOURCE_USERNAME: sso
       SPRING_DATASOURCE_PASSWORD: root
