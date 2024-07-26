@@ -5,6 +5,8 @@ spring:
     name: spring-sso-samples
   main:
     allow-bean-definition-overriding: true
+  jmx:
+    enabled: false
   mvc:
     problemdetails:
       enabled: true
@@ -80,7 +82,6 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-    show-sql: true
     open-in-view: false
     properties:
       hibernate.connection.provider_disables_autocommit: true
@@ -94,6 +95,30 @@ spring:
       hibernate.query.in_clause_parameter_padding: true
       jakarta.persistence.sharedCache.mode: ENABLE_SELECTIVE
 management:
+  metrics:
+    data:
+      repository:
+        autotime:
+          enabled: true
+    enable:
+      http: true
+      jvm: true
+      logback: true
+      process: true
+      system: true
+    distribution:
+      percentiles-histogram:
+        all: true
+      percentiles:
+        all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+        step: 60
+  observations:
+    key-values:
+      application: ${spring.application.name}
   endpoints:
     web:
       exposure:

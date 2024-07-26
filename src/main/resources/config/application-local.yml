@@ -26,6 +26,8 @@ spring:
       minimum-idle: 1
       pool-name: Hikari
       auto-commit: false
+  jpa:
+    show-sql: true
   cache:
     default-config:
       ttl: 1h
