@@ -63,4 +63,14 @@ public class SanitizationUtil {
             return jsonString;
         }
     }
+
+    public byte[] sanitizeJson(byte[] jsonContent) {
+        try {
+            JsonNode jsonNode = objectMapper.readTree(jsonContent);
+            jsonNode = sanitizeJsonNode(jsonNode);
+            return objectMapper.writeValueAsBytes(jsonNode);
+        } catch (IOException e) {
+            return jsonContent;
+        }
+    }
 }

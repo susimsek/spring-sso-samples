@@ -58,9 +58,8 @@ public class XssRequestWrapper extends ContentCachingRequestWrapper {
 
     @Override
     public byte[] getContentAsByteArray() {
-        var content = this.cachedContent.toString(Charset.forName(this.getCharacterEncoding()));
-        String sanitizedBodyString = SanitizationUtil.sanitizeJsonString(content);
-       return sanitizedBodyString.getBytes(StandardCharsets.UTF_8);
+        var content = this.cachedContent.toByteArray();
+        return SanitizationUtil.sanitizeJson(content);
     }
 
     @Override
