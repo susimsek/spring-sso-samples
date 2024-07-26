@@ -12,7 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @RequiredArgsConstructor
 public enum FilterOrder {
-    LOGGING(HIGHEST_PRECEDENCE + 1);
+    LOGGING(HIGHEST_PRECEDENCE + 1),
+    XSS(HIGHEST_PRECEDENCE + 2);
 
     private final int order;
 }

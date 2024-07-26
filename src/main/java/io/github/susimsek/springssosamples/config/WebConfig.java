@@ -3,10 +3,7 @@ package io.github.susimsek.springssosamples.config;
 import static io.github.susimsek.springssosamples.constant.Constants.SPRING_PROFILE_DEVELOPMENT;
 
 import io.github.susimsek.springssosamples.h2.H2ConfigurationHelper;
-import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletRegistration;
-import java.lang.reflect.InvocationTargetException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.ServletContextInitializer;

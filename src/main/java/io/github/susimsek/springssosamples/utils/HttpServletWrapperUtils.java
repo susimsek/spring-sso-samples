@@ -1,7 +1,9 @@
 package io.github.susimsek.springssosamples.utils;
 
+import io.github.susimsek.springssosamples.security.xss.XssRequestWrapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
@@ -14,6 +16,15 @@ public class HttpServletWrapperUtils {
             return wrapper;
         } else {
             return new ContentCachingRequestWrapper(request);
+        }
+    }
+
+    public static XssRequestWrapper wrapRequest(HttpServletRequest request,
+                                                List<String> nonSanitizedHeaders) {
+        if (request instanceof XssRequestWrapper wrapper) {
+            return wrapper;
+        } else {
+            return new XssRequestWrapper(request, nonSanitizedHeaders);
         }
     }
 

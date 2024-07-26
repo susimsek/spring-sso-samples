@@ -1,6 +1,5 @@
 package io.github.susimsek.springssosamples.logging.handler;
 
-import io.github.susimsek.springssosamples.enums.FilterOrder;
 import io.github.susimsek.springssosamples.logging.enums.HttpLogLevel;
 import io.github.susimsek.springssosamples.logging.enums.HttpLogType;
 import io.github.susimsek.springssosamples.logging.enums.MethodLogLevel;

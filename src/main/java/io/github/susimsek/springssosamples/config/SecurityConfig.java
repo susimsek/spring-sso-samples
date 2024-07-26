@@ -4,9 +4,11 @@ import static io.github.susimsek.springssosamples.constant.Constants.SPRING_PROF
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import io.github.susimsek.springssosamples.enums.FilterOrder;
 import io.github.susimsek.springssosamples.mapper.UserMapper;
 import io.github.susimsek.springssosamples.repository.UserRepository;
 import io.github.susimsek.springssosamples.security.SecurityProperties;
+import io.github.susimsek.springssosamples.filter.XssFilter;
 import io.github.susimsek.springssosamples.service.DomainUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,6 +26,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -45,6 +49,7 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(
         HttpSecurity http,
         RequestMatcherConfig requestMatcherConfig,
+        XssFilter xssFilter,
         MvcRequestMatcher.Builder mvc) throws Exception {
         if (env.acceptsProfiles(Profiles.of(SPRING_PROFILE_DEVELOPMENT))) {
             http.authorizeHttpRequests(authz -> authz.requestMatchers(toH2Console()).permitAll());
@@ -71,7 +76,8 @@ public class SecurityConfig {
                 .failureUrl(LOGIN_PAGE_URI + "?error=true"))
             .logout(logout -> logout
                 .logoutSuccessUrl(LOGIN_PAGE_URI + "?logout=true")
-            );
+            )
+            .addFilterAfter(xssFilter, BearerTokenAuthenticationFilter.class);
         return http.build();
     }
 
@@ -94,5 +100,29 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(UserRepository userRepository,
                                                  UserMapper userMapper) {
         return new DomainUserDetailsService(userRepository, userMapper);
+    }
+
+    @Bean
+    public XssFilter xssFilter(
+        RequestMatcherConfig requestMatcherConfig) {
+        return XssFilter.builder()
+            .order(FilterOrder.XSS.order())
+            .requestMatchers(requestMatcherConfig.staticResources()).permitAll()
+            .requestMatchers(requestMatcherConfig.swaggerPaths()).permitAll()
+            .requestMatchers(requestMatcherConfig.actuatorPaths()).permitAll()
+            .anyRequest().sanitized()
+            .nonSanitizedHeaders(
+                HttpHeaders.CONTENT_ENCODING, HttpHeaders.CACHE_CONTROL,
+                HttpHeaders.CONTENT_TYPE, HttpHeaders.CONTENT_LENGTH, HttpHeaders.AUTHORIZATION,
+                HttpHeaders.COOKIE, HttpHeaders.HOST, HttpHeaders.USER_AGENT,
+                HttpHeaders.REFERER, HttpHeaders.ACCEPT,
+                "sec-ch-ua",
+                "sec-ch-ua-mobile",
+                "sec-ch-ua-platform",
+                "sec-fetch-site",
+                "sec-fetch-mode",
+                "sec-fetch-user",
+                "sec-fetch-dest")
+            .build();
     }
 }
