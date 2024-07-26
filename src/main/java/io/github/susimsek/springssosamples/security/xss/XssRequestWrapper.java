@@ -26,7 +26,8 @@ public class XssRequestWrapper extends ContentCachingRequestWrapper {
         super(request);
         this.nonSanitizedHeaders = nonSanitizedHeaders;
         int contentLength = request.getContentLength();
-        this.cachedContent = contentLength > 0 ? new FastByteArrayOutputStream(contentLength) : new FastByteArrayOutputStream();
+        this.cachedContent = contentLength > 0 ? new FastByteArrayOutputStream(
+            contentLength) : new FastByteArrayOutputStream();
     }
 
     @Override
@@ -125,7 +126,8 @@ public class XssRequestWrapper extends ContentCachingRequestWrapper {
 
     private boolean isFormPost() {
         String contentType = this.getContentType();
-        return contentType != null && contentType.contains("application/x-www-form-urlencoded") && HttpMethod.POST.matches(this.getMethod());
+        return contentType != null && contentType.contains(
+            "application/x-www-form-urlencoded") && HttpMethod.POST.matches(this.getMethod());
     }
 
     private void writeRequestParametersToCachedContent() {
