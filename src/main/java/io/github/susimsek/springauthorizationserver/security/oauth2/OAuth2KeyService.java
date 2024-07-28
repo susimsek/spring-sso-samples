@@ -5,9 +5,13 @@
 
 package io.github.susimsek.springauthorizationserver.security.oauth2;
 
+import java.util.List;
 import org.springframework.lang.Nullable;
 
 public interface OAuth2KeyService {
+
+    List<OAuth2Key> findAll();
+
     void save(OAuth2Key key);
 
     void remove(OAuth2Key key);

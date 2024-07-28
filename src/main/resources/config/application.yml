@@ -63,6 +63,7 @@ spring:
       - oauth2ClientScopeMappingEntity
       - oauth2KeyEntity
       - oauth2KeyEntityByKid
+      - oauth2KeyEntityByUse
       - roleEntity
       - roleEntityByName
       - userEntity

@@ -1,10 +1,12 @@
 package io.github.susimsek.springauthorizationserver.service;
 
+import com.nimbusds.jose.jwk.KeyUse;
 import io.github.susimsek.springauthorizationserver.entity.OAuth2KeyEntity;
 import io.github.susimsek.springauthorizationserver.mapper.OAuth2KeyMapper;
 import io.github.susimsek.springauthorizationserver.repository.OAuth2KeyRepository;
 import io.github.susimsek.springauthorizationserver.security.oauth2.OAuth2Key;
 import io.github.susimsek.springauthorizationserver.security.oauth2.OAuth2KeyService;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataRetrievalFailureException;
@@ -16,6 +18,13 @@ public class DomainOAuth2KeyService implements OAuth2KeyService {
 
     private final OAuth2KeyRepository authorizationRepository;
     private final OAuth2KeyMapper authorizationMapper;
+
+    @Override
+    public List<OAuth2Key> findAll() {
+        var entities = authorizationRepository.findByActiveAndUse(
+            true, KeyUse.SIGNATURE.identifier());
+        return authorizationMapper.toModelList(entities);
+    }
 
     @Override
     @Transactional

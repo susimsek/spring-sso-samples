@@ -1,14 +1,14 @@
 package io.github.susimsek.springauthorizationserver.mapper;
 
+import com.nimbusds.jose.jwk.KeyUse;
 import io.github.susimsek.springauthorizationserver.entity.OAuth2KeyEntity;
 import io.github.susimsek.springauthorizationserver.security.EncryptionConstants;
 import io.github.susimsek.springauthorizationserver.security.oauth2.OAuth2Key;
-import org.mapstruct.Mapper;
-
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import com.nimbusds.jose.jwk.KeyUse;
+import java.util.List;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface OAuth2KeyMapper {
@@ -31,6 +31,7 @@ public interface OAuth2KeyMapper {
         return entity;
     }
 
+
     default OAuth2Key toModel(OAuth2KeyEntity entity) {
         if (entity == null) {
             return null;
@@ -47,6 +48,8 @@ public interface OAuth2KeyMapper {
             .use(entity.getUse())
             .build();
     }
+
+    List<OAuth2Key> toModelList(List<OAuth2KeyEntity> entities);
 
     static String publicKeyToString(PublicKey publicKey) {
         if (publicKey == null) {

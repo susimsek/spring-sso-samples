@@ -47,6 +47,11 @@
         <createIndex indexName="idx_kid" tableName="oauth2_key">
             <column name="kid"/>
         </createIndex>
+
+        <createIndex indexName="idx_active_use" tableName="oauth2_key">
+            <column name="active"/>
+            <column name="use"/>
+        </createIndex>
     </changeSet>
 
     <changeSet id="1699444800004-1-data" author="susimsek">
