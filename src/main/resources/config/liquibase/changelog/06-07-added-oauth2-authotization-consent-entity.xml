@@ -27,6 +27,10 @@
             <column name="updated_by" type="varchar(50)"/>
         </createTable>
         <addPrimaryKey columnNames="registered_client_id, principal_name" constraintName="pk_oauth2_authorization_consent" tableName="oauth2_authorization_consent"/>
+
+        <createIndex indexName="idx_oauth2_authorization_consent_registered_client_id" tableName="oauth2_authorization_consent">
+            <column name="registered_client_id"/>
+        </createIndex>
     </changeSet>
 
 </databaseChangeLog>

@@ -36,7 +36,7 @@
     </changeSet>
 
     <changeSet id="1699444800000-3" author="susimsek">
-        <createIndex indexName="idx_locale" tableName="message">
+        <createIndex indexName="idx_message_locale" tableName="message">
             <column name="locale"/>
         </createIndex>
     </changeSet>

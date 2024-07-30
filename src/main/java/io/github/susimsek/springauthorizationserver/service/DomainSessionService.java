@@ -437,8 +437,8 @@ public class DomainSessionService
         private void deleteSessionAttributes(UserSession session,
                                              List<String> attributeNames) {
             attributeNames.forEach(attributeName ->
-                springSessionAttributeRepository.deleteBySessionIdAndAttributeName(session.id,
-                attributeName));
+                springSessionAttributeRepository.deleteById(new UserSessionAttributeId(session.id,
+                attributeName)));
         }
     }
 

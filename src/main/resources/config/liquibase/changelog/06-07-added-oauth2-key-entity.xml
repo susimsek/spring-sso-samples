@@ -36,19 +36,19 @@
             <column name="updated_by" type="varchar(50)"/>
         </createTable>
 
-        <createIndex indexName="idx_type" tableName="oauth2_key">
+        <createIndex indexName="idx_oauth2_key_type" tableName="oauth2_key">
             <column name="type"/>
         </createIndex>
 
-        <createIndex indexName="idx_algorithm" tableName="oauth2_key">
+        <createIndex indexName="idx_oauth2_key_algorithm" tableName="oauth2_key">
             <column name="algorithm"/>
         </createIndex>
 
-        <createIndex indexName="idx_kid" tableName="oauth2_key">
+        <createIndex indexName="idx_oauth2_key_kid" tableName="oauth2_key">
             <column name="kid"/>
         </createIndex>
 
-        <createIndex indexName="idx_active_use" tableName="oauth2_key">
+        <createIndex indexName="idx_oauth2_key_active_use" tableName="oauth2_key">
             <column name="active"/>
             <column name="use"/>
         </createIndex>

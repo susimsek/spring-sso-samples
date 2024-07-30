@@ -29,13 +29,13 @@
             <column name="principal_name" type="varchar(200)"/>
         </createTable>
 
-        <createIndex indexName="idx_session_id" tableName="user_session" unique="true">
+        <createIndex indexName="idx_user_session_session_id" tableName="user_session" unique="true">
             <column name="session_id"/>
         </createIndex>
-        <createIndex indexName="idx_expiry_time" tableName="user_session">
+        <createIndex indexName="idx_user_session_expiry_time" tableName="user_session">
             <column name="expiry_time"/>
         </createIndex>
-        <createIndex indexName="idx_principal_name" tableName="user_session">
+        <createIndex indexName="idx_user_session_principal_name" tableName="user_session">
             <column name="principal_name"/>
         </createIndex>
     </changeSet>

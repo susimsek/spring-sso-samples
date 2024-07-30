@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserSessionAttributeRepository extends JpaRepository<UserSessionAttributeEntity, UserSessionAttributeId> {
-
-    void deleteBySessionIdAndAttributeName(String sessionId, String attributeName);
 }

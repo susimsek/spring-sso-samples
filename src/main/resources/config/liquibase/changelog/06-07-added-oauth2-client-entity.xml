@@ -52,7 +52,7 @@
             <column name="updated_by" type="varchar(50)"/>
         </createTable>
 
-        <createIndex indexName="idx_client_id" tableName="oauth2_client">
+        <createIndex indexName="idx_oauth2_client_client_id" tableName="oauth2_client">
             <column name="client_id"/>
         </createIndex>
     </changeSet>
@@ -102,7 +102,7 @@
             <column name="updated_by" type="varchar(50)"/>
         </createTable>
 
-        <createIndex indexName="idx_scope" tableName="oauth2_scope">
+        <createIndex indexName="idx_oauth2_scope_scope" tableName="oauth2_scope">
             <column name="scope"/>
         </createIndex>
     </changeSet>
