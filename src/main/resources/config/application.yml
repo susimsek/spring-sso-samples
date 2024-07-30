@@ -73,6 +73,9 @@ spring:
       - userRoleMappingEntity
       - messageEntity
       - messagesCache
+      - userSessionEntity
+      - userSessionEntity.attributes
+      - userSessionAttributeEntity
   data:
     jpa:
       repositories:

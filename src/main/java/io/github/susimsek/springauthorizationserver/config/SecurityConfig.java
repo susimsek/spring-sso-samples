@@ -5,10 +5,10 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import io.github.susimsek.springauthorizationserver.enums.FilterOrder;
+import io.github.susimsek.springauthorizationserver.filter.XssFilter;
 import io.github.susimsek.springauthorizationserver.mapper.UserMapper;
 import io.github.susimsek.springauthorizationserver.repository.UserRepository;
 import io.github.susimsek.springauthorizationserver.security.SecurityProperties;
-import io.github.susimsek.springauthorizationserver.filter.XssFilter;
 import io.github.susimsek.springauthorizationserver.service.DomainUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

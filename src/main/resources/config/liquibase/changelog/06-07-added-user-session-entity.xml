@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+    objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="1699444800006-1" author="susimsek">
+        <createTable tableName="user_session">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="session_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_access_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_inactive_interval" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiry_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="principal_name" type="varchar(200)"/>
+        </createTable>
+
+        <createIndex indexName="idx_session_id" tableName="user_session" unique="true">
+            <column name="session_id"/>
+        </createIndex>
+        <createIndex indexName="idx_expiry_time" tableName="user_session">
+            <column name="expiry_time"/>
+        </createIndex>
+        <createIndex indexName="idx_principal_name" tableName="user_session">
+            <column name="principal_name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="1699444800006-2" author="susimsek">
+        <createTable tableName="user_session_attributes">
+            <column name="session_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_name" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_bytes" type="${binaryType}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="datetime"/>
+            <column name="updated_by" type="varchar(50)"/>
+        </createTable>
+
+        <createIndex indexName="idx_user_session_attributes_session_id" tableName="user_session_attributes">
+            <column name="session_id"/>
+        </createIndex>
+
+        <addPrimaryKey columnNames="session_id, attribute_name"
+                       constraintName="user_session_attributes_pk"
+                       tableName="user_session_attributes"/>
+
+        <addForeignKeyConstraint baseColumnNames="session_id"
+                                 baseTableName="user_session_attributes"
+                                 constraintName="user_session_attributes_fk"
+                                 referencedTableName="user_session"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

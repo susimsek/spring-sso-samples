@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
-import java.io.Serializable;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +25,7 @@ import org.hibernate.proxy.HibernateProxy;
 @SuperBuilder
 @IdClass(OAuth2AuthorizationConsentId.class)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = CacheName.OAUTH2_AUTHORIZATION_CONSENT_ENTITY_CACHE)
-public class OAuth2AuthorizationConsentEntity extends BaseEntity implements Serializable {
+public class OAuth2AuthorizationConsentEntity extends BaseEntity {
 
     @Id
     @Column(name = "registered_client_id", length = 100, nullable = false)
