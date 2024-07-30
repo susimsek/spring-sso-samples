@@ -76,6 +76,8 @@ spring:
       - userSessionEntity
       - userSessionEntity.attributes
       - userSessionAttributeEntity
+      - userSessionEntityBySessionId
+      - userSessionEntityByPrincipalName
   data:
     jpa:
       repositories:

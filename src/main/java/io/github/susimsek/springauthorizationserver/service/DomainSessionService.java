@@ -1,6 +1,7 @@
 package io.github.susimsek.springauthorizationserver.service;
 
 import io.github.susimsek.springauthorizationserver.entity.UserSessionAttributeEntity;
+import io.github.susimsek.springauthorizationserver.entity.UserSessionAttributeId;
 import io.github.susimsek.springauthorizationserver.entity.UserSessionEntity;
 import io.github.susimsek.springauthorizationserver.repository.UserSessionAttributeRepository;
 import io.github.susimsek.springauthorizationserver.repository.UserSessionRepository;
@@ -422,13 +423,12 @@ public class DomainSessionService
 
         private void updateSessionAttributes(UserSession session,
                                              List<String> attributeNames) {
-            attributeNames.forEach(attributeName -> {
-                UserSessionAttributeEntity attributeEntity =
-                    springSessionAttributeRepository.findBySessionIdAndAttributeName(
-                        session.id, attributeName);
-                attributeEntity.setAttributeBytes(jsonConversionUtils.serialize(session.getAttribute(attributeName)));
-                springSessionAttributeRepository.save(attributeEntity);
-            });
+            attributeNames.forEach(attributeName -> springSessionAttributeRepository.findById(
+                new UserSessionAttributeId(session.id, attributeName))
+                .ifPresent(attributeEntity -> {
+                    attributeEntity.setAttributeBytes(jsonConversionUtils.serialize(session.getAttribute(attributeName)));
+                    springSessionAttributeRepository.save(attributeEntity);
+                }));
         }
 
         private void deleteSessionAttributes(UserSession session,

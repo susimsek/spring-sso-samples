@@ -29,4 +29,6 @@ public final class CacheName {
     public static final String USER_ENTITY_BY_EMAIL_CACHE = "userEntityByEmail";
     public static final String USER_SESSION_ENTITY_CACHE = "userSessionEntity";
     public static final String USER_SESSION_ATTRIBUTE_ENTITY_CACHE = "userSessionAttributeEntity";
+    public static final String USER_SESSION_ENTITY_BY_SESSION_ID_CACHE = "userSessionEntityBySessionId";
+    public static final String USER_SESSION_ENTITY_BY_PRINCIPAL_NAME_CACHE = "userSessionEntityByPrincipalName";
 }
