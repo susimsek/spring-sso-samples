@@ -18,6 +18,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -25,7 +26,6 @@ import org.springframework.scheduling.support.CronExpression;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.session.DelegatingIndexResolver;
 import org.springframework.session.FindByIndexNameSessionRepository;
-import org.springframework.session.FlushMode;
 import org.springframework.session.IndexResolver;
 import org.springframework.session.MapSession;
 import org.springframework.session.PrincipalNameIndexResolver;
@@ -50,12 +50,13 @@ public class DomainSessionService
 
     private Duration defaultMaxInactiveInterval = Duration.ofSeconds(1800L);
     private IndexResolver<Session> indexResolver =
-        new DelegatingIndexResolver<>(new PrincipalNameIndexResolver());
+        new DelegatingIndexResolver<>(new PrincipalNameIndexResolver<>());
     private SessionIdGenerator sessionIdGenerator = UuidSessionIdGenerator.getInstance();
     private String cleanupCron = "0 * * * * *";
     private ThreadPoolTaskScheduler taskScheduler;
-    private FlushMode flushMode = FlushMode.ON_SAVE;
-    private SaveMode saveMode = SaveMode.ON_SET_ATTRIBUTE;;
+
+    @Setter
+    private SaveMode saveMode = SaveMode.ON_SET_ATTRIBUTE;
 
     public void setDefaultMaxInactiveInterval(Duration defaultMaxInactiveInterval) {
         Assert.notNull(defaultMaxInactiveInterval, "defaultMaxInactiveInterval must not be null");
@@ -98,17 +99,10 @@ public class DomainSessionService
         this.cleanupCron = cleanupCron;
     }
 
-    public void setSaveMode(SaveMode saveMode) {
-        Assert.notNull(saveMode, "saveMode must not be null");
-        this.saveMode = saveMode;
-    }
-
     public UserSession createSession() {
         MapSession delegate = new MapSession(sessionIdGenerator.generate());
         delegate.setMaxInactiveInterval(defaultMaxInactiveInterval);
-        UserSession session = new UserSession(delegate, UUID.randomUUID().toString(), true);
-        session.flushIfRequired();
-        return session;
+        return new UserSession(delegate, UUID.randomUUID().toString(), true);
     }
 
     @Override
@@ -188,20 +182,8 @@ public class DomainSessionService
         return value != null ? () -> value : null;
     }
 
-    private void insertSessionAttributes(final UserSession session,
-                                         Set<String> attributeNames, UserSessionEntity sessionEntity) {
-        attributeNames.forEach(attributeName -> {
-            UserSessionAttributeEntity attributeEntity = new UserSessionAttributeEntity();
-            attributeEntity.setSessionId(session.id);
-            attributeEntity.setAttributeName(attributeName);
-            attributeEntity.setAttributeBytes(jsonConversionUtils.serialize(session.getAttribute(attributeName)));
-            attributeEntity.setSession(sessionEntity);
-            springSessionAttributeRepository.save(attributeEntity);
-        });
-    }
-
     public static <T> Supplier<T> lazily(final Supplier<T> supplier) {
-        Supplier<T> lazySupplier = new Supplier<T>() {
+        Supplier<T> lazySupplier = new Supplier<>() {
             private T value;
 
             public T get() {
@@ -227,9 +209,7 @@ public class DomainSessionService
             this.id = id;
             this.isNew = isNew;
             if (this.isNew || DomainSessionService.this.saveMode == SaveMode.ALWAYS) {
-                this.getAttributeNames().forEach((attributeName) -> {
-                    this.delta.put(attributeName, DomainSessionService.DeltaValue.UPDATED);
-                });
+                this.getAttributeNames().forEach(attributeName -> this.delta.put(attributeName, DeltaValue.UPDATED));
             }
         }
 
@@ -289,26 +269,51 @@ public class DomainSessionService
         public void setAttribute(String attributeName, Object attributeValue) {
             boolean attributeExists = this.delegate.getAttribute(attributeName) != null;
             boolean attributeRemoved = attributeValue == null;
-            if (attributeExists || !attributeRemoved) {
-                if (attributeExists) {
-                    if (attributeRemoved) {
-                        this.delta.merge(attributeName, DomainSessionService.DeltaValue.REMOVED, (oldDeltaValue, deltaValue) ->
-                            oldDeltaValue == DeltaValue.ADDED ? null : deltaValue);
-                    } else {
-                        this.delta.merge(attributeName, DomainSessionService.DeltaValue.UPDATED, (oldDeltaValue, deltaValue) ->
-                            oldDeltaValue == DeltaValue.ADDED ? oldDeltaValue : deltaValue);
-                    }
-                } else {
-                    this.delta.merge(attributeName, DomainSessionService.DeltaValue.ADDED, (oldDeltaValue, deltaValue) ->
-                        oldDeltaValue == DeltaValue.ADDED ? oldDeltaValue : DeltaValue.UPDATED);
-                }
 
-                this.delegate.setAttribute(attributeName, DomainSessionService.value(attributeValue));
-                if (FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME.equals(attributeName) || "SPRING_SECURITY_CONTEXT".equals(attributeName)) {
-                    this.changed = true;
-                }
+            if (!shouldProcessAttribute(attributeExists, attributeRemoved)) {
+                return;
+            }
 
-                this.flushIfRequired();
+            updateDelta(attributeName, attributeExists, attributeRemoved);
+            this.delegate.setAttribute(attributeName, DomainSessionService.value(attributeValue));
+            updateChangedFlag(attributeName);
+        }
+
+        private boolean shouldProcessAttribute(boolean attributeExists, boolean attributeRemoved) {
+            return attributeExists || !attributeRemoved;
+        }
+
+        private void updateDelta(String attributeName, boolean attributeExists, boolean attributeRemoved) {
+            if (attributeExists) {
+                handleExistingAttribute(attributeName, attributeRemoved);
+            } else {
+                this.delta.merge(attributeName, DomainSessionService.DeltaValue.ADDED, this::determineDeltaValueForNewAttribute);
+            }
+        }
+
+        private void handleExistingAttribute(String attributeName, boolean attributeRemoved) {
+            if (attributeRemoved) {
+                this.delta.merge(attributeName, DomainSessionService.DeltaValue.REMOVED, this::determineDeltaValueForRemovedAttribute);
+            } else {
+                this.delta.merge(attributeName, DomainSessionService.DeltaValue.UPDATED, this::determineDeltaValueForUpdatedAttribute);
+            }
+        }
+
+        private DeltaValue determineDeltaValueForNewAttribute(DeltaValue oldDeltaValue, DeltaValue deltaValue) {
+            return oldDeltaValue == DeltaValue.ADDED ? oldDeltaValue : DeltaValue.UPDATED;
+        }
+
+        private DeltaValue determineDeltaValueForRemovedAttribute(DeltaValue oldDeltaValue, DeltaValue deltaValue) {
+            return oldDeltaValue == DeltaValue.ADDED ? null : deltaValue;
+        }
+
+        private DeltaValue determineDeltaValueForUpdatedAttribute(DeltaValue oldDeltaValue, DeltaValue deltaValue) {
+            return oldDeltaValue == DeltaValue.ADDED ? oldDeltaValue : deltaValue;
+        }
+
+        private void updateChangedFlag(String attributeName) {
+            if (FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME.equals(attributeName) || "SPRING_SECURITY_CONTEXT".equals(attributeName)) {
+                this.changed = true;
             }
         }
 
@@ -325,7 +330,6 @@ public class DomainSessionService
         public void setLastAccessedTime(Instant lastAccessedTime) {
             this.delegate.setLastAccessedTime(lastAccessedTime);
             this.changed = true;
-            this.flushIfRequired();
         }
 
         public Instant getLastAccessedTime() {
@@ -335,7 +339,6 @@ public class DomainSessionService
         public void setMaxInactiveInterval(Duration interval) {
             this.delegate.setMaxInactiveInterval(interval);
             this.changed = true;
-            this.flushIfRequired();
         }
 
         @Override
@@ -346,13 +349,6 @@ public class DomainSessionService
 
         public boolean isExpired() {
             return this.delegate.isExpired();
-        }
-
-        private void flushIfRequired() {
-            if (DomainSessionService.this.flushMode == FlushMode.IMMEDIATE) {
-                this.save();
-            }
-
         }
 
         private void save() {
@@ -419,6 +415,18 @@ public class DomainSessionService
                     deleteSessionAttributes(this, removedAttributeNames);
                 }
             }
+        }
+
+        private void insertSessionAttributes(final UserSession session,
+                                             Set<String> attributeNames, UserSessionEntity sessionEntity) {
+            attributeNames.forEach(attributeName -> {
+                UserSessionAttributeEntity attributeEntity = new UserSessionAttributeEntity();
+                attributeEntity.setSessionId(session.id);
+                attributeEntity.setAttributeName(attributeName);
+                attributeEntity.setAttributeBytes(jsonConversionUtils.serialize(session.getAttribute(attributeName)));
+                attributeEntity.setSession(sessionEntity);
+                springSessionAttributeRepository.save(attributeEntity);
+            });
         }
 
         private void updateSessionAttributes(UserSession session,
