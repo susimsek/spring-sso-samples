@@ -49,8 +49,9 @@ public class DomainSessionService
     private final JsonConversionUtils jsonConversionUtils;
 
     private Duration defaultMaxInactiveInterval = Duration.ofSeconds(1800L);
-    private IndexResolver<Session> indexResolver =
-        new DelegatingIndexResolver<>(new PrincipalNameIndexResolver<>());
+
+    @Setter
+    private IndexResolver<Session> indexResolver = new DelegatingIndexResolver<>(new PrincipalNameIndexResolver<>());
     private SessionIdGenerator sessionIdGenerator = UuidSessionIdGenerator.getInstance();
     private String cleanupCron = "0 * * * * *";
     private ThreadPoolTaskScheduler taskScheduler;
@@ -148,11 +149,6 @@ public class DomainSessionService
         }
     }
 
-    public void setIndexResolver(IndexResolver<Session> indexResolver) {
-        Assert.notNull(indexResolver, "indexResolver cannot be null");
-        this.indexResolver = indexResolver;
-    }
-
 
     private UserSession convertToJdbcSession(UserSessionEntity sessionEntity) {
         MapSession delegate = new MapSession(sessionEntity.getSessionId());
@@ -173,7 +169,6 @@ public class DomainSessionService
     }
 
 
-    @Transactional
     public void cleanUpExpiredSessions() {
         springSessionRepository.deleteByExpiryTimeBefore(Instant.now());
     }
@@ -202,7 +197,7 @@ public class DomainSessionService
         private final String id;
         private boolean isNew;
         private boolean changed;
-        private Map<String, DeltaValue> delta = new HashMap<>();
+        private final Map<String, DeltaValue> delta = new HashMap<>();
 
         public UserSession(MapSession delegate, String id, boolean isNew) {
             this.delegate = delegate;
