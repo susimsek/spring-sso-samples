@@ -54,11 +54,7 @@
             <column name="created_at" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_by" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
             <column name="updated_at" type="datetime"/>
-            <column name="updated_by" type="varchar(50)"/>
         </createTable>
 
         <createIndex indexName="idx_user_session_attributes_session_id" tableName="user_session_attributes">

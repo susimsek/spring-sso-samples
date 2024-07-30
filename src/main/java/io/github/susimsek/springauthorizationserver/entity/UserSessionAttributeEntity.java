@@ -25,7 +25,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @SuperBuilder
 @IdClass(UserSessionAttributeId.class)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = CacheName.USER_SESSION_ATTRIBUTE_ENTITY_CACHE)
-public class UserSessionAttributeEntity extends BaseEntity {
+public class UserSessionAttributeEntity extends DateAuditingEntity {
 
     @Id
     @Column(name = "session_id", length = 36)
