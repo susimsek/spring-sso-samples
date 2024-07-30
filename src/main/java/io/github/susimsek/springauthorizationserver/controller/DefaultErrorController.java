@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -32,10 +33,20 @@ public class DefaultErrorController implements ErrorController {
                 default -> messageSource.getMessage(OAuth2ErrorCode.SERVER_ERROR.messageKey(), null, locale);
             };
         } else {
-            errorMessage = messageSource.getMessage(OAuth2ErrorCode.SERVER_ERROR.messageKey(), null, locale);
+            errorMessage = getErrorMessage(request);
+            if (errorMessage.startsWith("[access_denied]")) {
+                errorMessage = messageSource.getMessage(OAuth2ErrorCode.ACCESS_DENIED.messageKey(), null, locale);
+            } else {
+                errorMessage = messageSource.getMessage(OAuth2ErrorCode.SERVER_ERROR.messageKey(), null, locale);
+            }
         }
         model.addAttribute("errorTitle", errorTitle);
         model.addAttribute("errorMessage", errorMessage);
         return "error";
 	}
+
+    private String getErrorMessage(HttpServletRequest request) {
+        String errorMessage = (String) request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
+        return StringUtils.hasText(errorMessage) ? errorMessage : "";
+    }
 }
