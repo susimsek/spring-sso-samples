@@ -17,7 +17,6 @@ import io.github.susimsek.springauthorizationserver.repository.OAuth2Authorizati
 import io.github.susimsek.springauthorizationserver.repository.OAuth2AuthorizationRepository;
 import io.github.susimsek.springauthorizationserver.repository.OAuth2KeyRepository;
 import io.github.susimsek.springauthorizationserver.repository.OAuth2RegisteredClientRepository;
-import io.github.susimsek.springauthorizationserver.security.SecurityProperties;
 import io.github.susimsek.springauthorizationserver.security.oauth2.DomainTokenEncoder;
 import io.github.susimsek.springauthorizationserver.security.oauth2.OAuth2KeyJWKSource;
 import io.github.susimsek.springauthorizationserver.security.oauth2.OAuth2KeyService;
@@ -60,8 +59,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 public class AuthorizationServerConfig {
-
-    private final SecurityProperties securityProperties;
 
     private static final String CONSENT_PAGE_URI = "/oauth2/consent";
 

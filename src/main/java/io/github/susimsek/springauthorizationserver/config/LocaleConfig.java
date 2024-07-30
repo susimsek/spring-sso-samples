@@ -1,10 +1,12 @@
 package io.github.susimsek.springauthorizationserver.config;
 
-import io.github.susimsek.springauthorizationserver.i18n.SimpleParameterMessageSource;
+import io.github.susimsek.springauthorizationserver.i18n.DomainMessageSource;
 import io.github.susimsek.springauthorizationserver.i18n.ParameterMessageSource;
 import io.github.susimsek.springauthorizationserver.service.MessageService;
 import jakarta.validation.MessageInterpolator;
 import jakarta.validation.Validator;
+import java.time.Duration;
+import java.util.Locale;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.context.MessageSourceProperties;
@@ -17,9 +19,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-
-import java.time.Duration;
-import java.util.Locale;
 
 @Configuration(proxyBeanMethods = false)
 @Import(MessageSourceAutoConfiguration.class)
@@ -55,7 +54,7 @@ public class LocaleConfig {
     @Bean
     public ParameterMessageSource messageSource(MessageSourceProperties properties,
                                                 MessageService messageService) {
-        SimpleParameterMessageSource messageSource = new SimpleParameterMessageSource(messageService);
+        DomainMessageSource messageSource = new DomainMessageSource(messageService);
         if (StringUtils.hasText(properties.getBasename())) {
             messageSource.setBasenames(StringUtils
                 .commaDelimitedListToStringArray(StringUtils.trimAllWhitespace(properties.getBasename())));

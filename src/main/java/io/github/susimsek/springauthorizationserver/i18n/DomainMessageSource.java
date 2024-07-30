@@ -18,7 +18,7 @@ import org.springframework.util.StringUtils;
  * This class extends {@link AbstractNamedParameterMessageSource} and uses a
  * {@link MessageService} to fetch messages based on locale.
  */
-public class DatabaseMessageSource extends AbstractNamedParameterMessageSource {
+public class DomainMessageSource extends AbstractNamedParameterMessageSource {
 
     private final MessageSourceControl control;
     private long cacheMillis = -1L;
@@ -28,7 +28,7 @@ public class DatabaseMessageSource extends AbstractNamedParameterMessageSource {
      *
      * @param messageService the service to fetch messages from the database
      */
-    public DatabaseMessageSource(MessageService messageService) {
+    public DomainMessageSource(MessageService messageService) {
         this.setDefaultEncoding("UTF-8");
         this.control = new MessageSourceControl(messageService);
     }
