@@ -47,6 +47,12 @@ For API documentation, please refer to the Swagger UI:
 
 http://localhost:7080/swagger-ui.html
 
+## ER Diagram
+
+Below is the ER Diagram used for the project:
+
+![ER Diagram](https://github.com/susimsek/spring-sso-samples/blob/main/images/er-diagram.png)
+
 ## Used Technologies
 
 - Java 17
@@ -84,9 +90,3 @@ http://localhost:7080/swagger-ui.html
 - Logback Appender For Loki
 - Bootstrap
 - Font Awesome
-- 
-## ER Diagram
-
-Below is the ER Diagram used for the project:
-
-![ER Diagram](https://github.com/susimsek/spring-sso-samples/blob/main/images/er-diagram.png)
