@@ -78,3 +78,9 @@ mvn verify jib:dockerBuild
 - Logback Appender For Loki
 - Bootstrap
 - Font Awesome
+- 
+## ER Diagram
+
+Below is the ER Diagram used for the project:
+
+![ER Diagram](https://github.com/susimsek/spring-sso-samples/blob/main/images/er-diagram.png)
