@@ -65,6 +65,20 @@ Install Spring Authorization Server using Helm:
 helm install spring-authorization-server helm/spring-authorization-server
 ```
 
+To uninstall and delete the deployments, use the following commands:
+
+Uninstall PostgreSQL:
+
+```sh
+helm uninstall postgresql
+```
+
+Uninstall Spring Authorization Server:
+
+```sh
+helm uninstall spring-authorization-server
+```
+
 ## Documentation
 
 For API documentation, please refer to the Swagger UI:
