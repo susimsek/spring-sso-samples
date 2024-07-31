@@ -41,6 +41,12 @@ The sample applications can also be fully dockerized. To achieve this, first bui
 mvn verify jib:dockerBuild
 ```
 
+## Documentation
+
+For API documentation, please refer to the Swagger UI:
+
+http://localhost:7080/swagger-ui.html
+
 ## Used Technologies
 
 - Java 17
