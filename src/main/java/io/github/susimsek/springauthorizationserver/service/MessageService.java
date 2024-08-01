@@ -24,6 +24,6 @@ public class MessageService {
     private Map<String, String> loadMessagesFromDatabase(String locale) {
         List<MessageEntity> messages = messageRepository.findByLocale(locale);
         return messages.stream()
-            .collect(Collectors.toConcurrentMap(MessageEntity::getCode, MessageEntity::getContent));
+            .collect(Collectors.toMap(MessageEntity::getCode, MessageEntity::getContent));
     }
 }
