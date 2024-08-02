@@ -131,6 +131,8 @@ public class DomainSessionService
         springSessionRepository.deleteBySessionId(id);
     }
 
+    @Override
+    @Transactional(readOnly = true)
     public Map<String, UserSession> findByIndexNameAndIndexValue(String indexName, final String indexValue) {
         if (!PRINCIPAL_NAME_INDEX_NAME.equals(indexName)) {
             return Collections.emptyMap();
