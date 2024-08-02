@@ -20,6 +20,7 @@ public class DomainOAuth2KeyService implements OAuth2KeyService {
     private final OAuth2KeyMapper authorizationMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<OAuth2Key> findAll() {
         var entities = authorizationRepository.findByActiveAndUse(
             true, KeyUse.SIGNATURE.identifier());
