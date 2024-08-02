@@ -38,6 +38,7 @@ import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -284,6 +285,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleSocketTimeoutException(@NonNull SocketTimeoutException ex,
                                                                @NonNull WebRequest request) {
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.GATEWAY_TIMEOUT;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleAsyncRequestTimeoutException(
+        @NonNull AsyncRequestTimeoutException ex,
+        @NonNull HttpHeaders headers,
+        @NonNull HttpStatusCode status,
+        @NonNull WebRequest request) {
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.TEMPORARILY_UNAVAILABLE;
         return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
             oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
             null, new HttpHeaders(), request);
