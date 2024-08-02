@@ -45,125 +45,127 @@ id;locale;code;content;created_at;created_by;updated_at;updated_by
 44;en;error.oauth2.request_binding;There was an error binding the request. Please check the input and try again.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
 45;tr;error.oauth2.multipart;Çok parçalı isteği işlerken bir hata oluştu. Lütfen dosyayı kontrol edip tekrar deneyin.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
 46;en;error.oauth2.multipart;There was an error processing the multipart request. Please check the file and try again.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-47;tr;error.oauth2.validation_failed;Doğrulama hatası oluştu.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-48;en;error.oauth2.validation_failed;Validation error occurred.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-49;tr;error.oauth2.not_found;İstenen kaynak bulunamadı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-50;en;error.oauth2.not_found;The requested resource could not be found.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-51;tr;error.oauth2.unsupported_operation;İstenen işlem desteklenmiyor. Lütfen dokümantasyonu kontrol edip tekrar deneyin.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-52;en;error.oauth2.unsupported_operation;The requested operation is not supported. Please check the documentation and try again.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-53;tr;error.oauth2.gateway_timeout;Servis isteği zaman aşımına uğradı. Lütfen daha sonra tekrar deneyin.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-54;en;error.oauth2.gateway_timeout;The service request timed out. Please try again later.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-55;tr;error.oauth2.rate_limit_exceeded;Erişim sıklığı limiti aşımı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-56;en;error.oauth2.rate_limit_exceeded;Too many requests.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-57;tr;error.oauth2.unsupported_api_version;Desteklenmeyen API sürümü.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-58;en;error.oauth2.unsupported_api_version;Unsupported API version.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-59;tr;error.oauth2.resource_not_found;{resource} {criteria} ile bulunamadı: {value};2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-60;en;error.oauth2.resource_not_found;The {resource} could not be found with {criteria}: {value};2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-61;tr;error.oauth2.resource_conflict;{resource} {criteria} zaten mevcut: {value};2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-62;en;error.oauth2.resource_conflict;The {resource} already exists with {criteria}: {value};2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-63;tr;validation.field.notNull;Alan boş olamaz.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-64;en;validation.field.notNull;Field cannot be null.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-65;tr;validation.field.notBlank;Alan boş olamaz.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-66;en;validation.field.notBlank;Field must not be blank.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-67;tr;validation.field.size;Alan {min} ile {max} karakter arasında olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-68;en;validation.field.size;Field must be between {min} and {max} characters.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-69;tr;validation.field.pattern;Alan formatı geçersiz.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-70;en;validation.field.pattern;Field format is invalid.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-71;tr;validation.field.min;Alan en az {value} olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-72;en;validation.field.min;Field must be at least {value}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-73;tr;validation.field.max;Alan en fazla {value} olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-74;en;validation.field.max;Field must be at most {value}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-75;tr;validation.field.email;Geçerli bir e-posta adresi olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-76;en;validation.field.email;Email should be valid.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-77;tr;validation.field.past;Tarih geçmişte olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-78;en;validation.field.past;Date must be in the past.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-79;tr;validation.field.future;Tarih gelecekte olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-80;en;validation.field.future;Date must be in the future.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-81;tr;validation.field.url;Alan geçerli bir URL olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-82;en;validation.field.url;Field must be a valid URL.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-83;tr;validation.field.enum;Enum için geçersiz değer '{value}'. Geçerli değerler: {allowedValues}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-84;en;validation.field.enum;Invalid enum value '{value}'. Allowed values are: {allowedValues}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-85;tr;validation.field.ipAddress;Geçersiz IP adresi formatı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-86;en;validation.field.ipAddress;Invalid IP address format.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-87;tr;validation.field.phoneNumber;Geçersiz telefon numarası formatı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-88;en;validation.field.phoneNumber;Invalid phone number format.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-89;tr;validation.field.tckn;Geçersiz TCKN formatı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-90;en;validation.field.tckn;Invalid TCKN format.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-91;tr;validation.field.strongPassword;Şifre en az 8 karakter uzunluğunda olmalı ve en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermelidir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-92;en;validation.field.strongPassword;Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-93;tr;validation.field.noSpecialCharacters;Alan özel karakterler içermemelidir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-94;en;validation.field.noSpecialCharacters;Field must not contain special characters.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-95;tr;validation.field.alphanumeric;Alan yalnızca alfanumerik karakterler içermelidir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-96;en;validation.field.alphanumeric;Field must contain only alphanumeric characters.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-97;tr;validation.field.range;Alan {min} ile {max} arasında olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-98;en;validation.field.range;Field must be between {min} and {max}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-99;tr;validation.field.dateRange;Başlangıç tarihi ({startDate}) bitiş tarihinden ({endDate}) önce olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-100;en;validation.field.dateRange;The start date ({startDate}) must be before the end date ({endDate}).;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-101;tr;validation.header.mandatory;{headerName} zorunludur.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-102;en;validation.header.mandatory;{headerName} is mandatory.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-103;tr;search.criteria.id;id;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-104;en;search.criteria.id;id;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-105;tr;language.english;İngilizce;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-106;en;language.english;English;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-107;tr;language.turkish;Türkçe;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-108;en;language.turkish;Turkish;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-109;tr;login.title;Giriş;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-110;en;login.title;Login;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-111;tr;login.username;Kullanıcı Adı;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-112;en;login.username;Username;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-113;tr;login.password;Şifre;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-114;en;login.password;Password;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-115;tr;login.username.placeholder;Kullanıcı adınızı girin;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-116;en;login.username.placeholder;Enter your username;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-117;tr;login.password.placeholder;Şifrenizi girin;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-118;en;login.password.placeholder;Enter your password;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-119;tr;login.submit;Giriş Yap;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-120;en;login.submit;Login;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-121;tr;login.error;Geçersiz kullanıcı adı veya şifre.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-122;en;login.error;Invalid username or password.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-123;tr;login.logout;Çıkış yaptınız.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-124;en;login.logout;You have been logged out.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-125;tr;consent.title;Uygulama izinleri;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-126;en;consent.title;App permissions;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-127;tr;consent.userCode;{0} kodunu girdiniz. Bu kodun cihazınızda gösterilenle eşleştiğini doğrulayın.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-128;en;consent.userCode;You have provided the code <span class="fw-bold">{0}</span>. Verify that this code matches what is shown on your device.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-129;tr;consent.application.access;<span class="fw-bold text-primary">{0}</span> uygulaması hesabınıza erişim istemektedir: <span class="fw-bold">{1}</span>. ;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-130;en;consent.application.access;The application <span class="fw-bold text-primary">{0}</span> wants to access your account <span class="fw-bold">{1}</span>. ;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-131;tr;consent.code.provided;Kod sağladınız.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-132;en;consent.code.provided;You have provided the code;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-133;tr;consent.code.verify;Bu kodun cihazınızda gösterilenle eşleştiğini doğrulayın.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-134;en;consent.code.verify;Verify that this code matches what is shown on your device.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-135;tr;consent.permissions.requested;Yukarıdaki uygulama tarafından aşağıdaki izinler istenmektedir. Lütfen bunları gözden geçirin ve onaylayın.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-136;en;consent.permissions.requested;The following permissions are requested by the above app. Please review these and consent if you approve.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-137;tr;consent.scopes;İzinler;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-138;en;consent.scopes;Scopes;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-139;tr;consent.previous.permissions;Yukarıdaki uygulamaya zaten aşağıdaki izinleri verdiniz:;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-140;en;consent.previous.permissions;You have already granted the following permissions to the above app:;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-141;tr;consent.submit;Rızayı Onayla;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-142;en;consent.submit;Submit Consent;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-143;tr;consent.cancel;İptal;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-144;en;consent.cancel;Cancel;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-145;tr;consent.loading;Yükleniyor...;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-146;en;consent.loading;Loading...;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-147;tr;consent.info;Erişim izni vermeniz gerekmektedir. Onaylamıyorsanız, İptal'e tıklayın, bu durumda uygulama ile hiçbir bilgi paylaşılmayacaktır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-148;en;consent.info;Your consent to provide access is required. If you do not approve, click Cancel, in which case no information will be shared with the app.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-149;tr;scope.unknown.description;BİLİNMEYEN KAPSAM - Bu izin hakkında bilgi veremiyoruz, verirken dikkatli olun.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-150;en;scope.unknown.description;UNKNOWN SCOPE - We cannot provide information about this permission, use caution when granting this.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-151;tr;scope.openid.description;Bu uygulama, kimliğinizi OpenID Connect kullanarak doğrulayabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-152;en;scope.openid.description;This application will be able to verify your identity using OpenID Connect.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-153;tr;scope.profile.description;Bu uygulama profil bilgilerinizi okuyabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-154;en;scope.profile.description;This application will be able to read your profile information.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-155;tr;scope.email.description;Bu uygulama e-posta adresinizi okuyabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-156;en;scope.email.description;This application will be able to read your email address.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-157;tr;scope.address.description;Bu uygulama fiziksel adresinizi okuyabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-158;en;scope.address.description;This application will be able to read your physical address.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-159;tr;scope.phone.description;Bu uygulama telefon numaranızı okuyabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-160;en;scope.phone.description;This application will be able to read your phone number.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-161;tr;error.title;Hata;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-162;en;error.title;Error;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-163;tr;error.page.title;Hata;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-164;en;error.page.title;Error;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-165;tr;login.page.title;Giriş;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-166;en;login.page.title;Login;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-167;tr;consent.page.title;Rıza;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
-168;en;consent.page.title;Consent;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+47;tr;error.oauth2.payload_too_large;Dosya boyutu izin verilen maksimum boyutu aşıyor.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+48;en;error.oauth2.payload_too_large;File size exceeds the maximum allowed size.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+49;tr;error.oauth2.validation_failed;Doğrulama hatası oluştu.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+50;en;error.oauth2.validation_failed;Validation error occurred.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+51;tr;error.oauth2.not_found;İstenen kaynak bulunamadı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+52;en;error.oauth2.not_found;The requested resource could not be found.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+53;tr;error.oauth2.unsupported_operation;İstenen işlem desteklenmiyor. Lütfen dokümantasyonu kontrol edip tekrar deneyin.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+54;en;error.oauth2.unsupported_operation;The requested operation is not supported. Please check the documentation and try again.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+55;tr;error.oauth2.gateway_timeout;Servis isteği zaman aşımına uğradı. Lütfen daha sonra tekrar deneyin.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+56;en;error.oauth2.gateway_timeout;The service request timed out. Please try again later.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+57;tr;error.oauth2.rate_limit_exceeded;Erişim sıklığı limiti aşımı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+58;en;error.oauth2.rate_limit_exceeded;Too many requests.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+59;tr;error.oauth2.unsupported_api_version;Desteklenmeyen API sürümü.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+60;en;error.oauth2.unsupported_api_version;Unsupported API version.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+61;tr;error.oauth2.resource_not_found;{resource} {criteria} ile bulunamadı: {value};2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+62;en;error.oauth2.resource_not_found;The {resource} could not be found with {criteria}: {value};2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+63;tr;error.oauth2.resource_conflict;{resource} {criteria} zaten mevcut: {value};2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+64;en;error.oauth2.resource_conflict;The {resource} already exists with {criteria}: {value};2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+65;tr;validation.field.notNull;Alan boş olamaz.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+66;en;validation.field.notNull;Field cannot be null.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+67;tr;validation.field.notBlank;Alan boş olamaz.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+68;en;validation.field.notBlank;Field must not be blank.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+69;tr;validation.field.size;Alan {min} ile {max} karakter arasında olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+70;en;validation.field.size;Field must be between {min} and {max} characters.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+71;tr;validation.field.pattern;Alan formatı geçersiz.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+72;en;validation.field.pattern;Field format is invalid.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+73;tr;validation.field.min;Alan en az {value} olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+74;en;validation.field.min;Field must be at least {value}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+75;tr;validation.field.max;Alan en fazla {value} olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+76;en;validation.field.max;Field must be at most {value}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+77;tr;validation.field.email;Geçerli bir e-posta adresi olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+78;en;validation.field.email;Email should be valid.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+79;tr;validation.field.past;Tarih geçmişte olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+80;en;validation.field.past;Date must be in the past.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+81;tr;validation.field.future;Tarih gelecekte olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+82;en;validation.field.future;Date must be in the future.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+83;tr;validation.field.url;Alan geçerli bir URL olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+84;en;validation.field.url;Field must be a valid URL.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+85;tr;validation.field.enum;Enum için geçersiz değer '{value}'. Geçerli değerler: {allowedValues}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+86;en;validation.field.enum;Invalid enum value '{value}'. Allowed values are: {allowedValues}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+87;tr;validation.field.ipAddress;Geçersiz IP adresi formatı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+88;en;validation.field.ipAddress;Invalid IP address format.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+89;tr;validation.field.phoneNumber;Geçersiz telefon numarası formatı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+90;en;validation.field.phoneNumber;Invalid phone number format.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+91;tr;validation.field.tckn;Geçersiz TCKN formatı.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+92;en;validation.field.tckn;Invalid TCKN format.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+93;tr;validation.field.strongPassword;Şifre en az 8 karakter uzunluğunda olmalı ve en az bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermelidir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+94;en;validation.field.strongPassword;Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+95;tr;validation.field.noSpecialCharacters;Alan özel karakterler içermemelidir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+96;en;validation.field.noSpecialCharacters;Field must not contain special characters.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+97;tr;validation.field.alphanumeric;Alan yalnızca alfanumerik karakterler içermelidir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+98;en;validation.field.alphanumeric;Field must contain only alphanumeric characters.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+99;tr;validation.field.range;Alan {min} ile {max} arasında olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+100;en;validation.field.range;Field must be between {min} and {max}.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+101;tr;validation.field.dateRange;Başlangıç tarihi ({startDate}) bitiş tarihinden ({endDate}) önce olmalıdır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+102;en;validation.field.dateRange;The start date ({startDate}) must be before the end date ({endDate}).;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+103;tr;validation.header.mandatory;{headerName} zorunludur.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+104;en;validation.header.mandatory;{headerName} is mandatory.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+105;tr;search.criteria.id;id;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+106;en;search.criteria.id;id;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+107;tr;language.english;İngilizce;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+108;en;language.english;English;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+109;tr;language.turkish;Türkçe;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+110;en;language.turkish;Turkish;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+111;tr;login.title;Giriş;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+112;en;login.title;Login;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+113;tr;login.username;Kullanıcı Adı;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+114;en;login.username;Username;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+115;tr;login.password;Şifre;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+116;en;login.password;Password;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+117;tr;login.username.placeholder;Kullanıcı adınızı girin;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+118;en;login.username.placeholder;Enter your username;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+119;tr;login.password.placeholder;Şifrenizi girin;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+120;en;login.password.placeholder;Enter your password;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+121;tr;login.submit;Giriş Yap;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+122;en;login.submit;Login;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+123;tr;login.error;Geçersiz kullanıcı adı veya şifre.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+124;en;login.error;Invalid username or password.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+125;tr;login.logout;Çıkış yaptınız.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+126;en;login.logout;You have been logged out.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+127;tr;consent.title;Uygulama izinleri;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+128;en;consent.title;App permissions;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+129;tr;consent.userCode;{0} kodunu girdiniz. Bu kodun cihazınızda gösterilenle eşleştiğini doğrulayın.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+130;en;consent.userCode;You have provided the code <span class="fw-bold">{0}</span>. Verify that this code matches what is shown on your device.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+131;tr;consent.application.access;<span class="fw-bold text-primary">{0}</span> uygulaması hesabınıza erişim istemektedir: <span class="fw-bold">{1}</span>. ;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+132;en;consent.application.access;The application <span class="fw-bold text-primary">{0}</span> wants to access your account <span class="fw-bold">{1}</span>. ;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+133;tr;consent.code.provided;Kod sağladınız.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+134;en;consent.code.provided;You have provided the code;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+135;tr;consent.code.verify;Bu kodun cihazınızda gösterilenle eşleştiğini doğrulayın.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+136;en;consent.code.verify;Verify that this code matches what is shown on your device.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+137;tr;consent.permissions.requested;Yukarıdaki uygulama tarafından aşağıdaki izinler istenmektedir. Lütfen bunları gözden geçirin ve onaylayın.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+138;en;consent.permissions.requested;The following permissions are requested by the above app. Please review these and consent if you approve.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+139;tr;consent.scopes;İzinler;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+140;en;consent.scopes;Scopes;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+141;tr;consent.previous.permissions;Yukarıdaki uygulamaya zaten aşağıdaki izinleri verdiniz:;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+142;en;consent.previous.permissions;You have already granted the following permissions to the above app:;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+143;tr;consent.submit;Rızayı Onayla;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+144;en;consent.submit;Submit Consent;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+145;tr;consent.cancel;İptal;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+146;en;consent.cancel;Cancel;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+147;tr;consent.loading;Yükleniyor...;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+148;en;consent.loading;Loading...;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+149;tr;consent.info;Erişim izni vermeniz gerekmektedir. Onaylamıyorsanız, İptal'e tıklayın, bu durumda uygulama ile hiçbir bilgi paylaşılmayacaktır.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+150;en;consent.info;Your consent to provide access is required. If you do not approve, click Cancel, in which case no information will be shared with the app.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+151;tr;scope.unknown.description;BİLİNMEYEN KAPSAM - Bu izin hakkında bilgi veremiyoruz, verirken dikkatli olun.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+152;en;scope.unknown.description;UNKNOWN SCOPE - We cannot provide information about this permission, use caution when granting this.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+153;tr;scope.openid.description;Bu uygulama, kimliğinizi OpenID Connect kullanarak doğrulayabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+154;en;scope.openid.description;This application will be able to verify your identity using OpenID Connect.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+155;tr;scope.profile.description;Bu uygulama profil bilgilerinizi okuyabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+156;en;scope.profile.description;This application will be able to read your profile information.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+157;tr;scope.email.description;Bu uygulama e-posta adresinizi okuyabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+158;en;scope.email.description;This application will be able to read your email address.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+159;tr;scope.address.description;Bu uygulama fiziksel adresinizi okuyabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+160;en;scope.address.description;This application will be able to read your physical address.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+161;tr;scope.phone.description;Bu uygulama telefon numaranızı okuyabilecektir.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+162;en;scope.phone.description;This application will be able to read your phone number.;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+163;tr;error.title;Hata;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+164;en;error.title;Error;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+165;tr;error.page.title;Hata;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+166;en;error.page.title;Error;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+167;tr;login.page.title;Giriş;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+168;en;login.page.title;Login;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+169;tr;consent.page.title;Rıza;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system
+170;en;consent.page.title;Consent;2024-01-01T00:00:00;system;2024-01-01T00:00:00;system

@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -145,6 +146,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         @NonNull HttpStatusCode status,
         @NonNull WebRequest request) {
         OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.REQUEST_BINDING;
+        return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
+            oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
+            null, new HttpHeaders(), request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMaxUploadSizeExceededException(
+        @NonNull MaxUploadSizeExceededException ex,
+        @NonNull HttpHeaders headers,
+        @NonNull HttpStatusCode status,
+        @NonNull WebRequest request) {
+        OAuth2ErrorCode oAuth2ErrorCode = OAuth2ErrorCode.PAYLOAD_TOO_LARGE;
         return createProblemDetailResponse(ex, new OAuth2Error(oAuth2ErrorCode.errorCode()),
             oAuth2ErrorCode.httpStatus(), oAuth2ErrorCode.messageKey(),
             null, new HttpHeaders(), request);

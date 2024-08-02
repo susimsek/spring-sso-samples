@@ -36,6 +36,7 @@ public enum OAuth2ErrorCode {
     MISSING_PART(OAuth2ErrorCodes.INVALID_REQUEST, HttpStatus.BAD_REQUEST, "error.oauth2.missing_part"),
     REQUEST_BINDING(OAuth2ErrorCodes.INVALID_REQUEST, HttpStatus.BAD_REQUEST, "error.oauth2.request_binding"),
     MULTIPART(OAuth2ErrorCodes.INVALID_REQUEST, HttpStatus.BAD_REQUEST, "error.oauth2.multipart"),
+    PAYLOAD_TOO_LARGE("payload_too_large", HttpStatus.PAYLOAD_TOO_LARGE, "error.oauth2.payload_too_large"),
     VALIDATION_FAILED(OAuth2ErrorCodes.INVALID_REQUEST, HttpStatus.BAD_REQUEST, "error.oauth2.validation_failed"),
     NOT_FOUND("resource_not_found", HttpStatus.NOT_FOUND, "error.oauth2.not_found"),
     UNSUPPORTED_OPERATION("unsupported_operation", HttpStatus.NOT_IMPLEMENTED, "error.oauth2.unsupported_operation"),
