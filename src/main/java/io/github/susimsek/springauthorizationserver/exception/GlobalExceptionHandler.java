@@ -310,7 +310,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                            @NonNull WebRequest request) {
         return createProblemDetailResponse(ex, new OAuth2Error(ex.getErrorCode()),
             ex.getStatus(), ex.getMessage(),
-            null, new HttpHeaders(), request);
+            ex.getNamedArgs(), new HttpHeaders(), request);
     }
 
     @ExceptionHandler(Exception.class)
