@@ -1,5 +1,7 @@
 # Spring Authorization Server Samples
 
+![Introduction](https://github.com/susimsek/spring-sso-samples/blob/main/images/introduction.png)
+
 ## Overview
 
 Spring Authorization Server is a framework that provides implementations of the OAuth 2.1 and OpenID Connect 1.0 specifications and other related specifications. It is built on top of Spring Security to provide a secure, light-weight, and customizable foundation for building OpenID Connect 1.0 Identity Providers and OAuth2 Authorization Server products.
@@ -113,6 +115,7 @@ Below is the ER Diagram used for the project:
 - Spring Boot Starter Thymeleaf
 - Spring Boot Actuator
 - Spring Boot Configuration Processor
+- Spring Session JDBC
 - SpringDoc OpenAPI Starter WebMVC UI
 - Liquibase
 - PostgreSQL
