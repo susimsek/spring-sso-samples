@@ -56,13 +56,13 @@ To deploy the application on a Kubernetes cluster using Helm, follow these steps
 Install PostgreSQL using Helm:
 
 ```sh
-helm install postgresql bitnami/postgresql --values helm/postgresql/values.yaml --version 12.11.1
+helm install postgresql bitnami/postgresql --values deploy/helm/postgresql/values.yaml --version 12.11.1
 ```
 
 Install Spring Authorization Server using Helm:
 
 ```sh
-helm install spring-authorization-server helm/spring-authorization-server
+helm install spring-authorization-server deploy/helm/spring-authorization-server
 ```
 
 To uninstall and delete the deployments, use the following commands:
