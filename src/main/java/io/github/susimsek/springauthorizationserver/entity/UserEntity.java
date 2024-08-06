@@ -7,9 +7,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,10 +52,11 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private Boolean enabled;
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE,
         region = CacheName.USER_ENTITY_CACHE + ".userRoles")
-    private Set<UserRoleMappingEntity> userRoles;
+    private Set<UserRoleMappingEntity> userRoles = new HashSet<>();
 
     @Override
     public final boolean equals(Object obj) {

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -61,6 +62,7 @@ public class OAuth2RegisteredClientEntity extends BaseEntity {
     @Column(name = "post_logout_redirect_uris", length = 255)
     private String postLogoutRedirectUris;
 
+    @Builder.Default
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE,
         region = CacheName.OAUTH2_CLIENT_ENTITY_CACHE + ".clientScopes")

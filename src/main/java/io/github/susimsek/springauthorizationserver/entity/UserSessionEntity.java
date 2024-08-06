@@ -10,6 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,8 +52,9 @@ public class UserSessionEntity implements Serializable {
     @Column(name = "principal_name", length = 200)
     private String principalName;
 
+    @Builder.Default
     @OneToMany(mappedBy = "session", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE,
         region = CacheName.USER_SESSION_ENTITY_CACHE + ".attributes")
-    private Set<UserSessionAttributeEntity> attributes;
+    private Set<UserSessionAttributeEntity> attributes = new HashSet<>();
 }
