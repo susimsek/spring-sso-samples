@@ -33,11 +33,9 @@ import org.springframework.session.SaveMode;
 import org.springframework.session.Session;
 import org.springframework.session.SessionIdGenerator;
 import org.springframework.session.UuidSessionIdGenerator;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-@Service
 @RequiredArgsConstructor
 public class DomainSessionService
     implements FindByIndexNameSessionRepository<DomainSessionService.UserSession>, InitializingBean, DisposableBean {
