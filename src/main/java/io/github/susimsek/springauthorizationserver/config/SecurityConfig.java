@@ -1,8 +1,8 @@
 package io.github.susimsek.springauthorizationserver.config;
 
 import static io.github.susimsek.springauthorizationserver.constant.Constants.SPRING_PROFILE_DEVELOPMENT;
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 import io.github.susimsek.springauthorizationserver.enums.FilterOrder;
 import io.github.susimsek.springauthorizationserver.filter.XssFilter;
@@ -52,7 +52,7 @@ public class SecurityConfig {
         XssFilter xssFilter,
         MvcRequestMatcher.Builder mvc) throws Exception {
         if (env.acceptsProfiles(Profiles.of(SPRING_PROFILE_DEVELOPMENT))) {
-            http.authorizeHttpRequests(authz -> authz.requestMatchers(toH2Console()).permitAll());
+            http.authorizeHttpRequests(authz -> authz.requestMatchers(antMatcher("/h2-console/**")).permitAll());
         }
         http
             .csrf(AbstractHttpConfigurer::disable)
