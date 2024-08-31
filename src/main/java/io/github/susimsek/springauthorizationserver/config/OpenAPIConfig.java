@@ -48,6 +48,10 @@ public class OpenAPIConfig {
     public static final String RS256 = "RS256";
     public static final String REFRESH_TOKEN = "refresh_token";
     public static final String CLIENT_SECRET = "client_secret";
+    public static final String CODE_CHALLENGE = "code_challenge";
+    public static final String CODE_CHALLENGE_METHOD = "code_challenge_method";
+    public static final String CODE_VERIFIER = "code_verifier";
+    public static final String NONCE = "nonce";
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -116,6 +120,24 @@ public class OpenAPIConfig {
                     .required(false)
                     .schema(new StringSchema()).example("xyz")
                 )
+                .addParametersItem(new QueryParameter()
+                    .name(CODE_CHALLENGE)
+                    .description("PKCE code challenge.")
+                    .required(false)
+                    .schema(new StringSchema().example("TmYChljM61UUnU8i-iEGennmxz5vtcJyyLpDKb3AVgE"))
+                )
+                .addParametersItem(new QueryParameter()
+                    .name(CODE_CHALLENGE_METHOD)
+                    .description("PKCE code challenge method. The method used to derive the code challenge. Supported values: plain, S256.")
+                    .required(false)
+                    .schema(new StringSchema().example("S256"))
+                )
+                .addParametersItem(new QueryParameter()
+                    .name(NONCE)
+                    .description("A string value used to associate a client session with an ID token to mitigate replay attacks.")
+                    .required(false)
+                    .schema(new StringSchema().example("iAXdcF77sQ2ejthPM5xZtytYUjqZkJTXcHkgdyY2NinFx6y83nKssxEzlBtvnSY2"))
+                )
                 .responses(createAuthorizeResponses())
                 .externalDocs(new ExternalDocumentation()
                     .description("Authorization Endpoint Usage")
@@ -157,7 +179,10 @@ public class OpenAPIConfig {
                                         REFRESH_TOKEN, new StringSchema()
                                             .description(
                                                 "The refresh token used to obtain new access tokens. Required if grant_type is 'refresh_token'.")
-                                            .example("refresh_token_here")
+                                            .example("refresh_token_here"),
+                                        CODE_VERIFIER, new StringSchema()
+                                            .description("The PKCE code verifier used to obtain the access token.")
+                                            .example("77293416118e9ee95476efecae6c6f22b18a8bf47605c8745bea48f2")
                                     ))
                                     .required(List.of("grant_type"))
                                 )
