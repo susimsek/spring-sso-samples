@@ -10,12 +10,14 @@ Spring Authorization Server is a framework that provides implementations of the 
 
 This server comes with predefined registered OAuth2/OIDC clients:
 
-| Client ID          | Client-Secret | Access Token Format |
-|--------------------|---------------|---------------------|
-| oidc-client        | secret        | JWE                 |
-| oidc-client-pkce   | secret        | JWE                 |
-| oidc-client-jwt    | secret        | JWT                 |
-| oidc-client-opaque | secret        | Opaque              |
+| Client ID               | Client-Secret | Access Token Format |
+|-------------------------|---------------|---------------------|
+| oidc-client             | secret        | JWE                 |
+| oidc-client-pkce        | secret        | JWE                 |
+| oidc-client-jwt         | secret        | JWT                 |
+| oidc-client-pkce-jwt    | secret        | JWT                 |
+| oidc-client-opaque      | secret        | Opaque              |
+| oidc-client-pkce-opaque | secret        | Opaque              |
 
 ll clients have configured the following redirect URI
 
