@@ -6,6 +6,29 @@
 
 Spring Authorization Server is a framework that provides implementations of the OAuth 2.1 and OpenID Connect 1.0 specifications and other related specifications. It is built on top of Spring Security to provide a secure, light-weight, and customizable foundation for building OpenID Connect 1.0 Identity Providers and OAuth2 Authorization Server products.
 
+## Registered Clients
+
+This server comes with predefined registered OAuth2/OIDC clients:
+
+| Client ID          | Client-Secret | Access Token Format |
+|--------------------|---------------|---------------------|
+| oidc-client        | secret        | JWE                 |
+| oidc-client-opaque | secret        | Opaque              |
+
+ll clients have configured the following redirect URI
+
+* http://127.0.0.1:8080/login/oauth2/code/oidc-client
+
+## Login
+
+This server already has preconfigured users.
+Therefore, to login please use one of these predefined credentials:
+
+| Username | Email                    | Password | Roles  |
+|----------|--------------------------|----------|--------|
+| user     | user@example.com         | password | USER   |
+| admin    | admin@example.com        | password | ADMIN  |
+
 ## Prerequisites
 
 - Java 17
