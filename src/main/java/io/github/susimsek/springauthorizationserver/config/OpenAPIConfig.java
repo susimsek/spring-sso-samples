@@ -118,7 +118,7 @@ public class OpenAPIConfig {
                     .description(
                         "An opaque value used by the client to maintain state between the request and callback.")
                     .required(false)
-                    .schema(new StringSchema()).example("xyz")
+                    .schema(new StringSchema()).example("SU8nskju26XowSCg3bx2LeZq7MwKcwnQ7h6vQY8twd9QJECHRKs14OwXPdpNBI58")
                 )
                 .addParametersItem(new QueryParameter()
                     .name(CODE_CHALLENGE)
