@@ -28,7 +28,6 @@ public final class TokenEncoderParameters {
     public static TokenEncoderParameters from(JwsHeader jwsHeader,
                                               JWEHeader jweHeader, JwtClaimsSet claims) {
         Assert.notNull(jwsHeader, "jwsHeader cannot be null");
-        Assert.notNull(jweHeader, "jwsHeader cannot be null");
         Assert.notNull(claims, "claims cannot be null");
         return new TokenEncoderParameters(jwsHeader, jweHeader, claims);
     }
