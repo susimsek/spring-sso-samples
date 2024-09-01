@@ -414,14 +414,16 @@ public class DomainSessionService
 
         private void insertSessionAttributes(final UserSession session,
                                              Set<String> attributeNames, UserSessionEntity sessionEntity) {
-            attributeNames.forEach(attributeName -> {
+            var attributeEntities = attributeNames.stream().map(attributeName -> {
                 UserSessionAttributeEntity attributeEntity = new UserSessionAttributeEntity();
                 attributeEntity.setSessionId(session.id);
                 attributeEntity.setAttributeName(attributeName);
                 attributeEntity.setAttributeBytes(jsonConversionUtils.serialize(session.getAttribute(attributeName)));
                 attributeEntity.setSession(sessionEntity);
-                springSessionAttributeRepository.save(attributeEntity);
-            });
+                return attributeEntity;
+            }).collect(Collectors.toSet());
+            sessionEntity.getAttributes().addAll(attributeEntities);
+            springSessionRepository.save(sessionEntity);
         }
 
         private void updateSessionAttributes(UserSession session,
