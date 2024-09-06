@@ -10,11 +10,24 @@
 <body>
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
-    <a class="navbar-brand" th:href="@{/}">SSO</a>
+    <a class="navbar-brand" href="#">
+      <img src="/images/spring-security.svg" th:src="@{/images/spring-security.svg}" width="40" height="32">
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Authorize</a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);" onclick="authorize(false, 'oidc-client')">Authorize</a>
+              <a class="dropdown-item" href="javascript:void(0);" onclick="authorize(true, 'oidc-client-pkce')">Authorize PKCE</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
       <div class="ms-auto d-flex flex-column flex-lg-row align-items-center">
         <div class="theme-toggle me-3 mb-2 mb-lg-0" onclick="toggleTheme()">
           <input type="checkbox" id="themeSwitch">
@@ -33,12 +46,30 @@
     </div>
   </div>
 </nav>
+<div class="container-fluid g-0 p-0">
+  <div id="code-verifier-container" class="alert alert-info text-break d-none" role="alert">
+    <span id="code-verifier-display"></span>
+  </div>
+</div>
 <script>
   function setLanguage(language) {
     const url = new URL(window.location.href);
     url.searchParams.set('lang', language);
     window.location.replace(url.toString());
   }
+  function displayCodeVerifier() {
+    const savedCodeVerifier = sessionStorage.getItem('codeVerifier');
+    if (savedCodeVerifier) {
+      const codeVerifierElement = document.getElementById("code-verifier-display");
+      const codeVerifierContainer = document.getElementById("code-verifier-container");
+      if (codeVerifierElement && codeVerifierContainer) {
+        codeVerifierElement.textContent = `Code Verifier: ${savedCodeVerifier}`;
+        codeVerifierContainer.classList.remove('d-none');
+      }
+    }
+  }
+  displayCodeVerifier();
 </script>
+<script th:src="@{/js/oauth2.js}"></script>
 </body>
 </html>
