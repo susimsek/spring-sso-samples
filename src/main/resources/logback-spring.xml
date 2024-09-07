@@ -24,7 +24,6 @@
     <logger name="org.springframework.security" level="WARN"/>
     <logger name="org.springframework.security.oauth2" level="WARN"/>
     <logger name="org.springframework.cache" level="WARN"/>
-    <logger name="org.springframework.ai" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="liquibase" level="WARN"/>
     <logger name="io.github.resilience4j" level="WARN"/>
