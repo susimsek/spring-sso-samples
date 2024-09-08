@@ -3,12 +3,11 @@ package io.github.susimsek.springauthorizationserver.repository;
 import static io.github.susimsek.springauthorizationserver.cache.CacheName.OAUTH2_AUTHORIZATION_ENTITY_BY_SPECIFICATION_CACHE;
 
 import io.github.susimsek.springauthorizationserver.entity.OAuth2AuthorizationEntity;
+import java.util.Optional;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-
-import java.util.Optional;
 import org.springframework.lang.NonNull;
 
 

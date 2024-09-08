@@ -16,13 +16,13 @@ public class OAuth2AuthorizationSpecification {
         return (root, query, criteriaBuilder) -> {
             if (tokenType == null) {
                 return criteriaBuilder.or(
-                        criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.STATE), token),
-                        criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.AUTHORIZATION_CODE_VALUE), token),
-                        criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.ACCESS_TOKEN_VALUE), token),
-                        criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.OIDC_ID_TOKEN_VALUE), token),
-                        criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.REFRESH_TOKEN_VALUE), token),
-                        criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.USER_CODE_VALUE), token),
-                        criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.DEVICE_CODE_VALUE), token)
+                    criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.STATE), token),
+                    criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.AUTHORIZATION_CODE_VALUE), token),
+                    criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.ACCESS_TOKEN_VALUE), token),
+                    criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.OIDC_ID_TOKEN_VALUE), token),
+                    criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.REFRESH_TOKEN_VALUE), token),
+                    criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.USER_CODE_VALUE), token),
+                    criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.DEVICE_CODE_VALUE), token)
                 );
             } else if (OAuth2ParameterNames.STATE.equals(tokenType)) {
                 return criteriaBuilder.equal(root.get(OAuth2AuthorizationEntity_.STATE), token);

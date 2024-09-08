@@ -1,5 +1,6 @@
 package io.github.susimsek.springauthorizationserver.entity;
 
+import io.github.susimsek.springauthorizationserver.cache.CacheName;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,7 +13,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import io.github.susimsek.springauthorizationserver.cache.CacheName;
 import org.hibernate.proxy.HibernateProxy;
 
 @Entity

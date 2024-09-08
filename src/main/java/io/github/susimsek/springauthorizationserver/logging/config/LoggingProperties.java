@@ -27,7 +27,8 @@ public class LoggingProperties {
 
     @NotBlank(message = "{validation.field.notBlank}")
     private String pattern = "%clr(%d{yyyy-MM-dd''T''HH:mm:ss.SSSXXX}){faint} %clr(%5p){highlight} "
-        + "%clr(${PID:- }){magenta} --- [%clr(${spring.application.name:-}){green},%X{traceId:-},%X{spanId:-}] [%clr(%t){faint}] %clr(%-40.40logger{39}){cyan} "
+        +
+        "%clr(${PID:- }){magenta} --- [%clr(${spring.application.name:-}){green},%X{traceId:-},%X{spanId:-}] [%clr(%t){faint}] %clr(%-40.40logger{39}){cyan} "
         + "%clr(:){faint} %m%n%clr(%wEx){red}";
 
     @Valid

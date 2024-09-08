@@ -10,7 +10,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class SanitizationUtil {
 
-    private static final Pattern[] patterns = new Pattern[]{
+    private static final Pattern[] patterns = new Pattern[] {
         Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE),
         Pattern.compile("src[\r\n]*=[\r\n]*'(.*?)'", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
         Pattern.compile("src[\r\n]*=[\r\n]*\"(.*?)\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),

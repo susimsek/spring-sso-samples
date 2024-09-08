@@ -22,7 +22,7 @@ public final class TokenEncoderParameters {
 
     public static TokenEncoderParameters from(JwtClaimsSet claims) {
         Assert.notNull(claims, "claims cannot be null");
-        return new TokenEncoderParameters((JwsHeader)null, (JWEHeader)null, claims);
+        return new TokenEncoderParameters(null, null, claims);
     }
 
     public static TokenEncoderParameters from(JwsHeader jwsHeader,

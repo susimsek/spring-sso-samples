@@ -1,13 +1,12 @@
 package io.github.susimsek.springauthorizationserver.cache;
 
+import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
-
-import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 
 @Component("specificationKeyGenerator")
 public class SpecificationKeyGenerator implements KeyGenerator {

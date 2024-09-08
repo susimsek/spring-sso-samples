@@ -26,9 +26,9 @@ public record MessageContext(String messageTemplate,
     /**
      * Constructs a new MessageContext.
      *
-     * @param messageTemplate    the message template
-     * @param attributes         the attributes for message interpolation
-     * @param validatedValue     the validated value
+     * @param messageTemplate the message template
+     * @param attributes      the attributes for message interpolation
+     * @param validatedValue  the validated value
      */
     public MessageContext(
         String messageTemplate,

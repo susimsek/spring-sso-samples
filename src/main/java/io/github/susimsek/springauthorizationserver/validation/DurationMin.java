@@ -11,11 +11,14 @@ import org.hibernate.validator.internal.constraintvalidators.hv.time.DurationMin
 
 @Documented
 @Constraint(validatedBy = DurationMinValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DurationMin {
     String value();
+
     String message() default "{validation.field.min}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

@@ -1,7 +1,6 @@
 package io.github.susimsek.springauthorizationserver.repository;
 
 
-
 import io.github.susimsek.springauthorizationserver.entity.MessageEntity;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

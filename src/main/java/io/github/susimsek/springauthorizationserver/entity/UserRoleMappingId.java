@@ -22,11 +22,15 @@ public class UserRoleMappingId implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         UserRoleMappingId that = (UserRoleMappingId) o;
         return Objects.equals(userId, that.userId) &&
-               Objects.equals(roleId, that.roleId);
+            Objects.equals(roleId, that.roleId);
     }
 
     @Override

@@ -26,7 +26,8 @@ public class DomainOAuth2AuthorizationService implements OAuth2AuthorizationServ
     @Transactional
     public void save(OAuth2Authorization authorization) {
         Assert.notNull(authorization, "authorization cannot be null");
-        Optional<OAuth2AuthorizationEntity> existingAuthorization = authorizationRepository.findById(authorization.getId());
+        Optional<OAuth2AuthorizationEntity> existingAuthorization =
+            authorizationRepository.findById(authorization.getId());
         if (existingAuthorization.isPresent()) {
             updateAuthorization(authorization, existingAuthorization.get());
         } else {
@@ -34,7 +35,8 @@ public class DomainOAuth2AuthorizationService implements OAuth2AuthorizationServ
         }
     }
 
-    private void updateAuthorization(OAuth2Authorization authorization, OAuth2AuthorizationEntity existingAuthorization) {
+    private void updateAuthorization(OAuth2Authorization authorization,
+                                     OAuth2AuthorizationEntity existingAuthorization) {
         OAuth2AuthorizationEntity entity = authorizationMapper.toEntity(authorization);
         entity.setId(existingAuthorization.getId());
         authorizationRepository.save(entity);
@@ -51,7 +53,8 @@ public class DomainOAuth2AuthorizationService implements OAuth2AuthorizationServ
         Assert.hasText(id, "id cannot be empty");
         return authorizationRepository.findById(id)
             .map(entity -> {
-                RegisteredClient registeredClient = registeredClientRepository.findByIdOrThrow(entity.getRegisteredClientId());
+                RegisteredClient registeredClient =
+                    registeredClientRepository.findByIdOrThrow(entity.getRegisteredClientId());
                 return authorizationMapper.toModel(entity, registeredClient);
             })
             .orElse(null);
@@ -61,10 +64,12 @@ public class DomainOAuth2AuthorizationService implements OAuth2AuthorizationServ
     @Transactional(readOnly = true)
     public OAuth2Authorization findByToken(String token, OAuth2TokenType tokenType) {
         Assert.hasText(token, "token cannot be empty");
-        Specification<OAuth2AuthorizationEntity> spec = OAuth2AuthorizationSpecification.hasToken(token, tokenType != null ? tokenType.getValue() : null);
+        Specification<OAuth2AuthorizationEntity> spec =
+            OAuth2AuthorizationSpecification.hasToken(token, tokenType != null ? tokenType.getValue() : null);
         return authorizationRepository.findOne(spec)
             .map(entity -> {
-                RegisteredClient registeredClient = registeredClientRepository.findByIdOrThrow(entity.getRegisteredClientId());
+                RegisteredClient registeredClient =
+                    registeredClientRepository.findByIdOrThrow(entity.getRegisteredClientId());
                 return authorizationMapper.toModel(entity, registeredClient);
             })
             .orElse(null);

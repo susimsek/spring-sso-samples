@@ -219,28 +219,34 @@ public class HintsRegistrar implements RuntimeHintsRegistrar {
                         TypeReference.of("com.github.benmanes.caffeine.cache.AsyncCacheLoader"),
                         TypeReference.of("boolean")), ExecutableMode.INVOKE));
 
-        var oauth2CoreClasses = Set.of(TypeReference.of(SignatureAlgorithm.class), TypeReference.of(OAuth2AuthorizationResponseType.class),
-            TypeReference.of(OAuth2AuthorizationRequest.class), TypeReference.of(AuthorizationGrantType.class),
-            TypeReference.of(OAuth2TokenFormat.class), TypeReference.of(OAuth2Authorization.class),
-            TypeReference.of(SecurityContextImpl.class), TypeReference.of(EncryptionMethod.class),
-            TypeReference.of(JWEAlgorithm.class));
+        var oauth2CoreClasses =
+            Set.of(TypeReference.of(SignatureAlgorithm.class), TypeReference.of(OAuth2AuthorizationResponseType.class),
+                TypeReference.of(OAuth2AuthorizationRequest.class), TypeReference.of(AuthorizationGrantType.class),
+                TypeReference.of(OAuth2TokenFormat.class), TypeReference.of(OAuth2Authorization.class),
+                TypeReference.of(SecurityContextImpl.class), TypeReference.of(EncryptionMethod.class),
+                TypeReference.of(JWEAlgorithm.class));
 
-        var securityClasses = Set.of(TypeReference.of(User.class),TypeReference.of(WebAuthenticationDetails.class),
+        var securityClasses = Set.of(TypeReference.of(User.class), TypeReference.of(WebAuthenticationDetails.class),
             TypeReference.of(GrantedAuthority.class), TypeReference.of(Principal.class),
-            TypeReference.of(SimpleGrantedAuthority.class), TypeReference.of(UsernamePasswordAuthenticationToken.class));
+            TypeReference.of(SimpleGrantedAuthority.class),
+            TypeReference.of(UsernamePasswordAuthenticationToken.class));
         var servletClasses = Set.of(TypeReference.of(Cookie.class));
         var idClasses = Set.of(TypeReference.of(OAuth2AuthorizationConsentId.class),
             TypeReference.of(UserRoleMappingId.class), TypeReference.of(UserSessionAttributeId.class));
         var stringClasses = Map.of(
             "java.util.", Set.of("Arrays$ArrayList"),
-            "java.util.Collections$", Set.of("UnmodifiableRandomAccessList", "EmptyList", "UnmodifiableMap", "EmptyMap", "SingletonList", "UnmodifiableSet")
+            "java.util.Collections$",
+            Set.of("UnmodifiableRandomAccessList", "EmptyList", "UnmodifiableMap", "EmptyMap", "SingletonList",
+                "UnmodifiableSet")
         );//
-        var javaClasses = Set.of(TypeReference.of(ArrayList.class), TypeReference.of(Date.class), TypeReference.of(Duration.class),
-            TypeReference.of(Instant.class), TypeReference.of(URL.class),
-            TypeReference.of(TreeMap.class), TypeReference.of(HashMap.class),
-            TypeReference.of(LinkedHashMap.class), TypeReference.of(List.class));
-        var savedRequestClasses = Set.of(TypeReference.of(DefaultSavedRequest.class), TypeReference.of(SavedCookie.class),
-            TypeReference.of(DefaultSavedRequest.Builder.class));
+        var javaClasses =
+            Set.of(TypeReference.of(ArrayList.class), TypeReference.of(Date.class), TypeReference.of(Duration.class),
+                TypeReference.of(Instant.class), TypeReference.of(URL.class),
+                TypeReference.of(TreeMap.class), TypeReference.of(HashMap.class),
+                TypeReference.of(LinkedHashMap.class), TypeReference.of(List.class));
+        var savedRequestClasses =
+            Set.of(TypeReference.of(DefaultSavedRequest.class), TypeReference.of(SavedCookie.class),
+                TypeReference.of(DefaultSavedRequest.Builder.class));
         var jacksonTypes = resolveJacksonTypes();
         jacksonTypes.add(TypeReference.of(SecurityJackson2Modules.class));
         var classes = new ArrayList<TypeReference>();
@@ -252,10 +258,11 @@ public class HintsRegistrar implements RuntimeHintsRegistrar {
         classes.addAll(idClasses);
         classes.addAll(securityClasses);
 
-        stringClasses.forEach((root, setOfClasses) -> setOfClasses.forEach(cn -> classes.add(TypeReference.of(root + cn))));
+        stringClasses.forEach(
+            (root, setOfClasses) -> setOfClasses.forEach(cn -> classes.add(TypeReference.of(root + cn))));
 
         classes.forEach(typeReference -> {
-            hints.reflection().registerType(typeReference,  builder -> builder.withMembers(
+            hints.reflection().registerType(typeReference, builder -> builder.withMembers(
                 MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
                 MemberCategory.INVOKE_DECLARED_METHODS,
                 MemberCategory.DECLARED_FIELDS

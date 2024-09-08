@@ -24,7 +24,7 @@ import org.springframework.util.StringUtils;
 @Mapper(componentModel = "spring")
 public abstract class RegisteredClientMapper {
 
-    @Setter(onMethod_={@Autowired})
+    @Setter(onMethod_ = {@Autowired})
     private OAuth2JsonUtils oAuth2JsonUtils;
 
     public OAuth2RegisteredClientEntity toEntity(RegisteredClient registeredClient) {
@@ -47,7 +47,8 @@ public abstract class RegisteredClientMapper {
                 .collect(Collectors.toSet())
         ));
         client.setRedirectUris(StringUtils.collectionToCommaDelimitedString(registeredClient.getRedirectUris()));
-        client.setPostLogoutRedirectUris(StringUtils.collectionToCommaDelimitedString(registeredClient.getPostLogoutRedirectUris()));
+        client.setPostLogoutRedirectUris(
+            StringUtils.collectionToCommaDelimitedString(registeredClient.getPostLogoutRedirectUris()));
         client.setClientSettings(oAuth2JsonUtils.writeMap(registeredClient.getClientSettings().getSettings()));
         client.setTokenSettings(oAuth2JsonUtils.writeMap(registeredClient.getTokenSettings().getSettings()));
 
@@ -87,10 +88,13 @@ public abstract class RegisteredClientMapper {
             .clientSecret(client.getClientSecret())
             .clientSecretExpiresAt(client.getClientSecretExpiresAt())
             .clientName(client.getClientName())
-            .clientAuthenticationMethods(authenticationMethods -> authenticationMethods.addAll(resolveClientAuthenticationMethods(client.getClientAuthenticationMethods())))
-            .authorizationGrantTypes(grantTypes -> grantTypes.addAll(resolveAuthorizationGrantTypes(client.getAuthorizationGrantTypes())))
+            .clientAuthenticationMethods(authenticationMethods -> authenticationMethods.addAll(
+                resolveClientAuthenticationMethods(client.getClientAuthenticationMethods())))
+            .authorizationGrantTypes(
+                grantTypes -> grantTypes.addAll(resolveAuthorizationGrantTypes(client.getAuthorizationGrantTypes())))
             .redirectUris(uris -> uris.addAll(StringUtils.commaDelimitedListToSet(client.getRedirectUris())))
-            .postLogoutRedirectUris(uris -> uris.addAll(StringUtils.commaDelimitedListToSet(client.getPostLogoutRedirectUris())))
+            .postLogoutRedirectUris(
+                uris -> uris.addAll(StringUtils.commaDelimitedListToSet(client.getPostLogoutRedirectUris())))
             .scopes(sc -> sc.addAll(scopes))
             .clientSettings(clientSettings)
             .tokenSettings(tokenSettings)

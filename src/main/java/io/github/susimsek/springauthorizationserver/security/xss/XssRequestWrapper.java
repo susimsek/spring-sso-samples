@@ -65,7 +65,7 @@ public class XssRequestWrapper extends ContentCachingRequestWrapper {
     @Override
     public String getContentAsString() {
         var content = this.cachedContent.toString(Charset.forName(this.getCharacterEncoding()));
-       return SanitizationUtil.sanitizeJsonString(content);
+        return SanitizationUtil.sanitizeJsonString(content);
     }
 
     @Override
@@ -137,12 +137,12 @@ public class XssRequestWrapper extends ContentCachingRequestWrapper {
                 Map<String, String[]> form = super.getParameterMap();
                 Iterator<String> nameIterator = form.keySet().iterator();
 
-                while(nameIterator.hasNext()) {
+                while (nameIterator.hasNext()) {
                     String name = nameIterator.next();
                     List<String> values = Arrays.asList(form.get(name));
                     Iterator<String> valueIterator = values.iterator();
 
-                    while(valueIterator.hasNext()) {
+                    while (valueIterator.hasNext()) {
                         String value = valueIterator.next();
                         this.cachedContent.write(URLEncoder.encode(name, requestEncoding).getBytes());
                         if (value != null) {

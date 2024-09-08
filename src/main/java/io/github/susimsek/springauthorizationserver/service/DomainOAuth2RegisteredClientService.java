@@ -24,7 +24,8 @@ public class DomainOAuth2RegisteredClientService implements DomainRegisteredClie
     @Transactional
     public void save(RegisteredClient registeredClient) {
         Assert.notNull(registeredClient, "registeredClient cannot be null");
-        Optional<OAuth2RegisteredClientEntity> existingRegisteredClient = registeredClientRepository.findByClientId(registeredClient.getClientId());
+        Optional<OAuth2RegisteredClientEntity> existingRegisteredClient =
+            registeredClientRepository.findByClientId(registeredClient.getClientId());
         if (existingRegisteredClient.isPresent()) {
             updateRegisteredClient(registeredClient, existingRegisteredClient.get());
         } else {
@@ -53,7 +54,8 @@ public class DomainOAuth2RegisteredClientService implements DomainRegisteredClie
         registeredClientRepository.save(client);
     }
 
-    private void updateRegisteredClient(RegisteredClient registeredClient, OAuth2RegisteredClientEntity existingClient) {
+    private void updateRegisteredClient(RegisteredClient registeredClient,
+                                        OAuth2RegisteredClientEntity existingClient) {
         OAuth2RegisteredClientEntity client = registeredClientMapper.toEntity(registeredClient);
         client.setId(existingClient.getId());
         registeredClientRepository.save(client);

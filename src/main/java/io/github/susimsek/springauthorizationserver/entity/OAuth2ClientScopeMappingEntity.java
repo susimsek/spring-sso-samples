@@ -1,4 +1,5 @@
 package io.github.susimsek.springauthorizationserver.entity;
+
 import io.github.susimsek.springauthorizationserver.cache.CacheName;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,12 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import java.util.Objects;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.proxy.HibernateProxy;

@@ -227,7 +227,8 @@ public class DomainSessionService
         }
 
         Instant getExpiryTime() {
-            return this.getMaxInactiveInterval().isNegative() ? Instant.ofEpochMilli(Long.MAX_VALUE) : this.getLastAccessedTime().plus(this.getMaxInactiveInterval());
+            return this.getMaxInactiveInterval().isNegative() ? Instant.ofEpochMilli(Long.MAX_VALUE) :
+                this.getLastAccessedTime().plus(this.getMaxInactiveInterval());
         }
 
         public String getId() {
@@ -248,8 +249,9 @@ public class DomainSessionService
             } else {
                 T attributeValue = supplier.get();
                 if (attributeValue != null && DomainSessionService.this.saveMode.equals(SaveMode.ON_GET_ATTRIBUTE)) {
-                    this.delta.merge(attributeName, DomainSessionService.DeltaValue.UPDATED, (oldDeltaValue, deltaValue) ->
-                        oldDeltaValue == DeltaValue.ADDED ? oldDeltaValue : deltaValue);
+                    this.delta.merge(attributeName, DomainSessionService.DeltaValue.UPDATED,
+                        (oldDeltaValue, deltaValue) ->
+                            oldDeltaValue == DeltaValue.ADDED ? oldDeltaValue : deltaValue);
                 }
 
                 return attributeValue;
@@ -282,15 +284,18 @@ public class DomainSessionService
             if (attributeExists) {
                 handleExistingAttribute(attributeName, attributeRemoved);
             } else {
-                this.delta.merge(attributeName, DomainSessionService.DeltaValue.ADDED, this::determineDeltaValueForNewAttribute);
+                this.delta.merge(attributeName, DomainSessionService.DeltaValue.ADDED,
+                    this::determineDeltaValueForNewAttribute);
             }
         }
 
         private void handleExistingAttribute(String attributeName, boolean attributeRemoved) {
             if (attributeRemoved) {
-                this.delta.merge(attributeName, DomainSessionService.DeltaValue.REMOVED, this::determineDeltaValueForRemovedAttribute);
+                this.delta.merge(attributeName, DomainSessionService.DeltaValue.REMOVED,
+                    this::determineDeltaValueForRemovedAttribute);
             } else {
-                this.delta.merge(attributeName, DomainSessionService.DeltaValue.UPDATED, this::determineDeltaValueForUpdatedAttribute);
+                this.delta.merge(attributeName, DomainSessionService.DeltaValue.UPDATED,
+                    this::determineDeltaValueForUpdatedAttribute);
             }
         }
 
@@ -307,7 +312,8 @@ public class DomainSessionService
         }
 
         private void updateChangedFlag(String attributeName) {
-            if (FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME.equals(attributeName) || "SPRING_SECURITY_CONTEXT".equals(attributeName)) {
+            if (FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME.equals(attributeName) ||
+                "SPRING_SECURITY_CONTEXT".equals(attributeName)) {
                 this.changed = true;
             }
         }
@@ -429,9 +435,10 @@ public class DomainSessionService
         private void updateSessionAttributes(UserSession session,
                                              List<String> attributeNames) {
             attributeNames.forEach(attributeName -> springSessionAttributeRepository.findById(
-                new UserSessionAttributeId(session.id, attributeName))
+                    new UserSessionAttributeId(session.id, attributeName))
                 .ifPresent(attributeEntity -> {
-                    attributeEntity.setAttributeBytes(jsonConversionUtils.serialize(session.getAttribute(attributeName)));
+                    attributeEntity.setAttributeBytes(
+                        jsonConversionUtils.serialize(session.getAttribute(attributeName)));
                     springSessionAttributeRepository.save(attributeEntity);
                 }));
         }
@@ -440,7 +447,7 @@ public class DomainSessionService
                                              List<String> attributeNames) {
             attributeNames.forEach(attributeName ->
                 springSessionAttributeRepository.deleteById(new UserSessionAttributeId(session.id,
-                attributeName)));
+                    attributeName)));
         }
     }
 
@@ -448,6 +455,7 @@ public class DomainSessionService
         ADDED,
         UPDATED,
         REMOVED;
+
         DeltaValue() {
         }
     }

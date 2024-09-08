@@ -14,6 +14,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NonEmptyString {
     String message() default "String value must not be empty";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

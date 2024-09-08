@@ -11,11 +11,14 @@ import org.hibernate.validator.internal.constraintvalidators.hv.time.DurationMax
 
 @Documented
 @Constraint(validatedBy = DurationMaxValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DurationMax {
     String value();
+
     String message() default "{validation.field.max}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

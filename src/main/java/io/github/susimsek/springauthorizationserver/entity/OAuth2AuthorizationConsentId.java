@@ -17,11 +17,15 @@ public class OAuth2AuthorizationConsentId implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         OAuth2AuthorizationConsentId that = (OAuth2AuthorizationConsentId) o;
         return Objects.equals(registeredClientId, that.registeredClientId) &&
-               Objects.equals(principalName, that.principalName);
+            Objects.equals(principalName, that.principalName);
     }
 
     @Override

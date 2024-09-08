@@ -56,7 +56,7 @@ public class OAuth2AuthorizationConsentEntity extends BaseEntity {
             return false;
         }
         return Objects.equals(registeredClientId, other.registeredClientId) &&
-               Objects.equals(principalName, other.principalName);
+            Objects.equals(principalName, other.principalName);
     }
 
     @Override

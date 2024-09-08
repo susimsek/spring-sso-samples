@@ -118,7 +118,8 @@ public class OpenAPIConfig {
                     .description(
                         "An opaque value used by the client to maintain state between the request and callback.")
                     .required(false)
-                    .schema(new StringSchema()).example("SU8nskju26XowSCg3bx2LeZq7MwKcwnQ7h6vQY8twd9QJECHRKs14OwXPdpNBI58")
+                    .schema(new StringSchema())
+                    .example("SU8nskju26XowSCg3bx2LeZq7MwKcwnQ7h6vQY8twd9QJECHRKs14OwXPdpNBI58")
                 )
                 .addParametersItem(new QueryParameter()
                     .name(CODE_CHALLENGE)
@@ -128,15 +129,18 @@ public class OpenAPIConfig {
                 )
                 .addParametersItem(new QueryParameter()
                     .name(CODE_CHALLENGE_METHOD)
-                    .description("PKCE code challenge method. The method used to derive the code challenge. Supported values: plain, S256.")
+                    .description(
+                        "PKCE code challenge method. The method used to derive the code challenge. Supported values: plain, S256.")
                     .required(false)
                     .schema(new StringSchema().example("S256"))
                 )
                 .addParametersItem(new QueryParameter()
                     .name(NONCE)
-                    .description("A string value used to associate a client session with an ID token to mitigate replay attacks.")
+                    .description(
+                        "A string value used to associate a client session with an ID token to mitigate replay attacks.")
                     .required(false)
-                    .schema(new StringSchema().example("iAXdcF77sQ2ejthPM5xZtytYUjqZkJTXcHkgdyY2NinFx6y83nKssxEzlBtvnSY2"))
+                    .schema(
+                        new StringSchema().example("iAXdcF77sQ2ejthPM5xZtytYUjqZkJTXcHkgdyY2NinFx6y83nKssxEzlBtvnSY2"))
                 )
                 .responses(createAuthorizeResponses())
                 .externalDocs(new ExternalDocumentation()
@@ -333,9 +337,12 @@ public class OpenAPIConfig {
                             )
                         )
                     )
-                    .addApiResponse(RESPONSE_400, new ApiResponse().description(HttpStatus.BAD_REQUEST.getReasonPhrase()))
-                    .addApiResponse(RESPONSE_401, new ApiResponse().description(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
-                    .addApiResponse(RESPONSE_500, new ApiResponse().description(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()))
+                    .addApiResponse(RESPONSE_400,
+                        new ApiResponse().description(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+                    .addApiResponse(RESPONSE_401,
+                        new ApiResponse().description(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+                    .addApiResponse(RESPONSE_500,
+                        new ApiResponse().description(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()))
                 )
             )
         );

@@ -33,7 +33,8 @@ public class OAuth2JsonUtils {
 
     public Map<String, Object> parseMap(String data) {
         try {
-            return this.objectMapper.readValue(data, new TypeReference<>() {});
+            return this.objectMapper.readValue(data, new TypeReference<>() {
+            });
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }

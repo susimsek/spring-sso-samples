@@ -17,8 +17,12 @@ public class UserSessionAttributeId implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         UserSessionAttributeId that = (UserSessionAttributeId) o;
         return Objects.equals(sessionId, that.sessionId) &&
             Objects.equals(attributeName, that.attributeName);

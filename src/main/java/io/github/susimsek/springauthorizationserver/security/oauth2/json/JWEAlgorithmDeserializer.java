@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JWEAlgorithm;
 import com.nimbusds.jose.Requirement;
-
 import java.io.IOException;
 import lombok.NoArgsConstructor;
 

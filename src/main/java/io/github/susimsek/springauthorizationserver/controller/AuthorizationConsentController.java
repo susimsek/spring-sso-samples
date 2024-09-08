@@ -59,7 +59,8 @@ public class AuthorizationConsentController {
         model.addAttribute("clientId", clientId);
         model.addAttribute("state", state);
         model.addAttribute("scopes", withDescription(scopesToApprove, LocaleContextHolder.getLocale()));
-        model.addAttribute("previouslyApprovedScopes", withDescription(previouslyApprovedScopes, LocaleContextHolder.getLocale()));
+        model.addAttribute("previouslyApprovedScopes",
+            withDescription(previouslyApprovedScopes, LocaleContextHolder.getLocale()));
         model.addAttribute("principalName", principal.getName());
         model.addAttribute("userCode", userCode);
         if (StringUtils.hasText(userCode)) {

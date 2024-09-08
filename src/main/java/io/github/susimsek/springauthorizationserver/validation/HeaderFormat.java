@@ -11,18 +11,28 @@ import java.lang.annotation.Target;
 
 @Documented
 @Constraint(validatedBy = HeaderValidator.class)
-@Target({ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HeaderFormat {
     String message() default "Invalid header";
+
     String headerName();
+
     boolean notBlank() default true;
+
     int min() default 0;
+
     int max() default Integer.MAX_VALUE;
+
     String regexp() default "";
+
     String blankMessage() default "{validation.field.notBlank}";
+
     String sizeMessage() default "{validation.field.size}";
+
     String patternMessage() default "{validation.field.pattern}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

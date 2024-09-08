@@ -30,16 +30,19 @@ public class JsonConversionUtils {
         objectMapper.registerModules(securityModules);
         GenericConversionService converter = new GenericConversionService();
         converter.addConverter(Object.class, byte[].class, new SerializingConverter(new JsonSerializer(objectMapper)));
-        converter.addConverter(byte[].class, Object.class, new DeserializingConverter(new JsonDeserializer(objectMapper)));
+        converter.addConverter(byte[].class, Object.class,
+            new DeserializingConverter(new JsonDeserializer(objectMapper)));
         this.conversionService = converter;
     }
 
     public byte[] serialize(Object object) {
-        return (byte[])this.conversionService.convert(object, TypeDescriptor.valueOf(Object.class), TypeDescriptor.valueOf(byte[].class));
+        return (byte[]) this.conversionService.convert(object, TypeDescriptor.valueOf(Object.class),
+            TypeDescriptor.valueOf(byte[].class));
     }
 
     public Object deserialize(byte[] bytes) {
-        return this.conversionService.convert(bytes, TypeDescriptor.valueOf(byte[].class), TypeDescriptor.valueOf(Object.class));
+        return this.conversionService.convert(bytes, TypeDescriptor.valueOf(byte[].class),
+            TypeDescriptor.valueOf(Object.class));
     }
 
     static class JsonSerializer implements Serializer<Object> {

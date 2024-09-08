@@ -2,6 +2,8 @@ package io.github.susimsek.springauthorizationserver.mapper;
 
 import io.github.susimsek.springauthorizationserver.entity.OAuth2AuthorizationEntity;
 import io.github.susimsek.springauthorizationserver.security.oauth2.json.OAuth2JsonUtils;
+import java.util.Map;
+import java.util.Set;
 import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,10 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.util.StringUtils;
 
-import java.util.Map;
-import java.util.Set;
-
 @Mapper(componentModel = "spring")
 public abstract class OAuth2AuthorizationMapper {
 
-    @Setter(onMethod_={@Autowired})
+    @Setter(onMethod_ = {@Autowired})
     private OAuth2JsonUtils jsonUtils;
 
     public OAuth2AuthorizationEntity toEntity(OAuth2Authorization model) {
@@ -40,7 +39,8 @@ public abstract class OAuth2AuthorizationMapper {
         entity.setAttributes(jsonUtils.writeMap(model.getAttributes()));
         entity.setState(model.getAttribute(OAuth2ParameterNames.STATE));
 
-        OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCode = model.getToken(OAuth2AuthorizationCode.class);
+        OAuth2Authorization.Token<OAuth2AuthorizationCode> authorizationCode =
+            model.getToken(OAuth2AuthorizationCode.class);
         if (authorizationCode != null) {
             entity.setAuthorizationCodeValue(authorizationCode.getToken().getTokenValue());
             entity.setAuthorizationCodeIssuedAt(authorizationCode.getToken().getIssuedAt());
@@ -102,11 +102,11 @@ public abstract class OAuth2AuthorizationMapper {
         Map<String, Object> attributes = jsonUtils.parseMap(entity.getAttributes());
 
         OAuth2Authorization.Builder builder = OAuth2Authorization.withRegisteredClient(registeredClient)
-                .id(String.valueOf(entity.getId()))
-                .principalName(entity.getPrincipalName())
-                .authorizationGrantType(new AuthorizationGrantType(entity.getAuthorizationGrantType()))
-                .authorizedScopes(scopes)
-                .attributes(attrs -> attrs.putAll(attributes));
+            .id(String.valueOf(entity.getId()))
+            .principalName(entity.getPrincipalName())
+            .authorizationGrantType(new AuthorizationGrantType(entity.getAuthorizationGrantType()))
+            .authorizedScopes(scopes)
+            .attributes(attrs -> attrs.putAll(attributes));
 
         if (StringUtils.hasText(entity.getState())) {
             builder.attribute(OAuth2ParameterNames.STATE, entity.getState());
@@ -114,10 +114,11 @@ public abstract class OAuth2AuthorizationMapper {
 
         if (StringUtils.hasText(entity.getAuthorizationCodeValue())) {
             OAuth2AuthorizationCode authorizationCode = new OAuth2AuthorizationCode(
-                    entity.getAuthorizationCodeValue(),
-                    entity.getAuthorizationCodeIssuedAt(),
-                    entity.getAuthorizationCodeExpiresAt());
-            builder.token(authorizationCode, metadata -> metadata.putAll(jsonUtils.parseMap(entity.getAuthorizationCodeMetadata())));
+                entity.getAuthorizationCodeValue(),
+                entity.getAuthorizationCodeIssuedAt(),
+                entity.getAuthorizationCodeExpiresAt());
+            builder.token(authorizationCode,
+                metadata -> metadata.putAll(jsonUtils.parseMap(entity.getAuthorizationCodeMetadata())));
         }
 
         if (StringUtils.hasText(entity.getAccessTokenValue())) {
@@ -127,44 +128,47 @@ public abstract class OAuth2AuthorizationMapper {
             }
             Set<String> accessTokenScopes = StringUtils.commaDelimitedListToSet(entity.getAccessTokenScopes());
             OAuth2AccessToken accessToken = new OAuth2AccessToken(
-                    tokenType,
-                    entity.getAccessTokenValue(),
-                    entity.getAccessTokenIssuedAt(),
-                    entity.getAccessTokenExpiresAt(),
-                    accessTokenScopes);
-            builder.token(accessToken, metadata -> metadata.putAll(jsonUtils.parseMap(entity.getAccessTokenMetadata())));
+                tokenType,
+                entity.getAccessTokenValue(),
+                entity.getAccessTokenIssuedAt(),
+                entity.getAccessTokenExpiresAt(),
+                accessTokenScopes);
+            builder.token(accessToken,
+                metadata -> metadata.putAll(jsonUtils.parseMap(entity.getAccessTokenMetadata())));
         }
 
         if (StringUtils.hasText(entity.getOidcIdTokenValue())) {
             OidcIdToken oidcIdToken = new OidcIdToken(
-                    entity.getOidcIdTokenValue(),
-                    entity.getOidcIdTokenIssuedAt(),
-                    entity.getOidcIdTokenExpiresAt(),
-                    jsonUtils.parseMap(entity.getOidcIdTokenMetadata()));
-            builder.token(oidcIdToken, metadata -> metadata.putAll(jsonUtils.parseMap(entity.getOidcIdTokenMetadata())));
+                entity.getOidcIdTokenValue(),
+                entity.getOidcIdTokenIssuedAt(),
+                entity.getOidcIdTokenExpiresAt(),
+                jsonUtils.parseMap(entity.getOidcIdTokenMetadata()));
+            builder.token(oidcIdToken,
+                metadata -> metadata.putAll(jsonUtils.parseMap(entity.getOidcIdTokenMetadata())));
         }
 
         if (StringUtils.hasText(entity.getRefreshTokenValue())) {
             OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(
-                    entity.getRefreshTokenValue(),
-                    entity.getRefreshTokenIssuedAt(),
-                    entity.getRefreshTokenExpiresAt());
-            builder.token(refreshToken, metadata -> metadata.putAll(jsonUtils.parseMap(entity.getRefreshTokenMetadata())));
+                entity.getRefreshTokenValue(),
+                entity.getRefreshTokenIssuedAt(),
+                entity.getRefreshTokenExpiresAt());
+            builder.token(refreshToken,
+                metadata -> metadata.putAll(jsonUtils.parseMap(entity.getRefreshTokenMetadata())));
         }
 
         if (StringUtils.hasText(entity.getUserCodeValue())) {
             OAuth2UserCode userCode = new OAuth2UserCode(
-                    entity.getUserCodeValue(),
-                    entity.getUserCodeIssuedAt(),
-                    entity.getUserCodeExpiresAt());
+                entity.getUserCodeValue(),
+                entity.getUserCodeIssuedAt(),
+                entity.getUserCodeExpiresAt());
             builder.token(userCode, metadata -> metadata.putAll(jsonUtils.parseMap(entity.getUserCodeMetadata())));
         }
 
         if (StringUtils.hasText(entity.getDeviceCodeValue())) {
             OAuth2DeviceCode deviceCode = new OAuth2DeviceCode(
-                    entity.getDeviceCodeValue(),
-                    entity.getDeviceCodeIssuedAt(),
-                    entity.getDeviceCodeExpiresAt());
+                entity.getDeviceCodeValue(),
+                entity.getDeviceCodeIssuedAt(),
+                entity.getDeviceCodeExpiresAt());
             builder.token(deviceCode, metadata -> metadata.putAll(jsonUtils.parseMap(entity.getDeviceCodeMetadata())));
         }
 

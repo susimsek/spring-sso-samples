@@ -39,7 +39,7 @@ public class OAuth2SecurityProblemSupport
                                         ParameterMessageSource messageSource) {
         this.handlerExceptionResolver = handlerExceptionResolver;
         this.messageSource = messageSource;
-        this.redirectStrategy =  new DefaultRedirectStrategy();
+        this.redirectStrategy = new DefaultRedirectStrategy();
     }
 
     @Override
@@ -61,20 +61,23 @@ public class OAuth2SecurityProblemSupport
     }
 
     public void sendClientAuthenticationErrorResponse(HttpServletRequest request,
-                                                       HttpServletResponse response,
-                                                       AuthenticationException ex) {
+                                                      HttpServletResponse response,
+                                                      AuthenticationException ex) {
         SecurityContextHolder.clearContext();
         handlerExceptionResolver.resolveException(request, response, null, ex);
     }
 
     public void sendAuthorizationEndpointErrorResponse(HttpServletRequest request,
-                                  HttpServletResponse response,
-                                  AuthenticationException exception) throws
+                                                       HttpServletResponse response,
+                                                       AuthenticationException exception) throws
         IOException {
-        OAuth2AuthorizationCodeRequestAuthenticationException authorizationCodeRequestAuthenticationException = (OAuth2AuthorizationCodeRequestAuthenticationException)exception;
+        OAuth2AuthorizationCodeRequestAuthenticationException authorizationCodeRequestAuthenticationException =
+            (OAuth2AuthorizationCodeRequestAuthenticationException) exception;
         OAuth2Error error = authorizationCodeRequestAuthenticationException.getError();
-        OAuth2AuthorizationCodeRequestAuthenticationToken authorizationCodeRequestAuthentication = authorizationCodeRequestAuthenticationException.getAuthorizationCodeRequestAuthentication();
-        if (authorizationCodeRequestAuthentication != null && StringUtils.hasText(authorizationCodeRequestAuthentication.getRedirectUri())) {
+        OAuth2AuthorizationCodeRequestAuthenticationToken authorizationCodeRequestAuthentication =
+            authorizationCodeRequestAuthenticationException.getAuthorizationCodeRequestAuthentication();
+        if (authorizationCodeRequestAuthentication != null &&
+            StringUtils.hasText(authorizationCodeRequestAuthentication.getRedirectUri())) {
             if (this.logger.isTraceEnabled()) {
                 this.logger.trace("Redirecting to client with error");
             }

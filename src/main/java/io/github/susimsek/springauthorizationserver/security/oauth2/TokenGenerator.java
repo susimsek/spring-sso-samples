@@ -157,7 +157,7 @@ public final class TokenGenerator implements OAuth2TokenGenerator<Jwt> {
                     .getSetting(JweToken.ENABLED);
                 if (Boolean.FALSE.equals(jweEnabled)) {
                     return tokenEncoder.encode(TokenEncoderParameters.from(jwsHeader, null, claims),
-                       null);
+                        null);
                 }
                 OAuth2Key oAuth2Key = oAuth2KeyService.findByKidOrThrow(jweKeyId);
                 return tokenEncoder.encode(

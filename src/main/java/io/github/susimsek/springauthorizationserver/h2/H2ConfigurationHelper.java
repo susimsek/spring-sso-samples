@@ -18,7 +18,7 @@ public class H2ConfigurationHelper {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             Class<?> serverClass = Class.forName("org.h2.tools.Server", true, loader);
             Method createServer = serverClass.getMethod("createTcpServer", String[].class);
-            return createServer.invoke(null, (Object) new String[]{"-tcp", "-tcpAllowOthers", "-tcpPort", port});
+            return createServer.invoke(null, (Object) new String[] {"-tcp", "-tcpAllowOthers", "-tcpPort", port});
         } catch (ClassNotFoundException | LinkageError | NoSuchMethodException | IllegalAccessException e) {
             log.error("Failed to initialize H2 database server", e);
             throw new IllegalStateException("Failed to initialize H2 database server", e);

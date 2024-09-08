@@ -47,7 +47,7 @@ public class XssFilter extends OncePerRequestFilter implements Ordered {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         XssRequestWrapper wrappedRequest = new XssRequestWrapper(
             request, nonSanitizedHeaders);
         filterChain.doFilter(wrappedRequest, response);
@@ -71,6 +71,7 @@ public class XssFilter extends OncePerRequestFilter implements Ordered {
         AfterRequestMatchersBuilder requestMatchers(String... patterns);
 
         AfterRequestMatchersBuilder requestMatchers(RequestMatcher... requestMatchers);
+
         XssFilter build();
     }
 

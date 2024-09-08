@@ -65,7 +65,7 @@ public class UserRoleMappingEntity extends BaseEntity {
             return false;
         }
         return userId != null && Objects.equals(userId, other.userId) &&
-               roleId != null && Objects.equals(roleId, other.roleId);
+            roleId != null && Objects.equals(roleId, other.roleId);
     }
 
     @Override

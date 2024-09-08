@@ -12,10 +12,10 @@ import com.github.loki4j.logback.AbstractLoki4jEncoder;
 import com.github.loki4j.logback.JavaHttpSender;
 import com.github.loki4j.logback.JsonEncoder;
 import com.github.loki4j.logback.Loki4jAppender;
-import io.github.susimsek.springauthorizationserver.enums.FilterOrder;
 import io.github.susimsek.springauthorizationserver.aspect.LoggingAspect;
-import io.github.susimsek.springauthorizationserver.logging.config.LoggingProperties;
+import io.github.susimsek.springauthorizationserver.enums.FilterOrder;
 import io.github.susimsek.springauthorizationserver.filter.LoggingFilter;
+import io.github.susimsek.springauthorizationserver.logging.config.LoggingProperties;
 import io.github.susimsek.springauthorizationserver.logging.formatter.JsonLogFormatter;
 import io.github.susimsek.springauthorizationserver.logging.formatter.LogFormatter;
 import io.github.susimsek.springauthorizationserver.logging.handler.HttpLoggingHandler;
@@ -206,7 +206,7 @@ public class LoggingConfig {
         }
 
         private AbstractLoki4jEncoder.LabelCfg getLabel(String applicationName, String hostname,
-                                                                  String applicationEnvironment) {
+                                                        String applicationEnvironment) {
             var label = new AbstractLoki4jEncoder.LabelCfg();
             label.setReadMarkers(true);
             String labelPattern = (

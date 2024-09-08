@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.Requirement;
-
 import java.io.IOException;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +16,7 @@ public class EncryptionMethodDeserializer extends JsonDeserializer<EncryptionMet
 
     @Override
     public EncryptionMethod deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-        ObjectMapper mapper = (ObjectMapper)parser.getCodec();
+        ObjectMapper mapper = (ObjectMapper) parser.getCodec();
         JsonNode root = mapper.readTree(parser);
         return this.deserialize(parser, root);
     }

@@ -32,15 +32,15 @@ public class RequiredIfValidator implements ConstraintValidator<RequiredIf, Obje
             if (requiredFieldValue == null) {
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(notNullMessage)
-                        .addPropertyNode(requiredField)
-                        .addConstraintViolation();
+                    .addPropertyNode(requiredField)
+                    .addConstraintViolation();
                 return false;
             }
             if (!StringUtils.hasText(requiredFieldValue.toString())) {
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(notBlankMessage)
-                        .addPropertyNode(requiredField)
-                        .addConstraintViolation();
+                    .addPropertyNode(requiredField)
+                    .addConstraintViolation();
                 return false;
             }
         }

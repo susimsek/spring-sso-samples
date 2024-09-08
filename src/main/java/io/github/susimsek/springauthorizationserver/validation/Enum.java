@@ -10,11 +10,14 @@ import java.lang.annotation.Target;
 
 @Documented
 @Constraint(validatedBy = EnumValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER })
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Enum {
     Class<? extends java.lang.Enum<?>> enumClass();
+
     String message() default "{validation.field.enum}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

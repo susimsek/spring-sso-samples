@@ -10,11 +10,14 @@ import java.lang.annotation.Target;
 
 @Documented
 @Constraint(validatedBy = DataSizeMinValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DataSizeMin {
     String value();
+
     String message() default "{validation.field.min}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

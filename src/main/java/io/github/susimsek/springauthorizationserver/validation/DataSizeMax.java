@@ -10,11 +10,14 @@ import java.lang.annotation.Target;
 
 @Documented
 @Constraint(validatedBy = DataSizeMaxValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DataSizeMax {
     String value();
+
     String message() default "{validation.field.max}";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

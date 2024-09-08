@@ -156,12 +156,12 @@ public class AuthorizationServerConfig {
     }
 
     @Bean
-    public TokenEncoder tokenEncoder(JWKSource<SecurityContext> jwkSource)  {
+    public TokenEncoder tokenEncoder(JWKSource<SecurityContext> jwkSource) {
         return new DomainTokenEncoder(jwkSource);
     }
 
     @Bean
-    public JwtDecoder jwtDecoder (
+    public JwtDecoder jwtDecoder(
         OAuth2KeyService oAuth2KeyService,
         JWKSource<SecurityContext> jwkSource) {
         Set<JWSAlgorithm> jwsAlgs = new HashSet<>();
@@ -178,7 +178,8 @@ public class AuthorizationServerConfig {
 
     @Bean
     public OAuth2TokenCustomizer<OAuth2TokenClaimsContext> accessTokenCustomizer() {
-        return context -> {};
+        return context -> {
+        };
     }
 
     @Bean

@@ -19,8 +19,8 @@ public class DefaultErrorController implements ErrorController {
 
     private final ParameterMessageSource messageSource;
 
-	@RequestMapping("/error")
-	public String handleError(Model model, Locale locale, HttpServletRequest request) {
+    @RequestMapping("/error")
+    public String handleError(Model model, Locale locale, HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         String errorTitle = messageSource.getMessage("error.title", null, locale);
         String errorMessage;
@@ -43,7 +43,7 @@ public class DefaultErrorController implements ErrorController {
         model.addAttribute("errorTitle", errorTitle);
         model.addAttribute("errorMessage", errorMessage);
         return "error";
-	}
+    }
 
     private String getErrorMessage(HttpServletRequest request) {
         String errorMessage = (String) request.getAttribute(RequestDispatcher.ERROR_MESSAGE);

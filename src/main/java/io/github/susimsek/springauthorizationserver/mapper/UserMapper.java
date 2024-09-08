@@ -1,12 +1,11 @@
 package io.github.susimsek.springauthorizationserver.mapper;
 
 import io.github.susimsek.springauthorizationserver.entity.UserEntity;
+import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.stream.Collectors;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 
 @Mapper(componentModel = "spring")
