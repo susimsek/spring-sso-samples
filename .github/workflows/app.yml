@@ -31,13 +31,13 @@ jobs:
         with:
           version: 'latest'
 
-      # Set up JDK 17 with GraalVM
-      - name: Set up JDK 17 with GraalVM
+      # Set up JDK 22 with GraalVM
+      - name: Set up JDK 22 with GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
           distribution: 'liberica'
           version: '22.3.0'
-          java-version: '17'
+          java-version: '21'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: 'maven'
 
