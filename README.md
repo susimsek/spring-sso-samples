@@ -19,7 +19,7 @@ This server comes with predefined registered OAuth2/OIDC clients:
 | oidc-client-opaque      | secret        | Opaque              |
 | oidc-client-pkce-opaque | secret        | Opaque              |
 
-ll clients have configured the following redirect URI
+All clients have configured the following redirect URI
 
 * http://127.0.0.1:8080/login/oauth2/code/oidc-client
 
