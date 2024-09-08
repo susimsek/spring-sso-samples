@@ -21,8 +21,8 @@ public class SpecificationKeyGenerator implements KeyGenerator {
         keyBuilder.append(method.getName()).append(":");
 
         for (Object param : params) {
-            if (param instanceof Specification) {
-                keyBuilder.append(hashSpecification((Specification<?>) param));
+            if (param instanceof Specification<?> specification) {
+                keyBuilder.append(hashSpecification(specification));
             } else {
                 keyBuilder.append(param.hashCode()).append(",");
             }

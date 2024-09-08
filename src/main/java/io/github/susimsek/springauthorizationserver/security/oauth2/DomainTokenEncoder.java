@@ -87,7 +87,7 @@ public class DomainTokenEncoder implements TokenEncoder {
             return new Jwt(jweObject.serialize(),
                 claims.getIssuedAt(), claims.getExpiresAt(), jweHeader.toJSONObject(), claims.getClaims());
         } catch (JOSEException e) {
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Unable to encrypt JWT"), e);
+            throw new JwtEncodingException(ENCODING_ERROR_MESSAGE_TEMPLATE.formatted("Unable to encrypt JWT"), e);
         }
     }
 
@@ -103,7 +103,7 @@ public class DomainTokenEncoder implements TokenEncoder {
                 builder.jwk(JWK.parse(jwk));
             } catch (Exception ex) {
                 throw new JwtEncodingException(
-                    String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Unable to convert 'jwk' JOSE header"), ex);
+                    ENCODING_ERROR_MESSAGE_TEMPLATE.formatted("Unable to convert 'jwk' JOSE header"), ex);
             }
         }
 
@@ -209,7 +209,7 @@ public class DomainTokenEncoder implements TokenEncoder {
         try {
             return url.toURI();
         } catch (Exception ex) {
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
+            throw new JwtEncodingException(ENCODING_ERROR_MESSAGE_TEMPLATE.formatted(
                 "Unable to convert '" + header + "' JOSE header to a URI"), ex);
         }
     }
@@ -227,18 +227,18 @@ public class DomainTokenEncoder implements TokenEncoder {
             jwks = this.jwkSource.get(jwkSelector, null);
         } catch (Exception var4) {
             Exception ex = var4;
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
+            throw new JwtEncodingException(ENCODING_ERROR_MESSAGE_TEMPLATE.formatted(
                 "Failed to select a JWK signing key -> " + ex.getMessage()), ex);
         }
 
         if (jwks.size() > 1) {
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
+            throw new JwtEncodingException(ENCODING_ERROR_MESSAGE_TEMPLATE.formatted(
                 "Found multiple JWK signing keys for algorithm '" + headers.getAlgorithm().getName() + "'"));
         } else if (jwks.isEmpty()) {
             throw new JwtEncodingException(
-                String.format(ENCODING_ERROR_MESSAGE_TEMPLATE, "Failed to select a JWK signing key"));
+                ENCODING_ERROR_MESSAGE_TEMPLATE.formatted("Failed to select a JWK signing key"));
         } else {
-            return (JWK) jwks.get(0);
+            return (JWK) jwks.getFirst();
         }
     }
 
@@ -261,7 +261,7 @@ public class DomainTokenEncoder implements TokenEncoder {
         try {
             return JWS_SIGNER_FACTORY.createJWSSigner(jwk);
         } catch (JOSEException var2) {
-            throw new JwtEncodingException(String.format(ENCODING_ERROR_MESSAGE_TEMPLATE,
+            throw new JwtEncodingException(ENCODING_ERROR_MESSAGE_TEMPLATE.formatted(
                 "Failed to create a JWS Signer -> " + var2.getMessage()), var2);
         }
     }

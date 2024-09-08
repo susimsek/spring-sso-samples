@@ -24,7 +24,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @Import(MessageSourceAutoConfiguration.class)
 public class LocaleConfig {
 
-   public static final Locale TR = new Locale("tr", "TR");
+   public static final Locale TR = Locale.of("tr", "TR");
    public static final Locale EN = Locale.ENGLISH;
    public static final String COOKIE_NAME = "lang";
     public static final String PARAM_NAME = "lang";

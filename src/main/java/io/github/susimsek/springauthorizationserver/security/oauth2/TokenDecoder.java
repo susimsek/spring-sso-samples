@@ -70,9 +70,9 @@ public final class TokenDecoder implements JwtDecoder {
         } catch (Exception ex) {
             this.logger.trace("Failed to parse token", ex);
             if (ex instanceof ParseException) {
-                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, "Malformed token"), ex);
+                throw new BadJwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted("Malformed token"), ex);
             } else {
-                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, ex.getMessage()), ex);
+                throw new BadJwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted(ex.getMessage()), ex);
             }
         }
     }
@@ -83,9 +83,9 @@ public final class TokenDecoder implements JwtDecoder {
         } catch (Exception ex) {
             this.logger.trace("Failed to parse token", ex);
             if (ex instanceof ParseException) {
-                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, "Malformed token"), ex);
+                throw new BadJwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted("Malformed token"), ex);
             } else {
-                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, ex.getMessage()), ex);
+                throw new BadJwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted(ex.getMessage()), ex);
             }
         }
     }
@@ -95,7 +95,7 @@ public final class TokenDecoder implements JwtDecoder {
             RSADecrypter decrypter = new RSADecrypter(rsaKey);
             jweObject.decrypt(decrypter);
         } catch (JOSEException e) {
-            throw new JwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, "Unable to decrypt token"), e);
+            throw new JwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted("Unable to decrypt token"), e);
         }
     }
 
@@ -115,19 +115,19 @@ public final class TokenDecoder implements JwtDecoder {
         } catch (RemoteKeySourceException ex) {
             this.logger.trace("Failed to retrieve JWK set", ex);
             if (ex.getCause() instanceof ParseException) {
-                throw new JwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, "Malformed Jwk set"), ex);
+                throw new JwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted("Malformed Jwk set"), ex);
             } else {
-                throw new JwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, ex.getMessage()), ex);
+                throw new JwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted(ex.getMessage()), ex);
             }
         } catch (JOSEException ex) {
             this.logger.trace("Failed to process JWT", ex);
-            throw new JwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, ex.getMessage()), ex);
+            throw new JwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted(ex.getMessage()), ex);
         } catch (Exception ex) {
             this.logger.trace("Failed to process JWT", ex);
             if (ex.getCause() instanceof ParseException) {
-                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, "Malformed payload"), ex);
+                throw new BadJwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted("Malformed payload"), ex);
             } else {
-                throw new BadJwtException(String.format(DECODING_ERROR_MESSAGE_TEMPLATE, ex.getMessage()), ex);
+                throw new BadJwtException(DECODING_ERROR_MESSAGE_TEMPLATE.formatted(ex.getMessage()), ex);
             }
         }
     }

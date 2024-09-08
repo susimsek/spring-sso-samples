@@ -87,7 +87,7 @@ public class AuthorizationConsentController {
 
         ScopeWithDescription(String scope, MessageSource messageSource, Locale locale) {
             this.scope = scope;
-            String key = String.format("scope.%s.description", scope);
+            String key = "scope.%s.description".formatted(scope);
             this.description = messageSource.getMessage(key, null,
                 messageSource.getMessage(DEFAULT_DESCRIPTION_KEY, null, locale), locale);
         }

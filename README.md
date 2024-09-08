@@ -122,7 +122,7 @@ Below is the ER Diagram used for the project:
 
 ## Used Technologies
 
-- Java 17
+- Java 22
 - Checkstyle
 - SonarQube
 - Docker

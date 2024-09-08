@@ -209,10 +209,10 @@ public class LoggingConfig {
                                                                   String applicationEnvironment) {
             var label = new AbstractLoki4jEncoder.LabelCfg();
             label.setReadMarkers(true);
-            String labelPattern = String.format(
+            String labelPattern = (
                 "app=%s,host=%s,env=%s,level=%%level,"
                     + "traceId=%%X{traceId:-unknown},spanId=%%X{spanId:-unknown},"
-                    + "requestId=%%X{requestId:-unknown},correlationId=%%X{correlationId:-unknown}",
+                    + "requestId=%%X{requestId:-unknown},correlationId=%%X{correlationId:-unknown}").formatted(
                 applicationName, hostname, applicationEnvironment
             );
             label.setPattern(labelPattern);
