@@ -23,6 +23,16 @@ All clients have configured the following redirect URI
 
 * http://127.0.0.1:8080/login/oauth2/code/oidc-client
 
+## Login
+
+This server already has preconfigured users.
+Therefore, to login please use one of these predefined credentials:
+
+| Username | Email                    | Password | Roles  |
+|----------|--------------------------|----------|--------|
+| user     | user@example.com         | password | USER   |
+| admin    | admin@example.com        | password | ADMIN  |
+
 ## OAuth2 Endpoints
 
 The following OAuth2 Authorization Server endpoints are available:
@@ -36,16 +46,6 @@ The following OAuth2 Authorization Server endpoints are available:
 | POST   | /oauth2/token                     | Token                    |
 | POST   | /oauth2/revoke                    | Revoke Token             |
 | POST   | /oauth2/introspect                | Introspect Token         |
-
-## Login
-
-This server already has preconfigured users.
-Therefore, to login please use one of these predefined credentials:
-
-| Username | Email                    | Password | Roles  |
-|----------|--------------------------|----------|--------|
-| user     | user@example.com         | password | USER   |
-| admin    | admin@example.com        | password | ADMIN  |
 
 ## Prerequisites
 
