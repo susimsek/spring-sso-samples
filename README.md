@@ -78,6 +78,28 @@ The sample applications can also be fully dockerized. To achieve this, first bui
 mvn verify jib:dockerBuild
 ```
 
+## Docker Compose
+
+To deploy the application using Docker Compose for a production environment, follow these steps:
+
+From the root directory of the project, use Docker Compose to deploy the application:
+
+```sh
+docker-compose -f deploy/docker-compose/prod/docker-compose.yml up -d
+```
+
+After the containers are up and running, check the logs to ensure everything is working as expected:
+
+```sh
+docker-compose -f deploy/docker-compose/prod/docker-compose.yml logs -f
+```
+
+To stop the containers, run the following command:
+
+```sh
+docker-compose -f deploy/docker-compose/prod/docker-compose.yml down
+```
+
 ## Kubernetes
 
 To deploy the application on a Kubernetes cluster using Helm, follow these steps:
