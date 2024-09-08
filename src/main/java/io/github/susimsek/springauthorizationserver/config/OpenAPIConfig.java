@@ -314,6 +314,31 @@ public class OpenAPIConfig {
                 .addSecurityItem(new SecurityRequirement().addList("basicAuth"))
             )
         );
+
+        // /oauth2/userinfo
+        openAPI.path("/userinfo", new PathItem()
+            .get(new io.swagger.v3.oas.models.Operation()
+                .addTagsItem(TAG_NAME)
+                .summary("User Info")
+                .description("Endpoint to get information about the authenticated user.")
+                .addSecurityItem(new SecurityRequirement().addList(SCHEME_NAME))
+                .responses(new ApiResponses()
+                    .addApiResponse(RESPONSE_200, new ApiResponse()
+                        .description("Successful response")
+                        .content(new Content()
+                            .addMediaType(org.springframework.http.MediaType.APPLICATION_JSON_VALUE, new MediaType()
+                                .schema(new MapSchema()
+                                    .properties(createUserInfoProperties())
+                                )
+                            )
+                        )
+                    )
+                    .addApiResponse(RESPONSE_400, new ApiResponse().description(HttpStatus.BAD_REQUEST.getReasonPhrase()))
+                    .addApiResponse(RESPONSE_401, new ApiResponse().description(HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+                    .addApiResponse(RESPONSE_500, new ApiResponse().description(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()))
+                )
+            )
+        );
     }
 
     private static Map<String, Schema> createTokenIntrospectProperties() {
@@ -521,5 +546,51 @@ public class OpenAPIConfig {
                 .description("The client secret issued to the client during registration.")
                 .example("secret")
         );
+    }
+
+    private static Map<String, Schema> createUserInfoProperties() {
+        Map<String, Schema> properties = new HashMap<>();
+
+        properties.put("sub", new StringSchema()
+            .description("Subject - Identifier for the end user.")
+            .example("admin"));  // Typically the user ID or unique identifier
+
+        properties.put("name", new StringSchema()
+            .description("Full name of the end user.")
+            .example("John Doe"));
+
+        properties.put("preferred_username", new StringSchema()
+            .description("Preferred username of the end user.")
+            .example("admin"));
+
+        properties.put("email", new StringSchema()
+            .description("Email address of the end user.")
+            .example("admin@example.com"));
+
+        properties.put("email_verified", new BooleanSchema()
+            .description("Boolean value indicating whether the end user's email has been verified.")
+            .example(true));
+
+        properties.put("phone_number", new StringSchema()
+            .description("Phone number of the end user.")
+            .example("+1-202-555-0100"));
+
+        properties.put("phone_number_verified", new BooleanSchema()
+            .description("Boolean value indicating whether the end user's phone number has been verified.")
+            .example(false));
+
+        properties.put("locale", new StringSchema()
+            .description("Locale of the end user in IETF BCP 47 format.")
+            .example("en-US"));
+
+        properties.put("updated_at", new IntegerSchema()
+            .description("Time the end user's information was last updated in seconds since January 1, 1970.")
+            .example(689242400));
+
+        properties.put("picture", new StringSchema()
+            .description("URL of the end user's profile picture.")
+            .example("https://example.com/admin/me.jpg"));
+
+        return properties;
     }
 }
