@@ -45,8 +45,7 @@ public class H2ConfigurationHelper {
             registration.setInitParameter("webSSL", "false");
             registration.setLoadOnStartup(1);
         } catch (ClassNotFoundException | LinkageError | NoSuchMethodException
-                 | IllegalAccessException | InstantiationException |
-                 InvocationTargetException e) {
+                 | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             log.error("Failed to initialize H2 console", e);
             throw new IllegalStateException("Failed to initialize H2 console", e);
         }
