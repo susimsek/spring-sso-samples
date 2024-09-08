@@ -238,7 +238,7 @@ public class HintsRegistrar implements RuntimeHintsRegistrar {
             "java.util.Collections$",
             Set.of("UnmodifiableRandomAccessList", "EmptyList", "UnmodifiableMap", "EmptyMap", "SingletonList",
                 "UnmodifiableSet")
-        );//
+        );
         var javaClasses =
             Set.of(TypeReference.of(ArrayList.class), TypeReference.of(Date.class), TypeReference.of(Duration.class),
                 TypeReference.of(Instant.class), TypeReference.of(URL.class),
