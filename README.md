@@ -23,6 +23,20 @@ ll clients have configured the following redirect URI
 
 * http://127.0.0.1:8080/login/oauth2/code/oidc-client
 
+## OAuth2 Endpoints
+
+The following OAuth2 Authorization Server endpoints are available:
+
+| Method | Endpoint                                      | Description             |
+|--------|-----------------------------------------------|-------------------------|
+| GET    | /oauth2/authorize                             | Authorize               |
+| GET    | /oauth2/jwks                                  | JWKS                    |
+| GET    | /.well-known/openid-configuration              | OpenID Connect Discovery|
+| GET    | /userinfo                                     | User Info               |
+| POST   | /oauth2/token                                 | Token                   |
+| POST   | /oauth2/revoke                                | Revoke Token            |
+| POST   | /oauth2/introspect                            | Introspect Token        |
+
 ## Login
 
 This server already has preconfigured users.
