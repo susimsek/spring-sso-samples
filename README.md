@@ -67,11 +67,24 @@ mvn clean install
 
 ## Run the Application
 
-To run the application locally, run the following command:
+To run the application locally with an in-memory H2 database, run the following command:
 
 ```sh
 mvn spring-boot:run
 ```
+
+Access H2 Console:
+You can access the H2 console at:
+
+http://localhost:7080/h2-console
+
+Use the following credentials to log in:
+
+| Field    | Value                                                                      |
+|----------|----------------------------------------------------------------------------|
+| JDBC URL | `jdbc:h2:mem:sso;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE` |
+| Username | `admin`                                                                    |
+| Password | `password`                                                                 |
 
 ## Testing
 
@@ -107,7 +120,7 @@ The application can also be fully dockerized. To achieve this, first build a Doc
 mvn verify jib:dockerBuild
 ```
 
-To deploy the application using Docker Compose for a production environment, follow these steps:
+To deploy the application and dependencies (PostgreSQL) using Docker Compose for a production environment, follow these steps:
 
 From the root directory of the project, use Docker Compose to deploy the application:
 
