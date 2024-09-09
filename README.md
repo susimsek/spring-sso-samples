@@ -63,6 +63,14 @@ To install dependencies and build the project, run the following command:
 mvn clean install
 ```
 
+## Run the Application
+
+To run the application locally, run the following command:
+
+```sh
+mvn spring-boot:run
+```
+
 ## Testing
 
 To run the application's tests, use the following command:
