@@ -1,10 +1,9 @@
-# Spring Authorization Server Samples
+# Spring Authorization Server Sample
 
-![Introduction](https://github.com/susimsek/spring-sso-samples/blob/main/images/introduction.png)
+![Spring Authorization Server](https://github.com/susimsek/spring-sso-samples/blob/main/images/introduction.png)
 
 ## Overview
-
-Spring Authorization Server is a framework that provides implementations of the OAuth 2.1 and OpenID Connect 1.0 specifications and other related specifications. It is built on top of Spring Security to provide a secure, light-weight, and customizable foundation for building OpenID Connect 1.0 Identity Providers and OAuth2 Authorization Server products.
+Spring Authorization Server provides a secure and customizable foundation for building OAuth2 Authorization Servers and OpenID Connect Identity Providers. It’s built on top of Spring Security, supporting OAuth 2.1 and OpenID Connect 1.0 specifications.
 
 ## Registered Clients
 
@@ -19,7 +18,7 @@ This server comes with predefined registered OAuth2/OIDC clients:
 | oidc-client-opaque      | secret        | Opaque              |
 | oidc-client-pkce-opaque | secret        | Opaque              |
 
-All clients have configured the following redirect URI
+All clients use the following redirect URI for OAuth2 callbacks:
 
 * http://127.0.0.1:8080/login/oauth2/code/oidc-client
 
@@ -49,8 +48,12 @@ The following OAuth2 Authorization Server endpoints are available:
 
 ## Prerequisites
 
-- Java 17
-- Maven 3.x
+Before you begin, ensure you have the following installed:
+
+- **Java 22**
+- **Maven 3.x**
+- **Docker** (for running dependencies like PostgreSQL etc.)
+- **Kubernetes** (if deploying to a Kubernetes cluster)
 
 ## Build
 
@@ -158,39 +161,39 @@ Below is the ER Diagram used for the project:
 
 ## Used Technologies
 
-- Java 22
-- Checkstyle
-- SonarQube
-- Docker
-- Kubernetes
-- Helm
-- Sonarqube
-- GitHub Actions
-- Spring Boot 3.x
-- Spring Boot Starter Web
-- Spring Boot Starter Validation
-- Spring Boot Starter Data JPA
-- Spring Boot Starter OAuth2 Authorization Server
-- Spring Boot Starter Security
-- Spring Security OAuth2 Jose
-- Spring Boot Starter AOP
-- Spring Boot Starter Cache
-- Spring Boot Starter Thymeleaf
-- Spring Boot Actuator
-- Spring Boot Configuration Processor
-- Spring Session JDBC
-- SpringDoc OpenAPI Starter WebMVC UI
-- Liquibase
-- PostgreSQL
-- H2
-- Spring Boot DevTools
-- Caffeine Cache
-- Hibernate Jpamodelgen
-- Hibernate JCache
-- Lombok
-- Mapstruct
-- Micrometer Tracing
-- Micrometer Tracing Bridge OTel
-- Logback Appender For Loki
-- Bootstrap
-- Font Awesome
+- **Java 22**
+- **Spring Boot 3.x**
+- **Checkstyle**
+- **SonarQube**
+- **Docker**
+- **Kubernetes**
+- **Helm**
+- **Sonarqube**
+- **GitHub Actions**
+- **Spring Boot Starter Web**
+- **Spring Boot Starter Validation**
+- **Spring Boot Starter Data JPA**
+- **Spring Boot Starter OAuth2 Authorization Server**
+- **Spring Boot Starter Security**
+- **Spring Security OAuth2 Jose**
+- **Spring Boot Starter AOP**
+- **Spring Boot Starter Cache**
+- **Spring Boot Starter Thymeleaf**
+- **Spring Boot Actuator**
+- **Spring Boot Configuration Processor**
+- **Spring Session JDBC**
+- **SpringDoc OpenAPI Starter WebMVC UI**
+- **Liquibase**
+- **PostgreSQL**
+- **H2**
+- **Spring Boot DevTools**
+- **Caffeine Cache**
+- **Hibernate Jpamodelgen**
+- **Hibernate JCache**
+- **Lombok**
+- **Mapstruct**
+- **Micrometer Tracing**
+- **Micrometer Tracing Bridge OTel**
+- **Logback Appender For Loki**
+- **Bootstrap**
+- **Font Awesome**
