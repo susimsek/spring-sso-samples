@@ -171,39 +171,39 @@ Below is the ER Diagram used for the project:
 
 ## Used Technologies
 
-- **Java 22**
-- **Spring Boot 3.x**
-- **Docker**
-- **Kubernetes**
-- **Checkstyle**
-- **SonarQube**
-- **Helm**
-- **Sonarqube**
-- **GitHub Actions**
-- **Spring Boot Starter Web**
-- **Spring Boot Starter Validation**
-- **Spring Boot Starter Data JPA**
-- **Spring Boot Starter OAuth2 Authorization Server**
-- **Spring Boot Starter Security**
-- **Spring Security OAuth2 Jose**
-- **Spring Boot Starter AOP**
-- **Spring Boot Starter Cache**
-- **Spring Boot Starter Thymeleaf**
-- **Spring Boot Actuator**
-- **Spring Boot Configuration Processor**
-- **Spring Session JDBC**
-- **SpringDoc OpenAPI Starter WebMVC UI**
-- **Liquibase**
-- **PostgreSQL**
-- **H2**
-- **Spring Boot DevTools**
-- **Caffeine Cache**
-- **Hibernate Jpamodelgen**
-- **Hibernate JCache**
-- **Lombok**
-- **Mapstruct**
-- **Micrometer Tracing**
-- **Micrometer Tracing Bridge OTel**
-- **Logback Appender For Loki**
-- **Bootstrap**
-- **Font Awesome**
+- Java 22
+- Spring Boot 3.x
+- Docker
+- Kubernetes
+- Checkstyle
+- SonarQube
+- Helm
+- Sonarqube
+- GitHub Actions
+- Spring Boot Starter Web
+- Spring Boot Starter Validation
+- Spring Boot Starter Data JPA
+- Spring Boot Starter OAuth2 Authorization Server
+- Spring Boot Starter Security
+- Spring Security OAuth2 Jose
+- Spring Boot Starter AOP
+- Spring Boot Starter Cache
+- Spring Boot Starter Thymeleaf
+- Spring Boot Actuator
+- Spring Boot Configuration Processor
+- Spring Session JDBC
+- SpringDoc OpenAPI Starter WebMVC UI
+- Liquibase
+- PostgreSQL
+- H2
+- Spring Boot DevTools
+- Caffeine Cache
+- Hibernate Jpamodelgen
+- Hibernate JCache
+- Lombok
+- Mapstruct
+- Micrometer Tracing
+- Micrometer Tracing Bridge OTel
+- Logback Appender For Loki
+- Bootstrap
+- Font Awesome
