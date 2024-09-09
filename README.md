@@ -82,7 +82,7 @@ Use the following credentials to log in:
 
 | Field    | Value                                                                      |
 |----------|----------------------------------------------------------------------------|
-| JDBC URL | `jdbc:h2:mem:sso;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE` |
+| Jdbc Url | `jdbc:h2:mem:sso;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE` |
 | Username | `admin`                                                                    |
 | Password | `password`                                                                 |
 
