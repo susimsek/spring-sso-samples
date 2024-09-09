@@ -5,7 +5,18 @@
 ## Overview
 Spring Authorization Server provides a secure and customizable foundation for building OAuth2 Authorization Servers and OpenID Connect Identity Providers. It’s built on top of Spring Security, supporting OAuth 2.1 and OpenID Connect 1.0 specifications.
 
-## Registered Clients
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Java 22**
+- **Maven 3.x**
+- **Docker** (for running dependencies like PostgreSQL etc.)
+- **Kubernetes** (if deploying to a Kubernetes cluster)
+
+## Usage
+
+### Registered Clients
 
 This server comes with predefined registered OAuth2/OIDC clients:
 
@@ -22,7 +33,7 @@ All clients use the following redirect URI for OAuth2 callbacks:
 
 * http://127.0.0.1:8080/login/oauth2/code/oidc-client
 
-## Login
+### Login
 
 This server already has preconfigured users.
 Therefore, to login please use one of these predefined credentials:
@@ -32,7 +43,7 @@ Therefore, to login please use one of these predefined credentials:
 | user     | user@example.com         | password | USER   |
 | admin    | admin@example.com        | password | ADMIN  |
 
-## OAuth2 Endpoints
+### OAuth2 Endpoints
 
 The following OAuth2 Authorization Server endpoints are available:
 
@@ -45,15 +56,6 @@ The following OAuth2 Authorization Server endpoints are available:
 | POST   | /oauth2/token                     | Token                    |
 | POST   | /oauth2/revoke                    | Revoke Token             |
 | POST   | /oauth2/introspect                | Introspect Token         |
-
-## Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-- **Java 22**
-- **Maven 3.x**
-- **Docker** (for running dependencies like PostgreSQL etc.)
-- **Kubernetes** (if deploying to a Kubernetes cluster)
 
 ## Build
 
@@ -95,15 +97,15 @@ To check the code style using Checkstyle, execute:
 mvn checkstyle:check
 ```
 
-## Docker
+## Deployment
 
-The sample applications can also be fully dockerized. To achieve this, first build a Docker image of your app:
+### Docker Deployment
+
+The application can also be fully dockerized. To achieve this, first build a Docker image of your app:
 
 ```sh
 mvn verify jib:dockerBuild
 ```
-
-## Docker Compose
 
 To deploy the application using Docker Compose for a production environment, follow these steps:
 
@@ -125,7 +127,7 @@ To stop the containers, run the following command:
 docker-compose -f deploy/docker-compose/prod/docker-compose.yml down
 ```
 
-## Kubernetes
+### Kubernetes Deployment
 
 To deploy the application on a Kubernetes cluster using Helm, follow these steps:
 
@@ -171,10 +173,10 @@ Below is the ER Diagram used for the project:
 
 - **Java 22**
 - **Spring Boot 3.x**
-- **Checkstyle**
-- **SonarQube**
 - **Docker**
 - **Kubernetes**
+- **Checkstyle**
+- **SonarQube**
 - **Helm**
 - **Sonarqube**
 - **GitHub Actions**
