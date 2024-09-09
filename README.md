@@ -176,6 +176,8 @@ For API documentation, please refer to the Swagger UI:
 
 http://localhost:7080/swagger-ui.html
 
+![Api Documentation](https://github.com/susimsek/spring-sso-samples/blob/main/images/swagger-ui.png)
+
 ## ER Diagram
 
 Below is the ER Diagram used for the project:
