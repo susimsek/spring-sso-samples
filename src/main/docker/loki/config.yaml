@@ -1,0 +1,72 @@
+auth_enabled: false
+
+server:
+  http_listen_address: 0.0.0.0
+  http_listen_port: 3100
+  log_level: info
+
+common:
+  path_prefix: /loki
+  replication_factor: 1
+
+ingester:
+  lifecycler:
+    join_after: 10s
+    observe_period: 5s
+    ring:
+      replication_factor: 1
+      kvstore:
+        store: inmemory
+    final_sleep: 0s
+  wal:
+    enabled: true
+    dir: /loki/wal
+  chunk_idle_period: 1m
+  max_chunk_age: 1m
+  chunk_encoding: snappy
+  chunk_target_size: 1536000
+  flush_op_timeout: 10s
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+
+storage_config:
+  boltdb_shipper:
+    active_index_directory: /loki/index
+    cache_location: /loki/index_cache
+    shared_store: filesystem
+
+chunk_store_config:
+  max_look_back_period: 0s
+
+limits_config:
+  max_cache_freshness_per_query: '10m'
+  reject_old_samples: true
+  reject_old_samples_max_age: 30m
+  ingestion_rate_mb: 10
+  ingestion_burst_size_mb: 20
+  split_queries_by_interval: 15m
+  volume_enabled: true
+
+
+table_manager:
+  retention_deletes_enabled: true
+  retention_period: 336h
+
+query_range:
+  align_queries_with_step: true
+  max_retries: 3
+  parallelise_shardable_queries: true
+  cache_results: true
+
+frontend:
+  log_queries_longer_than: 5s
+  compress_responses: true
+  max_outstanding_per_tenant: 2048
