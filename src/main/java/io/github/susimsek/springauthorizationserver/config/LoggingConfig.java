@@ -211,8 +211,7 @@ public class LoggingConfig {
             label.setReadMarkers(true);
             String labelPattern = (
                 "app=%s,host=%s,env=%s,level=%%level,"
-                    + "traceId=%%X{traceId:-unknown},spanId=%%X{spanId:-unknown},"
-                    + "requestId=%%X{requestId:-unknown},correlationId=%%X{correlationId:-unknown}").formatted(
+                    + "traceId=%%X{traceId:-unknown},spanId=%%X{spanId:-unknown}").formatted(
                 applicationName, hostname, applicationEnvironment
             );
             label.setPattern(labelPattern);
