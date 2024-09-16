@@ -12,8 +12,13 @@ datasources:
     editable: true
     jsonData:
       httpHeaderName1: "X-Scope-OrgID"
+      derivedFields:
+        - datasourceUid: tempo
+          matcherRegex: "\\[.+,(.+),.+\\]"
+          name: TraceID
+          url: '$${__value.raw}'
     secureJsonData:
-      httpHeaderValue1: "docker"
+      httpHeaderValue1: "tenant1"
   - name: Prometheus
     type: prometheus
     uid: prometheus
@@ -29,7 +34,7 @@ datasources:
   - name: Tempo
     type: tempo
     uid: tempo
-    url: http://tempo:3100
+    url: http://tempo:3200
     access: proxy
     orgId: 1
     basicAuth: false

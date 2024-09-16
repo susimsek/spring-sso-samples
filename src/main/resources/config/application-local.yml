@@ -48,8 +48,6 @@ spring:
   thymeleaf:
     cache: false
 
-
-security:
 logging:
   level:
     ROOT: DEBUG
@@ -71,3 +69,10 @@ logging:
     log-level: FULL
   obfuscate:
     enabled: true
+
+management:
+  tracing:
+    enabled: false
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411
