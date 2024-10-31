@@ -13,7 +13,7 @@ import org.springframework.validation.ObjectError;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record Violation(
     @Schema(description = "Code.", example = "not_blank")
-    @JsonProperty("object")
+    @JsonProperty("code")
     String code,
 
     @Schema(description = "Object name", example = "chatRequest")
