@@ -1,9 +1,8 @@
 package io.github.susimsek.springauthorizationserver.mapper;
 
 import io.github.susimsek.springauthorizationserver.entity.OAuth2AuthorizationEntity;
+import io.github.susimsek.springauthorizationserver.security.oauth2.wallet.Wallet;
 import io.github.susimsek.springauthorizationserver.security.oauth2.json.OAuth2JsonUtils;
-import java.util.Map;
-import java.util.Set;
 import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,9 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationCode;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.util.StringUtils;
+
+import java.util.Map;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public abstract class OAuth2AuthorizationMapper {
@@ -88,6 +90,13 @@ public abstract class OAuth2AuthorizationMapper {
             entity.setDeviceCodeIssuedAt(deviceCode.getToken().getIssuedAt());
             entity.setDeviceCodeExpiresAt(deviceCode.getToken().getExpiresAt());
             entity.setDeviceCodeMetadata(jsonUtils.writeMap(deviceCode.getMetadata()));
+        }
+
+        Object walletAttr = model.getAttribute("wallet");
+        if (walletAttr instanceof Wallet wallet) {
+            entity.setWalletAddress(wallet.getWalletAddress());
+            entity.setWalletSignature(wallet.getWalletSignature());
+            entity.setWalletMessage(wallet.getWalletMessage());
         }
 
         return entity;
@@ -170,6 +179,15 @@ public abstract class OAuth2AuthorizationMapper {
                 entity.getDeviceCodeIssuedAt(),
                 entity.getDeviceCodeExpiresAt());
             builder.token(deviceCode, metadata -> metadata.putAll(jsonUtils.parseMap(entity.getDeviceCodeMetadata())));
+        }
+
+        if (StringUtils.hasText(entity.getWalletAddress())) {
+            Wallet wallet = new Wallet(
+                entity.getWalletAddress(),
+                entity.getWalletSignature(),
+                entity.getWalletMessage()
+            );
+            builder.attribute("wallet", wallet);
         }
 
         return builder.build();

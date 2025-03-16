@@ -28,6 +28,7 @@ This server comes with predefined registered OAuth2/OIDC clients:
 | oidc-client-pkce-jwt    | secret        | JWT                 |
 | oidc-client-opaque      | secret        | Opaque              |
 | oidc-client-pkce-opaque | secret        | Opaque              |
+| wallet-client           | secret        | JWT                 |
 
 All clients use the following redirect URI for OAuth2 callbacks:
 

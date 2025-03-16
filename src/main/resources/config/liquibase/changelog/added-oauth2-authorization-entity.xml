@@ -49,6 +49,9 @@
             <column name="device_code_issued_at" type="datetime"/>
             <column name="device_code_expires_at" type="datetime"/>
             <column name="device_code_metadata" type="varchar(4000)"/>
+            <column name="wallet_address" type="varchar(50)"/>
+            <column name="wallet_signature" type="varchar(150)"/>
+            <column name="wallet_message" type="varchar(1024)"/>
         </createTable>
 
         <!-- Indices for OAuth2 Authorization -->
@@ -78,6 +81,9 @@
         </createIndex>
         <createIndex indexName="idx_oauth2_authorization_device_code_value" tableName="oauth2_authorization">
             <column name="device_code_value"/>
+        </createIndex>
+        <createIndex indexName="idx_oauth2_authorization_wallet_address" tableName="oauth2_authorization">
+          <column name="wallet_address"/>
         </createIndex>
     </changeSet>
 

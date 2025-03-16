@@ -5,8 +5,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.Instant;
-import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +13,9 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.proxy.HibernateProxy;
+
+import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @Table(name = "oauth2_authorization")
@@ -125,6 +126,15 @@ public class OAuth2AuthorizationEntity {
 
     @Column(name = "device_code_metadata", length = 4000)
     private String deviceCodeMetadata;
+
+    @Column(name = "wallet_address", length = 50)
+    private String walletAddress;
+
+    @Column(name = "wallet_signature", length = 150)
+    private String walletSignature;
+
+    @Column(name = "wallet_message", length = 1024)
+    private String walletMessage;
 
     @Override
     public final boolean equals(Object obj) {

@@ -3,11 +3,12 @@ package io.github.susimsek.springauthorizationserver.security.oauth2.json;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Map;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class OAuth2JsonUtils {
@@ -21,6 +22,7 @@ public class OAuth2JsonUtils {
         this.objectMapper.registerModules(securityModules);
         this.objectMapper.registerModule(new OAuth2AuthorizationServerJackson2Module());
         this.objectMapper.registerModule(new JweJacksonModule());
+        this.objectMapper.registerModule(new WalletJacksonModule());
     }
 
     public String writeMap(Map<String, Object> data) {

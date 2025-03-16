@@ -23,13 +23,13 @@ import io.github.susimsek.springauthorizationserver.security.oauth2.OAuth2KeySer
 import io.github.susimsek.springauthorizationserver.security.oauth2.TokenDecoder;
 import io.github.susimsek.springauthorizationserver.security.oauth2.TokenEncoder;
 import io.github.susimsek.springauthorizationserver.security.oauth2.TokenGenerator;
+import io.github.susimsek.springauthorizationserver.security.oauth2.wallet.WalletAuthenticationConverter;
+import io.github.susimsek.springauthorizationserver.security.oauth2.wallet.WalletAuthenticationProvider;
+import io.github.susimsek.springauthorizationserver.security.oauth2.wallet.WalletSignatureVerifier;
 import io.github.susimsek.springauthorizationserver.service.DomainOAuth2AuthorizationConsentService;
 import io.github.susimsek.springauthorizationserver.service.DomainOAuth2AuthorizationService;
 import io.github.susimsek.springauthorizationserver.service.DomainOAuth2KeyService;
 import io.github.susimsek.springauthorizationserver.service.DomainOAuth2RegisteredClientService;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +40,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
@@ -61,6 +62,10 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
+
 @Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 public class AuthorizationServerConfig {
@@ -71,7 +76,10 @@ public class AuthorizationServerConfig {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(
         HttpSecurity http,
-        OAuth2SecurityProblemSupport problemSupport) throws Exception {
+        OAuth2SecurityProblemSupport problemSupport,
+        OAuth2AuthorizationService authorizationService,
+        OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator,
+        WalletSignatureVerifier walletSignatureVerifier) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
 
         Function<OidcUserInfoAuthenticationContext, OidcUserInfo> userInfoMapper = context -> {
@@ -89,7 +97,11 @@ public class AuthorizationServerConfig {
                 .logoutEndpoint(logoutEndpoint -> logoutEndpoint.errorResponseHandler(problemSupport))
                 .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.errorResponseHandler(problemSupport)
                     .userInfoMapper(userInfoMapper)))
-            .tokenEndpoint(tokenEndpoint -> tokenEndpoint.errorResponseHandler(problemSupport))
+            .tokenEndpoint(tokenEndpoint -> tokenEndpoint
+                .accessTokenRequestConverter(new WalletAuthenticationConverter())
+                .authenticationProvider(walletAuthenticationProvider(
+                    authorizationService, tokenGenerator, walletSignatureVerifier))
+                .errorResponseHandler(problemSupport))
             .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
                 .errorResponseHandler(problemSupport::sendAuthorizationEndpointErrorResponse)
                 .consentPage(CONSENT_PAGE_URI))
@@ -112,6 +124,13 @@ public class AuthorizationServerConfig {
             .oauth2ResourceServer(oauth2ResourceServer ->
                 oauth2ResourceServer.jwt(Customizer.withDefaults()));
         return http.build();
+    }
+
+    public WalletAuthenticationProvider walletAuthenticationProvider(
+        OAuth2AuthorizationService authorizationService,
+        OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator,
+        WalletSignatureVerifier walletSignatureVerifier) {
+        return new WalletAuthenticationProvider(authorizationService, tokenGenerator, walletSignatureVerifier);
     }
 
     @Bean
