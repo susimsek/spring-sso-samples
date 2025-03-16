@@ -242,6 +242,7 @@ Below is the ER Diagram used for the project:
 - Hibernate JCache
 - Lombok
 - Mapstruct
+- Web3j
 - Micrometer Tracing
 - Micrometer Tracing Bridge OTel
 - Logback Appender For Loki
